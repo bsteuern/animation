@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#1DB8C6;--w:#fff;--tx:#162D3E;--mu:#8a9fae;--ac:#1DB8C6;--r:.52em;}
+html,body{width:1116px;height:558px;overflow:hidden;background:var(--bg);font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;color:var(--tx)}
+.card{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:6% 7%;gap:.36em}
+.row{display:flex;align-items:center;gap:.6em;background:var(--w);border-radius:var(--r);padding:.56em .7em;box-shadow:0 4px 16px rgba(0,0,0,.1);will-change:opacity,transform;opacity:0;transform:translateY(.45em)}
+.ico{width:1.85em;height:1.85em;border-radius:.28em;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ib{background:rgba(29,184,198,.12)}.ig{background:rgba(52,199,89,.1)}.io{background:rgba(22,45,62,.06)}.id{background:rgba(22,45,62,.04)}
+.meta{flex:1;min-width:0}
+.t1{font-size:.73em;font-weight:500;color:var(--tx);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t2{font-size:.59em;color:var(--mu);display:block;margin-top:.05em}
+.chk{width:1.12em;height:1.12em;border-radius:50%;background:#1DB8C6;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto;will-change:opacity,transform}
+.chk svg{width:52%;height:52%}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="row" id="r0">
+    <div class="ico ib"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#1DB8C6" stroke-width="1.2" fill="none"/><line x1="6.5" y1="4" x2="6.5" y2="7" stroke="#1DB8C6" stroke-width="1.3" stroke-linecap="round"/><circle cx="6.5" cy="9" r=".65" fill="#1DB8C6"/></svg></div>
+    <div class="meta"><span class="t1">Körperschaftsteuer</span><span class="t2">15 % + Solidaritätszuschlag</span></div>
+    <div class="chk" id="c0"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="row" id="r1">
+    <div class="ico io"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="3.5" width="10" height="7" rx="1.2" stroke="#162D3E" stroke-width="1.2" fill="none"/><line x1="4" y1="6.5" x2="9" y2="6.5" stroke="#162D3E" stroke-width="1.1" stroke-linecap="round"/><line x1="4" y1="1.5" x2="4" y2="4" stroke="#162D3E" stroke-width="1.2" stroke-linecap="round"/><line x1="9" y1="1.5" x2="9" y2="4" stroke="#162D3E" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+    <div class="meta"><span class="t1">Gewerbesteuer</span><span class="t2">Hebesatz ab 200 % variabel</span></div>
+    <div class="chk" id="c1"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="row" id="r2">
+    <div class="ico ig"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#34C759" stroke-width="1.2" fill="none"/><path d="M4.5 6.5l1.5 1.5L9 4.5" stroke="#34C759" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="meta"><span class="t1">Abgeltungsteuer</span><span class="t2">25 % auf Ausschüttungen</span></div>
+    <div class="chk" id="c2"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="row" id="r3">
+    <div class="ico id"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,9 5,5.5 7.5,7.5 10,3.5 11.5,5" stroke="#8a9fae" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="2" y1="11" x2="11.5" y2="11" stroke="#8a9fae" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+    <div class="meta"><span class="t1">Optimierungspotenzial</span><span class="t2">Verlustvorträge &amp; Anrechnung</span></div>
+    <div class="chk" id="c3"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>
+</div>
+<script>
+function sf(b){document.documentElement.style.fontSize=Math.max(Math.min(document.body.clientWidth/b,22),9)+"px";}
+sf(22);window.addEventListener("resize",()=>sf(22));
+const R=[0,1,2,3].map(i=>document.getElementById("r"+i));
+const C=[0,1,2,3].map(i=>document.getElementById("c"+i));
+const S=210,CO=440,H=3000,DI=560,DO=400;
+function run(){
+  R.forEach(r=>{r.style.transition="none";r.style.opacity="0";r.style.transform="translateY(.45em)"});
+  C.forEach(c=>{c.style.transition="none";c.style.opacity="0";c.style.transform="scale(.3)"});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    R.forEach((r,i)=>setTimeout(()=>{
+      r.style.transition=`opacity ${DI}ms cubic-bezier(.4,0,.2,1),transform ${DI}ms cubic-bezier(.4,0,.2,1)`;
+      r.style.opacity="1";r.style.transform="translateY(0)";
+    },i*S));
+    C.forEach((c,i)=>setTimeout(()=>{
+      c.style.transition="opacity .38s ease,transform .42s cubic-bezier(.34,1.4,.64,1)";
+      c.style.opacity="1";c.style.transform="scale(1)";
+    },i*S+CO));
+    const all=3*S+CO+560;
+    setTimeout(()=>{
+      R.forEach(r=>{r.style.transition=`opacity ${DO}ms ease,transform ${DO}ms ease`;r.style.opacity="0";r.style.transform="translateY(-.3em)"});
+      C.forEach(c=>{c.style.transition=`opacity ${DO}ms ease`;c.style.opacity="0"});
+      setTimeout(run,DO+100);
+    },all+H);
+  }));
+}
+setTimeout(run,180);
+</script>
+</body>
+</html>
