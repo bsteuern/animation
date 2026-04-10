@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#1DB8C6;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#1DB8C6;}
+.wrap{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:6% 16%;gap:.4em;}
+.row{
+  display:flex;align-items:center;gap:.5em;
+  background:#fff;border-radius:.52em;padding:.55em .72em;
+  box-shadow:0 4px 16px rgba(0,0,0,.1);
+  will-change:opacity,transform;opacity:0;transform:translateY(.45em);
+  width:100%;
+}
+.ico{width:1.8em;height:1.8em;border-radius:.28em;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.meta{flex:1;min-width:0;}
+.t1{font-size:.78em;font-weight:500;color:#162D3E;display:block;white-space:nowrap;}
+.t2{font-size:.64em;color:#8a9fae;display:block;margin-top:.04em;white-space:nowrap;}
+.right{display:flex;align-items:center;gap:.38em;flex-shrink:0;}
+.pct{font-size:.84em;font-weight:600;color:#162D3E;white-space:nowrap;}
+.track{width:1.6em;height:.38em;background:rgba(22,45,62,.08);border-radius:.25em;overflow:hidden;flex-shrink:0;}
+.fill{height:100%;border-radius:.25em;transform-origin:left;transform:scaleX(0);transition:transform .85s cubic-bezier(.4,0,.2,1);}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="wrap">
+    <div class="row" id="r0">
+      <div class="ico" style="background:rgba(29,184,198,.12)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="5" r="2.5" stroke="#1DB8C6" stroke-width="1.2" fill="none"/><path d="M2 11.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="#1DB8C6" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg></div>
+      <div class="meta"><span class="t1">Geschäftsführergehalt</span><span class="t2">Sozialversicherungsoptimiert</span></div>
+      <div class="right"><span class="pct" id="p0">0 %</span><div class="track"><div class="fill" id="f0" style="background:#162D3E;width:62%"></div></div></div>
+    </div>
+    <div class="row" id="r1">
+      <div class="ico" style="background:rgba(29,184,198,.12)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 10.5l2.5-4L7 9l2.5-5.5L12 6" stroke="#1DB8C6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+      <div class="meta"><span class="t1">Tantieme</span><span class="t2">Erfolgsabhängig &amp; steuermindernd</span></div>
+      <div class="right"><span class="pct" id="p1">0 %</span><div class="track"><div class="fill" id="f1" style="background:#1DB8C6;width:22%"></div></div></div>
+    </div>
+    <div class="row" id="r2">
+      <div class="ico" style="background:rgba(52,199,89,.1)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="5.5" width="9" height="6" rx="1" stroke="#34C759" stroke-width="1.2" fill="none"/><path d="M4.5 5.5V4a2 2 0 014 0v1.5" stroke="#34C759" stroke-width="1.2" stroke-linecap="round" fill="none"/><circle cx="6.5" cy="8.5" r=".6" fill="#34C759"/></svg></div>
+      <div class="meta"><span class="t1">Gewinnausschüttung</span><span class="t2">25 % Abgeltungsteuer</span></div>
+      <div class="right"><span class="pct" id="p2">0 %</span><div class="track"><div class="fill" id="f2" style="background:#34C759;width:40%"></div></div></div>
+    </div>
+    <div class="row" id="r3">
+      <div class="ico" style="background:rgba(255,255,255,.5)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#8a9fae" stroke-width="1.2" fill="none"/><path d="M4.5 6.5l1.5 1.5L9 4.5" stroke="#8a9fae" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="meta"><span class="t1">Jährliche Ersparnis</span><span class="t2">Durch optimale Aufteilung</span></div>
+      <div class="right"><span class="pct" id="p3" style="color:#1DB8C6;">0 €</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+const ro=new ResizeObserver(sf);ro.observe(stage);sf();
+const rows=[0,1,2,3].map(i=>document.getElementById("r"+i));
+const fills=[0,1,2].map(i=>document.getElementById("f"+i));
+const pcts=[0,1,2].map(i=>document.getElementById("p"+i));
+const savEl=document.getElementById("p3");
+const tgts=[62,22,40];
+const S=220,DI=560,H=3200,DO=420;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function countUp(el,target,dur,suffix){const start=Date.now();(function tick(){const p=Math.min((Date.now()-start)/dur,1);el.textContent=Math.round(ease(p)*target)+suffix;if(p<1)requestAnimationFrame(tick);})();}
+function run(){
+  rows.forEach(r=>{r.style.transition="none";r.style.opacity="0";r.style.transform="translateY(.45em)"});
+  fills.forEach(f=>{f.style.transition="none";f.style.transform="scaleX(0)"});
+  pcts.forEach(p=>p.textContent="0 %");savEl.textContent="0 €";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    rows.forEach((r,i)=>setTimeout(()=>{
+      r.style.transition=`opacity ${DI}ms cubic-bezier(.4,0,.2,1),transform ${DI}ms cubic-bezier(.4,0,.2,1)`;
+      r.style.opacity="1";r.style.transform="translateY(0)";
+      if(i<3){setTimeout(()=>{fills[i].style.transition="transform .85s cubic-bezier(.4,0,.2,1)";fills[i].style.transform="scaleX(1)";countUp(pcts[i],tgts[i],850," %");},200);}
+      if(i===3){setTimeout(()=>countUp(savEl,14400,1000," €"),300);}
+    },i*S));
+    setTimeout(()=>{
+      rows.forEach(r=>{r.style.transition=`opacity ${DO}ms ease,transform ${DO}ms ease`;r.style.opacity="0";r.style.transform="translateY(-.3em)"});
+      setTimeout(run,DO+100);
+    },3*S+DI+H);
+  }));
+}
+setTimeout(run,200);
+</script>
+</body>
+</html>
