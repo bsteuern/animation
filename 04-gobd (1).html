@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#1DB8C6;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#1DB8C6;}
+.card{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:6% 16%;gap:.38em;opacity:0;transition:opacity .65s ease;}
+.card.visible{opacity:1;}
+.step{display:flex;align-items:center;gap:.5em;width:100%;}
+.num{width:1.65em;height:1.65em;border-radius:50%;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:.64em;font-weight:600;color:rgba(255,255,255,.7);flex-shrink:0;transition:background .45s cubic-bezier(.4,0,.2,1),border-color .45s ease,color .45s ease,box-shadow .45s ease;}
+.step.active .num{background:#fff;border-color:#fff;color:#1DB8C6;box-shadow:0 2px 12px rgba(0,0,0,.15);}
+.step.done .num{background:#162D3E;border-color:#162D3E;color:#fff;}
+/* bar: full width block, space-between for right-aligned badge */
+.bar{
+  flex:1;display:flex;align-items:center;justify-content:space-between;gap:.5em;
+  background:rgba(255,255,255,.92);border-radius:.52em;
+  padding:.55em .72em;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+  transition:box-shadow .45s ease,transform .45s cubic-bezier(.4,0,.2,1);
+  transform-origin:left center;
+}
+.step.active .bar{box-shadow:0 4px 20px rgba(0,0,0,.14);transform:scaleX(1.012);}
+.step.done .bar{box-shadow:0 2px 8px rgba(0,0,0,.06);transform:none;}
+.lbl{font-size:.78em;font-weight:500;color:rgba(22,45,62,.45);transition:color .45s ease;white-space:nowrap;}
+.step.active .lbl,.step.done .lbl{color:#162D3E;}
+.bdg{font-size:.62em;font-weight:500;border-radius:20px;padding:.22em .65em;white-space:nowrap;flex-shrink:0;opacity:0;transform:translateX(4px);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);}
+.step.active .bdg,.step.done .bdg{opacity:1;transform:none;}
+.ba{background:rgba(29,184,198,.12);color:#0a8f99;}
+.br{background:rgba(22,45,62,.07);color:#162D3E;}
+.bs{background:rgba(255,149,0,.1);color:#b06500;}
+.bg{background:rgba(52,199,89,.12);color:#1a8f35;}
+.conn{display:flex;align-items:center;padding-left:.82em;height:.6em;width:100%;}
+.vl-track{width:1.5px;height:100%;background:rgba(255,255,255,.28);border-radius:2px;position:relative;overflow:hidden;}
+.vl-fill{position:absolute;top:0;left:0;width:100%;height:0%;background:#fff;border-radius:2px;transition:height .55s cubic-bezier(.4,0,.2,1);}
+.conn.filled .vl-fill{height:100%;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="step" id="s0"><div class="num">1</div><div class="bar"><span class="lbl">Belege digital erfassen</span><span class="bdg br">GoBD</span></div></div>
+    <div class="conn" id="c0"><div class="vl-track"><div class="vl-fill"></div></div></div>
+    <div class="step" id="s1"><div class="num">2</div><div class="bar"><span class="lbl">Revisionssicher archivieren</span><span class="bdg ba">Automatisch</span></div></div>
+    <div class="conn" id="c1"><div class="vl-track"><div class="vl-fill"></div></div></div>
+    <div class="step" id="s2"><div class="num">3</div><div class="bar"><span class="lbl">DATEV-Integration aktiv</span><span class="bdg bs">Verbunden</span></div></div>
+    <div class="conn" id="c2"><div class="vl-track"><div class="vl-fill"></div></div></div>
+    <div class="step" id="s3"><div class="num">4</div><div class="bar"><span class="lbl">Prüfung bestanden</span><span class="bdg bg">Konform</span></div></div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+const ro=new ResizeObserver(sf);ro.observe(stage);sf();
+const card=document.getElementById("card");
+const steps=[0,1,2,3].map(i=>document.getElementById("s"+i));
+const conns=[0,1,2].map(i=>document.getElementById("c"+i));
+const STEP=780,CW=300,HOLD=1500,FO=600,LG=480;
+function clearAll(){card.classList.remove("visible");steps.forEach(s=>s.classList.remove("active","done"));conns.forEach(c=>c.classList.remove("filled"));}
+function activate(i,done){
+  if(i>0)steps[i-1].classList.replace("active","done");
+  steps[i].classList.add("active");
+  if(i<conns.length)setTimeout(()=>conns[i].classList.add("filled"),CW);
+  const next=i+1;
+  if(next<steps.length){setTimeout(()=>activate(next,done),STEP);}
+  else{setTimeout(()=>{steps[i].classList.replace("active","done");setTimeout(done,HOLD)},STEP);}
+}
+function run(){
+  clearAll();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.classList.add("visible");
+    setTimeout(()=>activate(0,()=>{card.classList.remove("visible");setTimeout(run,FO+LG);}),600);
+  }));
+}
+setTimeout(run,250);
+</script>
+</body>
+</html>
