@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#F6DF35;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;align-items:center;justify-content:center;gap:.7em}
+/* All three panels share same flex-align stretch */
+.wrap{display:flex;align-items:stretch;gap:.7em}
+/* Incoming doc */
+.doc-panel{width:7em;display:flex;flex-direction:column;opacity:0;transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.16,1,.3,1)}
+.doc-card{background:#F9F4EC;border-radius:.52em;overflow:hidden;box-shadow:0 .3em 1.4em rgba(14,12,28,.15);flex:1;display:flex;flex-direction:column}
+.dc-h{padding:.48em .65em;border-bottom:1px solid rgba(14,12,28,.1);flex-shrink:0}
+.dc-ht{font-size:.6em;font-weight:600;color:#0E0C1C}
+.dc-sub{font-size:.5em;color:rgba(14,12,28,.4);margin-top:.05em}
+.dc-lines{padding:.38em .65em .48em;display:flex;flex-direction:column;gap:.22em;flex:1;justify-content:center}
+.dc-line{height:.38em;border-radius:.2em;background:rgba(14,12,28,.1);transform-origin:left;transform:scaleX(0)}
+.dc-line.v{animation:lineIn .4s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes lineIn{to{transform:scaleX(1)}}
+.doc-lbl{font-size:.54em;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(14,12,28,.45);text-align:center;margin-top:.4em;flex-shrink:0}
+/* Center arrow */
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35em;flex-shrink:0}
+.arrow-track{display:flex;align-items:center;gap:.15em}
+.at-dot{width:.42em;height:.42em;border-radius:50%;background:rgba(14,12,28,.25);flex-shrink:0;opacity:0}
+.at-arrow{font-size:1.1em;color:rgba(14,12,28,.35);opacity:0;transition:opacity .3s}
+.proc-chip{background:#0E0C1C;border-radius:2em;padding:.32em .75em;font-size:.56em;font-weight:600;color:#F6DF35;opacity:0;transform:scale(.85);transition:opacity .4s,transform .4s cubic-bezier(.34,1.4,.64,1)}
+/* Result card — same height as doc-panel */
+.result-panel{width:11em;display:flex;flex-direction:column;opacity:0;transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.16,1,.3,1)}
+.rc-card{background:#F9F4EC;border-radius:.55em;overflow:hidden;box-shadow:0 .4em 2em rgba(14,12,28,.15);flex:1;display:flex;flex-direction:column}
+.rc-h{background:rgba(14,12,28,.05);padding:.48em .75em;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(14,12,28,.08);flex-shrink:0}
+.rc-ht{font-size:.62em;font-weight:700;color:#0E0C1C}
+.rc-ctr{font-size:.54em;font-weight:700;color:#0E0C1C;background:#F6DF35;padding:.1em .45em;border-radius:20px}
+.rc-ctr.bump{animation:bump .25s cubic-bezier(.34,1.8,.64,1) both}
+@keyframes bump{50%{transform:scale(1.25)}100%{transform:scale(1)}}
+.rc-body{padding:.3em 0 .3em;flex:1;overflow:hidden}
+.entry{display:flex;align-items:center;gap:.42em;padding:.28em .75em;opacity:0;transform:translateY(.25em);transition:opacity .38s ease,transform .38s ease}
+.entry.v{opacity:1;transform:none}
+.entry+.entry{border-top:1px solid rgba(14,12,28,.07)}
+.e-dot{width:.45em;height:.45em;border-radius:50%;flex-shrink:0}
+.e-info{flex:1}
+.e-n{font-size:.6em;font-weight:500;color:#0E0C1C;display:block}
+.e-s{font-size:.5em;color:rgba(14,12,28,.4);display:block;margin-top:.03em}
+.e-amt{font-size:.62em;font-weight:700;color:#0E0C1C;white-space:nowrap}
+/* Footer: single line — Alle gebucht + checkmark */
+.rc-foot{background:rgba(14,12,28,.05);padding:.42em .75em;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(14,12,28,.07);opacity:0;transition:opacity .4s;flex-shrink:0}
+.rf-l{font-size:.54em;color:rgba(14,12,28,.4)}
+.rf-right{display:flex;align-items:center;gap:.28em}
+.rf-txt{font-size:.62em;font-weight:700;color:#0E0C1C}
+.chk-circ{width:1em;height:1em;border-radius:50%;background:#0E0C1C;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transform:scale(0)}
+.chk-circ svg{width:55%;height:55%}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 -1 -1 4.45905e-08 315.359 157.914)" fill="#F6DF35"/>
+<path d="M157.601 0.312316C178.318 0.312315 198.833 4.38881 217.973 12.309C237.113 20.2293 254.504 31.8381 269.153 46.4728C283.802 61.1075 295.423 78.4813 303.351 97.6025C311.279 116.724 315.359 137.218 315.359 157.914L157.601 157.914L157.601 0.312316Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 -1 -1 4.45905e-08 315.359 315.516)" fill="#F6DF35"/>
+<path d="M157.601 157.914C178.318 157.914 198.833 161.99 217.973 169.911C237.113 177.831 254.504 189.44 269.153 204.074C283.802 218.709 295.423 236.083 303.351 255.204C311.279 274.325 315.359 294.819 315.359 315.516L157.601 315.516L157.601 157.914Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(-1 -8.74228e-08 -8.65437e-08 1 157.602 0)" fill="#F6DF35"/>
+<path d="M-0.000204924 157.758C-0.000203131 137.041 4.07629 116.527 11.9965 97.3866C19.9168 78.2466 31.5256 60.8554 46.1603 46.2062C60.795 31.5571 78.1688 19.9367 97.29 12.0086C116.411 4.08053 136.905 -2.71492e-06 157.602 0L157.602 157.758L-0.000204924 157.758Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(-1 -8.74228e-08 -8.65437e-08 1 157.602 157.758)" fill="#F6DF35"/>
+<path d="M-0.000204924 315.516C-0.000203131 294.799 4.07629 274.285 11.9965 255.144C19.9168 236.004 31.5256 218.613 46.1603 203.964C60.795 189.315 78.1688 177.695 97.29 169.766C116.411 161.838 136.905 157.758 157.602 157.758L157.602 315.516L-0.000204924 315.516Z" fill="#FBF2AE"/></svg>
+<div class="stage" id="stage">
+  <div class="wrap" id="wrap">
+    <div class="doc-panel" id="docin">
+      <div class="doc-card">
+        <div class="dc-h">
+          <div class="dc-ht" id="doc-title">Eingangsrechnung</div>
+          <div class="dc-sub" id="doc-sub">Scanner · PDF</div>
+        </div>
+        <div class="dc-lines">
+          <div class="dc-line" id="dl0" style="width:80%"></div>
+          <div class="dc-line" id="dl1" style="width:55%"></div>
+          <div class="dc-line" id="dl2" style="width:70%"></div>
+        </div>
+      </div>
+      <div class="doc-lbl">Eingang</div>
+    </div>
+    <div class="center" id="ctr-col">
+      <div class="arrow-track">
+        <div class="at-dot" id="ad0"></div><div class="at-dot" id="ad1"></div><div class="at-dot" id="ad2"></div>
+        <div class="at-arrow" id="aarrow">→</div>
+      </div>
+      <div class="proc-chip" id="proc">Wird verbucht…</div>
+    </div>
+    <div class="result-panel" id="res">
+      <div class="rc-card">
+        <div class="rc-h"><span class="rc-ht">Buchungsjournal</span><span class="rc-ctr" id="ctr">0 Belege</span></div>
+        <div class="rc-body" id="rcbody"></div>
+        <div class="rc-foot" id="rcfoot">
+          <span class="rf-l">GoBD-konform</span>
+          <span class="rf-right">
+            <span class="rf-txt">Alle gebucht</span>
+            <span class="chk-circ" id="footchk"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#F6DF35" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const docin=document.getElementById("docin"),res=document.getElementById("res"),rcbody=document.getElementById("rcbody"),rcfoot=document.getElementById("rcfoot"),proc=document.getElementById("proc"),aarrow=document.getElementById("aarrow"),ctr=document.getElementById("ctr"),footchk=document.getElementById("footchk");
+const adots=[0,1,2].map(i=>document.getElementById("ad"+i));
+const docTitle=document.getElementById("doc-title"),docSub=document.getElementById("doc-sub");
+const docLines=[0,1,2].map(i=>document.getElementById("dl"+i));
+const docs=[
+  {name:"Eingangsrechnung",sub:"Lieferant · PDF",amt:"−1.840 €",dot:"#0E0C1C"},
+  {name:"Kontoauszug",sub:"Geschäftskonto · CSV",amt:"+42.000 €",dot:"rgba(14,12,28,.4)"},
+  {name:"Reisekostenbeleg",sub:"Mitarbeiter · JPG",amt:"−234 €",dot:"rgba(14,12,28,.6)"},
+];
+const H=3200,DO=600;let dotsIv=null;
+function setEl(el,p){Object.assign(el.style,p)}
+function startDots(){let i=0;dotsIv=setInterval(()=>{adots.forEach((d,j)=>{d.style.transition="opacity .22s";d.style.opacity=j===i%3?"1":"0.12"});i++},260)}
+function stopDots(){clearInterval(dotsIv);adots.forEach(d=>d.style.opacity="0")}
+function bumpCtr(){ctr.classList.remove("bump");void ctr.offsetWidth;ctr.classList.add("bump")}
+function addEntry(doc,count){
+  const e=document.createElement("div");e.className="entry";
+  e.innerHTML=`<div class="e-dot" style="background:${doc.dot}"></div><div class="e-info"><span class="e-n">${doc.name}</span><span class="e-s">${doc.sub}</span></div><span class="e-amt">${doc.amt}</span>`;
+  rcbody.appendChild(e);ctr.textContent=count+" Belege";bumpCtr();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>e.classList.add("v")));
+}
+function animDocLines(){docLines.forEach((l,i)=>{l.classList.remove("v");l.style.transform="scaleX(0)";setTimeout(()=>l.classList.add("v"),80+i*120)})}
+function burst(cx,cy){
+  const colors=["#0E0C1C","rgba(14,12,28,.6)","rgba(14,12,28,.35)","#F9F4EC"];
+  for(let i=0;i<16;i++){
+    const p=document.createElement("div"),angle=(i/16)*Math.PI*2+Math.random()*.3,dist=22+Math.random()*28,sz=Math.round(2.5+Math.random()*4);
+    p.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;background:${colors[i%colors.length]};border-radius:50%;left:${cx}px;top:${cy}px;transform:translate(-50%,-50%);opacity:1;pointer-events:none;z-index:200;transition:transform .65s cubic-bezier(.17,.84,.44,1),opacity .65s ease`;
+    stage.appendChild(p);
+    setTimeout(()=>{const dx=Math.cos(angle)*dist,dy=Math.sin(angle)*dist;p.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;p.style.opacity="0"},20);
+    setTimeout(()=>p.remove(),750);
+  }
+  const r=document.createElement("div"),em=parseFloat(getComputedStyle(document.documentElement).fontSize);
+  r.style.cssText=`position:absolute;width:${em*1.2}px;height:${em*1.2}px;border:2.5px solid rgba(14,12,28,.5);border-radius:50%;left:${cx}px;top:${cy}px;transform:translate(-50%,-50%) scale(1);opacity:.8;pointer-events:none;z-index:199;transition:transform .7s cubic-bezier(.17,.84,.44,1),opacity .7s ease`;
+  stage.appendChild(r);
+  setTimeout(()=>{r.style.transform="translate(-50%,-50%) scale(3.8)";r.style.opacity="0"},20);
+  setTimeout(()=>r.remove(),800);
+}
+function run(){
+  setEl(docin,{transition:"none",opacity:"0",transform:"none"});
+  setEl(res,{transition:"none",opacity:"0",transform:"none"});
+  setEl(proc,{transition:"none",opacity:"0",transform:"scale(.85)"});
+  aarrow.style.opacity="0";rcfoot.style.opacity="0";
+  setEl(footchk,{transition:"none",opacity:"0",transform:"scale(0)"});
+  stopDots();rcbody.innerHTML="";ctr.textContent="0 Belege";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // Result card fades in first (empty)
+    setTimeout(()=>{setEl(res,{transition:"opacity .6s cubic-bezier(.4,0,.2,1)",opacity:"1"})},150);
+    let offset=500;
+    docs.forEach((doc,i)=>{
+      setTimeout(()=>{docTitle.textContent=doc.name;docSub.textContent=doc.sub;setEl(docin,{transition:"opacity .45s cubic-bezier(.4,0,.2,1)",opacity:"1"});animDocLines()},offset);
+      setTimeout(()=>{aarrow.style.opacity="1";setEl(proc,{transition:"opacity .4s,transform .4s cubic-bezier(.34,1.4,.64,1)",opacity:"1",transform:"scale(1)"});startDots()},offset+380);
+      setTimeout(()=>{setEl(docin,{transition:"opacity .35s ease",opacity:"0"});stopDots();aarrow.style.opacity="0";setEl(proc,{transition:"opacity .3s",opacity:"0"});addEntry(doc,i+1)},offset+1150);
+      offset+=1700;
+    });
+    // Footer appears, then confetti, then checkmark
+    setTimeout(()=>{rcfoot.style.transition="opacity .4s";rcfoot.style.opacity="1"},offset+100);
+    setTimeout(()=>{
+      const sR=stage.getBoundingClientRect(),fR=footchk.getBoundingClientRect();
+      burst(fR.left+fR.width/2-sR.left,fR.top+fR.height/2-sR.top);
+      setTimeout(()=>{setEl(footchk,{transition:"opacity .38s ease,transform .46s cubic-bezier(.34,1.7,.64,1)",opacity:"1",transform:"scale(1)"})},450);
+    },offset+480);
+    setTimeout(()=>{const t=`opacity ${DO}ms ease`;[docin,res,rcfoot].forEach(el=>{el.style.transition=t;el.style.opacity="0"});setTimeout(run,DO+150)},offset+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>

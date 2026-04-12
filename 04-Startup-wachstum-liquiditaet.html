@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#F6DF35;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;align-items:center;justify-content:center}
+/* Square composition: total width ≈ total height of the stage center */
+.composition{display:flex;align-items:stretch;gap:.45em;height:72%;width:auto}
+/* Left: two metric cards stacked */
+.left-col{display:flex;flex-direction:column;gap:.45em;width:8.5em}
+.metric-card{background:#F9F4EC;border-radius:.55em;padding:.55em .8em;box-shadow:0 .3em 1.4em rgba(14,12,28,.15);opacity:0;flex:1;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.mc-label{font-size:.5em;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(14,12,28,.4);margin-bottom:.15em}
+.mc-val{font-size:1.45em;font-weight:700;color:#0E0C1C;letter-spacing:-.04em;line-height:1}
+.mc-sub{font-size:.5em;color:rgba(14,12,28,.4);margin-top:.12em}
+.mc-track{height:.42em;background:rgba(14,12,28,.1);border-radius:.25em;overflow:hidden;margin-top:.35em}
+.mc-fill{height:100%;border-radius:.25em;transform-origin:left;transform:scaleX(0)}
+/* Shine — opacity only transition */
+.shine{position:absolute;top:0;bottom:0;left:-70%;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-12deg);opacity:0;pointer-events:none}
+/* Right: detail card — same height as full left-col via align-self:stretch */
+.detail-card{background:#F9F4EC;border-radius:.6em;overflow:hidden;box-shadow:0 .4em 2em rgba(14,12,28,.15);opacity:0;display:flex;flex-direction:column;width:11em}
+.dc-h{border-bottom:2px solid #0E0C1C;padding:.52em .82em;flex-shrink:0}
+.dc-ht{font-size:.62em;font-weight:700;color:#0E0C1C}
+.dc-body{padding:.35em .82em .45em;display:flex;flex-direction:column;flex:1;justify-content:space-around}
+.dc-row{display:flex;justify-content:space-between;align-items:center;opacity:0;transform:translateX(-.3em);transition:opacity .38s ease,transform .4s cubic-bezier(.16,1,.3,1)}
+.dc-row.v{opacity:1;transform:none}
+.dc-row+.dc-row{border-top:1px solid rgba(14,12,28,.08);padding-top:.22em;margin-top:.22em}
+.dc-l{font-size:.56em;color:rgba(14,12,28,.4)}
+.dc-r{font-size:.58em;font-weight:700;color:#0E0C1C}
+.dc-r.pos{background:#F6DF35;color:#0E0C1C;padding:.08em .4em;border-radius:20px;opacity:0;transform:scale(.6);transition:opacity .35s ease,transform .42s cubic-bezier(.34,1.6,.64,1)}
+.dc-r.pos.v{opacity:1;transform:scale(1)}
+@keyframes valPulse{50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.mc-val.pulse{animation:valPulse .4s cubic-bezier(.34,1.5,.64,1) both}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="157.449" height="157.758" transform="matrix(-1 -1.74846e-07 -1.73966e-07 1 157.758 0)" fill="#FBF2AE"/>
+<path d="M0.308373 157.758C0.308377 137.041 4.38093 116.527 12.2935 97.3866C20.2061 78.2465 31.8037 60.8554 46.4242 46.2062C61.0448 31.5571 78.4019 19.9367 97.5045 12.0086C116.607 4.08052 137.081 -4.52078e-06 157.758 0L157.758 157.758L0.308373 157.758Z" fill="#F6DF35"/>
+<rect width="157.449" height="157.758" transform="matrix(1.31134e-07 -1 -1 -1.30255e-07 315.359 157.789)" fill="#FBF2AE"/>
+<path d="M157.601 0.33963C178.318 0.339633 198.833 4.41219 217.973 12.3248C237.113 20.2373 254.504 31.835 269.153 46.4555C283.802 61.076 295.423 78.4331 303.351 97.5358C311.279 116.638 315.359 137.113 315.359 157.789L157.601 157.789L157.601 0.33963Z" fill="#F6DF35"/>
+<rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 1 1 4.28323e-08 0 157.75)" fill="#F6DF35"/>
+<path d="M157.758 315.352C137.041 315.352 116.527 311.275 97.3866 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08053 198.94 -1.81025e-06 178.447 0 157.75L157.758 157.75L157.758 315.352Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(1 1.74846e-07 1.73966e-07 -1 157.758 315.508)" fill="#F6DF35"/>
+<path d="M315.36 157.75C315.36 178.467 311.283 198.981 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L157.758 157.75L315.36 157.75Z" fill="#FBF2AE"/></svg>
+<div class="stage" id="stage">
+  <div class="composition">
+    <div class="left-col">
+      <div class="metric-card" id="m0">
+        <div>
+          <div class="mc-label">Runway</div>
+          <div class="mc-val" id="mv0">0 Mo.</div>
+          <div class="mc-sub">bis nächste Runde</div>
+        </div>
+        <div class="mc-track"><div class="mc-fill" id="mf0" style="background:#0E0C1C;width:75%"></div></div>
+        <div class="shine" id="sh0"></div>
+      </div>
+      <div class="metric-card" id="m1">
+        <div>
+          <div class="mc-label">Burn Rate</div>
+          <div class="mc-val" id="mv1">0 €</div>
+          <div class="mc-sub">monatliche Ausgaben</div>
+        </div>
+        <div class="mc-track"><div class="mc-fill" id="mf1" style="background:rgba(14,12,28,.45);width:45%"></div></div>
+        <div class="shine" id="sh1"></div>
+      </div>
+    </div>
+    <div class="detail-card" id="dc">
+      <div class="dc-h"><div class="dc-ht">Soll-Ist-Vergleich</div></div>
+      <div class="dc-body">
+        <div class="dc-row" id="dr0"><span class="dc-l">Umsatz Q1 Soll</span><span class="dc-r">150K €</span></div>
+        <div class="dc-row" id="dr1"><span class="dc-l">Umsatz Q1 Ist</span><span class="dc-r pos" id="dv1">182K €</span></div>
+        <div class="dc-row" id="dr2"><span class="dc-l">Kosten Soll</span><span class="dc-r">90K €</span></div>
+        <div class="dc-row" id="dr3"><span class="dc-l">Kosten Ist</span><span class="dc-r pos" id="dv3">78K €</span></div>
+        <div class="dc-row" id="dr4"><span class="dc-l">Prognose Q2</span><span class="dc-r pos" id="dv4">↑ Positiv</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const m0=document.getElementById("m0"),m1=document.getElementById("m1"),dc=document.getElementById("dc");
+const mv0=document.getElementById("mv0"),mv1=document.getElementById("mv1");
+const mf0=document.getElementById("mf0"),mf1=document.getElementById("mf1");
+const sh0=document.getElementById("sh0"),sh1=document.getElementById("sh1");
+const rows=[0,1,2,3,4].map(i=>document.getElementById("dr"+i));
+const posEls=[document.getElementById("dv1"),document.getElementById("dv3"),document.getElementById("dv4")];
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const H=4500,DO=600;
+function countUp(el,target,dur,delay,fmt){
+  setTimeout(()=>{const s=Date.now();(function t(){const p=Math.min((Date.now()-s)/dur,1);el.textContent=fmt(Math.round(ease(p)*target));if(p<1)requestAnimationFrame(t)})()},delay);
+}
+function runShine(shEl,delay){
+  setTimeout(()=>{
+    shEl.style.transition="none";shEl.style.left="-70%";shEl.style.opacity="1";
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      shEl.style.transition="left .55s cubic-bezier(.4,0,.2,1),opacity .18s ease .38s";
+      shEl.style.left="130%";shEl.style.opacity="0";
+    }));
+  },delay);
+}
+function pulseMV(el,delay){setTimeout(()=>{el.classList.remove("pulse");void el.offsetWidth;el.classList.add("pulse")},delay)}
+function run(){
+  // Reset: ONLY opacity — no transform on cards (prevents vibration)
+  [m0,m1,dc].forEach(el=>{el.style.transition="none";el.style.opacity="0"});
+  [mf0,mf1].forEach(f=>{f.style.transition="none";f.style.transform="scaleX(0)"});
+  rows.forEach(r=>{r.style.transition="none";r.classList.remove("v")});
+  posEls.forEach(p=>{p.style.transition="none";p.classList.remove("v")});
+  mv0.textContent="0 Mo.";mv1.textContent="0 €";
+  [sh0,sh1].forEach(s=>{s.style.left="-70%";s.style.opacity="0";s.style.transition="none"});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // Metric cards: opacity only, no transform
+    setTimeout(()=>{
+      m0.style.transition="opacity .5s ease";m0.style.opacity="1";
+      setTimeout(()=>{mf0.style.transition="transform .95s cubic-bezier(.4,0,.2,1)";mf0.style.transform="scaleX(1)"},220);
+      countUp(mv0,18,950,220,v=>v+" Mo.");
+      pulseMV(mv0,1250);runShine(sh0,1320);
+    },150);
+    setTimeout(()=>{
+      m1.style.transition="opacity .5s ease";m1.style.opacity="1";
+      setTimeout(()=>{mf1.style.transition="transform .95s cubic-bezier(.4,0,.2,1)";mf1.style.transform="scaleX(1)"},220);
+      countUp(mv1,28000,950,220,v=>v.toLocaleString("de-DE")+" €");
+      pulseMV(mv1,1300);runShine(sh1,1380);
+    },370);
+    // Detail card: opacity only
+    setTimeout(()=>{
+      dc.style.transition="opacity .55s ease";dc.style.opacity="1";
+      rows.forEach((r,i)=>{
+        setTimeout(()=>{
+          r.classList.add("v");
+          if(i===1)setTimeout(()=>posEls[0].classList.add("v"),180);
+          if(i===3)setTimeout(()=>posEls[1].classList.add("v"),180);
+          if(i===4)setTimeout(()=>posEls[2].classList.add("v"),180);
+        },200+i*240);
+      });
+    },580);
+    setTimeout(()=>{
+      const t=`opacity ${DO}ms ease`;
+      [m0,m1,dc].forEach(el=>{el.style.transition=t;el.style.opacity="0"});
+      setTimeout(run,DO+150);
+    },1850+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>

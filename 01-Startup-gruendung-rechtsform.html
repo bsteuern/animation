@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#F6DF35;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;align-items:center;justify-content:center;gap:.7em}
+.cards-wrap{display:flex;align-items:stretch;gap:.7em}
+.card{background:#F9F4EC;border-radius:.55em;overflow:hidden;box-shadow:0 .4em 2em rgba(14,12,28,.15);opacity:0;transform:translateY(.6em);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.left-card{width:9em;flex-shrink:0}
+.right-card{width:12em}
+/* Left */
+.lc-h{border-bottom:2px solid rgba(14,12,28,.1);padding:.55em .8em;flex-shrink:0}
+.lc-ht{font-size:.6em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(14,12,28,.4)}
+.lc-body{padding:.4em 0;flex:1}
+.opt{display:flex;align-items:center;gap:.5em;padding:.4em .8em;transition:background .22s}
+.opt.active{background:rgba(14,12,28,.07)}
+.opt-dot{width:.55em;height:.55em;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(14,12,28,.2);transition:background .22s,border-color .22s,transform .3s cubic-bezier(.34,1.6,.64,1)}
+.opt.active .opt-dot{background:#0E0C1C;border-color:#0E0C1C;transform:scale(1.15)}
+.opt-name{font-size:.72em;font-weight:600;color:rgba(14,12,28,.3);transition:color .22s}
+.opt.active .opt-name{color:#0E0C1C}
+/* Right */
+.rc-h{background:rgba(14,12,28,.04);padding:.55em .85em;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(14,12,28,.08);flex-shrink:0;min-height:2.3em}
+.rc-ht{font-size:.65em;font-weight:700;color:rgba(14,12,28,.18);transition:color .25s}
+.rc-ht.on{color:#0E0C1C}
+/* Empfohlen badge: only visible for GmbH */
+.rc-tag{font-size:.54em;font-weight:700;background:#F6DF35;color:#0E0C1C;padding:.18em .6em;border-radius:20px;opacity:0;transform:scale(.7);transition:opacity .3s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.34,1.5,.64,1)}
+.rc-tag.on{opacity:1;transform:scale(1)}
+.rc-body{padding:.4em .85em .55em;flex:1;display:flex;flex-direction:column;justify-content:space-around}
+.rc-row{display:flex;justify-content:space-between;align-items:center;padding:.33em 0}
+.rc-row+.rc-row{border-top:1px solid rgba(14,12,28,.07)}
+.rc-rl{font-size:.58em;color:rgba(14,12,28,.2);transition:color .25s}
+.rc-rl.on{color:rgba(14,12,28,.5)}
+/* Pills:
+   - default (empty, gray bg matching label color)
+   - .on = GmbH active → yellow bg, dark text, content shown */
+.pill{
+  font-size:.52em;font-weight:700;padding:.14em .7em;border-radius:20px;
+  background:rgba(14,12,28,.12);color:transparent;
+  transition:background .3s,color .3s,transform .3s cubic-bezier(.34,1.5,.64,1)
+}
+.pill.on{background:#F6DF35;color:#0E0C1C}
+/* Flash transition for content swap */
+.rc-ht.flash-out,.pill.flash-out{animation:flashOut .25s ease both}
+.rc-ht.flash-in,.pill.flash-in{animation:flashIn .25s ease both}
+@keyframes flashOut{to{opacity:0;transform:translateY(-.12em)}}
+@keyframes flashIn{from{opacity:0;transform:translateY(.12em)}to{opacity:1;transform:none}}
+.badge{position:absolute;bottom:1.1em;left:50%;transform:translateX(-50%) scale(.85);background:#0E0C1C;border-radius:2em;padding:.4em 1.1em;display:flex;align-items:center;gap:.38em;white-space:nowrap;opacity:0;transition:opacity .45s,transform .45s cubic-bezier(.34,1.5,.64,1)}
+.badge.v{opacity:1;transform:translateX(-50%)}
+.bt{font-size:.62em;font-weight:700;color:#F6DF35}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 1 1 4.28323e-08 0 157.758)" fill="#F6DF35"/>
+<path d="M157.758 315.36C137.041 315.36 116.527 311.283 97.3866 303.363C78.2466 295.443 60.8554 283.834 46.2063 269.199C31.5571 254.564 19.9367 237.191 12.0086 218.069C4.08053 198.948 -1.81025e-06 178.454 0 157.758L157.758 157.758L157.758 315.36Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 1 1 4.28323e-08 0 0)" fill="#F6DF35"/>
+<path d="M157.758 157.602C137.041 157.602 116.527 153.525 97.3866 145.605C78.2466 137.685 60.8554 126.076 46.2063 111.441C31.5571 96.8066 19.9367 79.4327 12.0086 60.3116C4.08053 41.1905 -1.81025e-06 20.6966 0 0L157.758 1.63957e-05L157.758 157.602Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(1 1.74846e-07 1.73966e-07 -1 157.758 315.516)" fill="#F6DF35"/>
+<path d="M315.36 157.758C315.36 178.475 311.283 198.989 303.363 218.129C295.443 237.269 283.834 254.66 269.199 269.309C254.564 283.959 237.191 295.579 218.069 303.507C198.948 311.435 178.454 315.516 157.758 315.516L157.758 157.758L315.36 157.758Z" fill="#FBF2AE"/>
+<rect width="157.602" height="157.758" transform="matrix(1 1.74846e-07 1.73966e-07 -1 157.758 157.758)" fill="#F6DF35"/>
+<path d="M315.36 -0.000211697C315.36 20.7169 311.283 41.2311 303.363 60.3712C295.443 79.5113 283.834 96.9024 269.199 111.552C254.564 126.201 237.191 137.821 218.069 145.749C198.948 153.677 178.454 157.758 157.758 157.758L157.758 -0.000239253L315.36 -0.000211697Z" fill="#FBF2AE"/></svg>
+<div class="stage" id="stage">
+  <div class="cards-wrap">
+    <div class="card left-card" id="lc">
+      <div class="lc-h"><span class="lc-ht">Rechtsform</span></div>
+      <div class="lc-body">
+        <div class="opt" id="o0"><div class="opt-dot"></div><span class="opt-name">UG</span></div>
+        <div class="opt" id="o1"><div class="opt-dot"></div><span class="opt-name">GmbH</span></div>
+        <div class="opt" id="o2"><div class="opt-dot"></div><span class="opt-name">GbR</span></div>
+        <div class="opt" id="o3"><div class="opt-dot"></div><span class="opt-name">Einzelunternehmen</span></div>
+      </div>
+    </div>
+    <div class="card right-card" id="rc">
+      <div class="rc-h">
+        <span class="rc-ht" id="rct">—</span>
+        <span class="rc-tag" id="rctag">Empfohlen</span>
+      </div>
+      <div class="rc-body">
+        <div class="rc-row"><span class="rc-rl" id="rl0">Haftung</span><span class="pill" id="p0"></span></div>
+        <div class="rc-row"><span class="rc-rl" id="rl1">Steuerlast</span><span class="pill" id="p1"></span></div>
+        <div class="rc-row"><span class="rc-rl" id="rl2">Finanzierungsrunden</span><span class="pill" id="p2"></span></div>
+        <div class="rc-row"><span class="rc-rl" id="rl3">Verlustvorträge</span><span class="pill" id="p3"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="badge" id="badge"><span class="bt">Vor der Gründung klären – nicht danach</span></div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const lc=document.getElementById("lc"),rc=document.getElementById("rc"),badge=document.getElementById("badge");
+const opts=[0,1,2,3].map(i=>document.getElementById("o"+i));
+const pills=[0,1,2,3].map(i=>document.getElementById("p"+i));
+const rls=[0,1,2,3].map(i=>document.getElementById("rl"+i));
+const rct=document.getElementById("rct"),rctag=document.getElementById("rctag");
+const H=4500,DO=600;
+// GmbH pills have content + yellow bg; others: empty text + gray bg only
+const gmbhPills=["Beschränkt","Optimiert","Ideal","Nutzbar"];
+function flash(el,text,isGmbh){
+  el.classList.remove("flash-in");el.classList.add("flash-out");
+  setTimeout(()=>{
+    el.classList.remove("flash-out");
+    el.textContent=text;
+    if(isGmbh){el.classList.add("on")}else{el.classList.remove("on")}
+    el.classList.add("flash-in");
+    setTimeout(()=>el.classList.remove("flash-in"),280);
+  },250);
+}
+function setOption(idx){
+  opts.forEach(o=>o.classList.remove("active"));opts[idx].classList.add("active");
+  const isGmbh=(idx===1);
+  // Title
+  const names=["UG","GmbH","GbR","Einzelunternehmen"];
+  flash(rct,names[idx],true); // title always visible
+  rls.forEach(rl=>rl.classList.add("on"));
+  // Pills: GmbH shows content + yellow; others empty + gray
+  pills.forEach((p,i)=>flash(p,isGmbh?gmbhPills[i]:"",isGmbh));
+  if(isGmbh){rctag.classList.add("on")}else{rctag.classList.remove("on")}
+}
+function run(){
+  [lc,rc,badge].forEach(el=>{el.style.transition="none";el.style.opacity="0";el.style.transform=el===badge?"translateX(-50%) scale(.85)":"translateY(.6em)"});
+  opts.forEach(o=>o.classList.remove("active"));
+  rct.textContent="—";rct.classList.remove("on","flash-out","flash-in");
+  rctag.classList.remove("on");
+  rls.forEach(rl=>rl.classList.remove("on"));
+  pills.forEach(p=>{p.textContent="";p.classList.remove("on","flash-out","flash-in")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    setTimeout(()=>{lc.style.transition="opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.16,1,.3,1)";lc.style.opacity="1";lc.style.transform="translateY(0)"},150);
+    setTimeout(()=>{rc.style.transition="opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.16,1,.3,1)";rc.style.opacity="1";rc.style.transform="translateY(0)"},350);
+    // Sequence: UG → GbR → Einzelunternehmen → GmbH
+    const seq=[0,2,3,1];
+    seq.forEach((idx,i)=>setTimeout(()=>setOption(idx),800+i*950));
+    setTimeout(()=>{badge.style.transition="opacity .45s,transform .45s cubic-bezier(.34,1.5,.64,1)";badge.classList.add("v")},800+seq.length*950+200);
+    setTimeout(()=>{const t=`opacity ${DO}ms ease`;[lc,rc,badge].forEach(el=>{el.style.transition=t;el.style.opacity="0"});setTimeout(run,DO+150)},800+seq.length*950+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
