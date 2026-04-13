@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#F6DF35;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#F6DF35;}
+.wrap{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:7% 13%;gap:.52em;}
+.panels{display:flex;gap:.6em;align-items:stretch;}
+.panel{flex:1;padding:.72em .82em;display:flex;flex-direction:column;gap:.28em;border-radius:.46em;will-change:opacity,transform;opacity:0;transform:translateY(.42em);}
+.p-dark{background:#0E0C1C;}
+.p-cream{background:#F9F4EC;box-shadow:0 2px 16px rgba(14,12,28,.09);}
+.p-eyebrow{font-size:.57em;font-weight:700;text-transform:uppercase;letter-spacing:.1em;}
+.p-dark .p-eyebrow{color:#F6DF35;}
+.p-cream .p-eyebrow{color:#B91C1C;}
+.p-num{font-size:1.75em;font-weight:700;line-height:1;}
+.p-dark .p-num{color:#fff;}
+.p-cream .p-num{color:#0E0C1C;}
+.p-sub{font-size:.56em;}
+.p-dark .p-sub{color:rgba(255,255,255,.38);}
+.p-cream .p-sub{color:rgba(14,12,28,.38);}
+.bottom-row{display:flex;align-items:center;justify-content:space-between;background:#F9F4EC;padding:.44em .7em;border-radius:.46em;box-shadow:0 2px 12px rgba(14,12,28,.07);will-change:opacity,transform;opacity:0;transform:translateY(.32em);}
+.br-label{font-size:.65em;color:rgba(14,12,28,.55);}
+.br-val{font-size:.65em;font-weight:700;color:#B91C1C;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="wrap">
+    <div class="panels">
+      <div class="panel p-dark" id="p0">
+        <div class="p-eyebrow">Lohnsteuer</div>
+        <div class="p-num" id="num">0 €</div>
+        <div class="p-sub">in 12 Monaten</div>
+      </div>
+      <div class="panel p-cream" id="p1">
+        <div class="p-eyebrow">Ihr Gewinn</div>
+        <div class="p-num">0 €</div>
+        <div class="p-sub">nach 12 Monaten</div>
+      </div>
+    </div>
+    <div class="bottom-row" id="brow">
+      <span class="br-label">Effektive Liquiditätsbelastung</span>
+      <span class="br-val" id="pct">0 %</span>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const p0=document.getElementById("p0"),p1=document.getElementById("p1"),brow=document.getElementById("brow");
+const num=document.getElementById("num"),pct=document.getElementById("pct");
+const H=3400,DO=500,ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function cu(el,target,dur,fmt){const t0=Date.now();(function tick(){const p=Math.min((Date.now()-t0)/dur,1);el.textContent=fmt(Math.round(ease(p)*target));if(p<1)requestAnimationFrame(tick);})();}
+function fmtEur(n){return(n>=1000?n.toLocaleString("de-DE"):n)+" €";}
+function show(){
+  [p0,p1].forEach(e=>{e.style.opacity="0";e.style.transform="translateY(.42em)";});
+  brow.style.opacity="0";brow.style.transform="translateY(.32em)";
+  num.textContent="0 €";pct.textContent="0 %";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const di="opacity .65s ease,transform .65s cubic-bezier(.4,0,.2,1)";
+    p0.style.transition=di;p0.style.opacity="1";p0.style.transform="translateY(0)";
+    setTimeout(()=>{p1.style.transition=di;p1.style.opacity="1";p1.style.transform="translateY(0)";},120);
+    setTimeout(()=>{cu(num,15120,1800,fmtEur);},300);
+    setTimeout(()=>{brow.style.transition="opacity .5s ease,transform .5s ease";brow.style.opacity="1";brow.style.transform="translateY(0)";cu(pct,100,1200,n=>n+" %");},700);
+    setTimeout(()=>{
+      [p0,p1,brow].forEach(e=>{e.style.transition=`opacity ${DO}ms ease`;e.style.opacity="0";});
+      setTimeout(show,DO+100);
+    },H);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>
