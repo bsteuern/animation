@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#C531A4;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#C531A4;}
+.badge{font-size:.59em;font-weight:700;padding:.2em .62em;border-radius:.28em;white-space:nowrap;}
+.bdg-pu{background:#C531A4;color:#fff;}
+.bdg-white{background:rgba(249,244,236,.9);color:#0E0C1C;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4% 8%;gap:.2em;opacity:0;transition:opacity .5s ease;" id="tree">
+    <!-- root -->
+    <div id="root" style="background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);padding:.35em .85em;text-align:center;opacity:0;">
+      <span style="font-size:.65em;font-weight:700;color:#0E0C1C;">Umsatz &gt; 22.000 €?</span>
+    </div>
+    <!-- lines + badges -->
+    <div style="width:82%;height:1.8em;position:relative;">
+      <svg width="100%" height="100%" viewBox="0 0 200 44" fill="none">
+        <line x1="100" y1="0" x2="100" y2="22" stroke="rgba(249,244,236,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="22" stroke-dashoffset="22" id="l0" style="transition:stroke-dashoffset .5s cubic-bezier(.65,0,.35,1);"/>
+        <line x1="100" y1="22" x2="36" y2="22" stroke="rgba(249,244,236,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="64" stroke-dashoffset="64" id="l1" style="transition:stroke-dashoffset .55s .48s cubic-bezier(.65,0,.35,1);"/>
+        <line x1="100" y1="22" x2="164" y2="22" stroke="rgba(249,244,236,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="64" stroke-dashoffset="64" id="l2" style="transition:stroke-dashoffset .55s .48s cubic-bezier(.65,0,.35,1);"/>
+        <line x1="36" y1="22" x2="36" y2="44" stroke="rgba(249,244,236,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="22" stroke-dashoffset="22" id="l3" style="transition:stroke-dashoffset .4s 1.06s cubic-bezier(.65,0,.35,1);"/>
+        <line x1="164" y1="22" x2="164" y2="44" stroke="rgba(249,244,236,.6)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="22" stroke-dashoffset="22" id="l4" style="transition:stroke-dashoffset .4s 1.06s cubic-bezier(.65,0,.35,1);"/>
+      </svg>
+      <div id="lnein" style="position:absolute;left:18%;top:6px;opacity:0;transform:scale(.6);transition:opacity .35s ease,transform .4s cubic-bezier(.34,1.5,.64,1);">
+        <span class="badge bdg-white" style="font-size:.5em;">Nein</span>
+      </div>
+      <div id="lja" style="position:absolute;right:18%;top:6px;opacity:0;transform:scale(.6);transition:opacity .35s ease,transform .4s cubic-bezier(.34,1.5,.64,1);">
+        <span class="badge bdg-white" style="font-size:.5em;">Ja</span>
+      </div>
+    </div>
+    <!-- branch cards -->
+    <div id="br" style="display:flex;width:100%;gap:.4em;opacity:0;">
+      <div style="flex:1;background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);padding:.4em .6em;text-align:center;">
+        <div style="font-size:.6em;font-weight:700;color:#15803D;margin-bottom:.12em;">Kleinunternehmer</div>
+        <div style="font-size:.54em;color:#8A7880;">Keine USt-Pflicht · § 19 UStG</div>
+      </div>
+      <div style="flex:1;background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);padding:.4em .6em;text-align:center;">
+        <div style="font-size:.6em;font-weight:700;color:#C531A4;margin-bottom:.12em;">Regelbesteuerung</div>
+        <div style="font-size:.54em;color:#8A7880;">19 % / 7 % USt · UStVA monatlich</div>
+      </div>
+    </div>
+    <!-- note centered -->
+    <div id="note" style="background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);width:100%;display:flex;align-items:center;justify-content:center;gap:.55em;padding:.38em .68em;opacity:0;transform:translateY(.28em);">
+      <span style="font-size:.62em;color:rgba(14,12,28,.5);">Reverse-Charge / IGL beachten</span>
+      <span class="badge bdg-pu">b'steuern prüft</span>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const tree=document.getElementById("tree"),root=document.getElementById("root");
+const ls=[0,1,2,3,4].map(i=>document.getElementById("l"+i));
+const lnein=document.getElementById("lnein"),lja=document.getElementById("lja");
+const br=document.getElementById("br"),note=document.getElementById("note");
+const HOLD=3600,DO=400;
+function show(){
+  tree.style.opacity="0";root.style.opacity="0";br.style.opacity="0";
+  note.style.opacity="0";note.style.transform="translateY(.28em)";
+  [lnein,lja].forEach(e=>{e.style.opacity="0";e.style.transform="scale(.6)";});
+  ls.forEach(l=>{l.style.transition="none";l.style.strokeDashoffset=l.getAttribute("stroke-dasharray");});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    tree.style.opacity="1";
+    setTimeout(()=>{root.style.transition="opacity .5s ease";root.style.opacity="1";},200);
+    setTimeout(()=>{ls[0].style.strokeDashoffset="0";},700);
+    setTimeout(()=>{ls[1].style.strokeDashoffset="0";ls[2].style.strokeDashoffset="0";},1080);
+    setTimeout(()=>{lnein.style.opacity="1";lnein.style.transform="scale(1)";lja.style.opacity="1";lja.style.transform="scale(1)";},1280);
+    setTimeout(()=>{ls[3].style.strokeDashoffset="0";ls[4].style.strokeDashoffset="0";},1520);
+    setTimeout(()=>{br.style.transition="opacity .5s ease";br.style.opacity="1";},1820);
+    setTimeout(()=>{note.style.transition="opacity .5s ease,transform .5s ease";note.style.opacity="1";note.style.transform="translateY(0)";},2200);
+    setTimeout(()=>{tree.style.transition=`opacity ${DO}ms ease`;tree.style.opacity="0";setTimeout(show,DO+100);},HOLD);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>

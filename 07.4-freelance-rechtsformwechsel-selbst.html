@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#C531A4;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#C531A4;}
+.badge{font-size:.59em;font-weight:700;padding:.2em .62em;border-radius:.28em;white-space:nowrap;}
+.bdg-pu{background:#C531A4;color:#fff;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:5% 9%;gap:.45em;">
+    <div style="display:flex;gap:.45em;width:100%;">
+      <!-- EU -->
+      <div id="c0" style="flex:1;background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);overflow:hidden;opacity:0;transform:translateY(.4em);">
+        <div style="background:rgba(14,12,28,.06);padding:.28em .6em;border-bottom:1px solid rgba(14,12,28,.06);"><span style="font-size:.5em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(14,12,28,.35);">Einzelunternehmen</span></div>
+        <div style="padding:.45em .65em;">
+          <div style="font-size:.75em;font-weight:700;color:#0E0C1C;margin-bottom:.25em;">EU</div>
+          <div style="display:flex;flex-direction:column;gap:.15em;">
+            <div style="font-size:.54em;color:#B91C1C;">✕ Unbeschr. Haftung</div>
+            <div style="font-size:.54em;color:#B91C1C;">✕ ESt bis 45 %</div>
+            <div style="font-size:.54em;color:#15803D;">✓ Einfache Gründung</div>
+          </div>
+        </div>
+      </div>
+      <!-- UG -->
+      <div id="c1" style="flex:1;background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);overflow:hidden;opacity:0;transform:translateY(.4em);">
+        <div style="background:rgba(197,49,164,.08);padding:.28em .6em;border-bottom:1px solid rgba(197,49,164,.12);"><span style="font-size:.5em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(197,49,164,.65);">Zwischenstufe</span></div>
+        <div style="padding:.45em .65em;">
+          <div style="font-size:.75em;font-weight:700;color:#C531A4;margin-bottom:.25em;">UG</div>
+          <div style="display:flex;flex-direction:column;gap:.15em;">
+            <div style="font-size:.54em;color:#15803D;">✓ Beschr. Haftung</div>
+            <div style="font-size:.54em;color:#15803D;">✓ KSt 15 %</div>
+            <div style="font-size:.54em;color:#C531A4;">→ Ab 1 € möglich</div>
+          </div>
+        </div>
+      </div>
+      <!-- GmbH -->
+      <div id="c2" style="flex:1;background:#C531A4;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.25);overflow:hidden;opacity:0;transform:translateY(.4em);">
+        <div style="background:rgba(0,0,0,.12);padding:.28em .6em;border-bottom:1px solid rgba(255,255,255,.1);"><span style="font-size:.5em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.55);">Ziel</span></div>
+        <div style="padding:.45em .65em;">
+          <div style="font-size:.75em;font-weight:700;color:#fff;margin-bottom:.25em;">GmbH</div>
+          <div style="display:flex;flex-direction:column;gap:.15em;">
+            <div style="font-size:.54em;color:rgba(255,255,255,.85);">✓ Vollschutz Haftung</div>
+            <div style="font-size:.54em;color:rgba(255,255,255,.85);">✓ KSt + GewSt ~30 %</div>
+            <div style="font-size:.54em;color:rgba(255,255,255,.85);">✓ Investorenbereit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- divider label -->
+    <div id="header" style="width:100%;display:flex;align-items:center;justify-content:center;gap:.5em;opacity:0;">
+      <div style="flex:1;height:1px;background:rgba(249,244,236,.18);border-radius:1px;"></div>
+      <span style="font-size:.55em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(249,244,236,.45);">Rechtsformvergleich</span>
+      <div style="flex:1;height:1px;background:rgba(249,244,236,.18);border-radius:1px;"></div>
+    </div>
+    <!-- result -->
+    <div id="res" style="background:#F9F4EC;border-radius:.44em;box-shadow:0 6px 24px rgba(14,12,28,.2);width:100%;display:flex;align-items:center;justify-content:space-between;padding:.4em .68em;opacity:0;transform:translateY(.28em);">
+      <span style="font-size:.63em;color:rgba(14,12,28,.5);">Steueroptimale Umwandlung § UmwStG</span>
+      <span class="badge bdg-pu">b'steuern begleitet</span>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const cards=[0,1,2].map(i=>document.getElementById("c"+i));
+const header=document.getElementById("header"),res=document.getElementById("res");
+const HOLD=3600,DO=400;
+function show(){
+  [...cards,header,res].forEach(e=>{e.style.transition="none";e.style.opacity="0";});
+  cards.forEach(c=>c.style.transform="translateY(.4em)");res.style.transform="translateY(.28em)";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    cards.forEach((c,i)=>setTimeout(()=>{
+      c.style.transition="opacity .45s ease,transform .5s cubic-bezier(.34,1.2,.64,1)";
+      c.style.opacity="1";c.style.transform="translateY(0)";
+    },200+i*280));
+    setTimeout(()=>{header.style.transition="opacity .45s ease";header.style.opacity="1";},200+2*280+200);
+    setTimeout(()=>{res.style.transition="opacity .5s ease,transform .5s ease";res.style.opacity="1";res.style.transform="translateY(0)";},200+2*280+500);
+    setTimeout(()=>{
+      [...cards,header,res].forEach(e=>{e.style.transition=`opacity ${DO}ms ease`;e.style.opacity="0";});
+      setTimeout(show,DO+100);
+    },HOLD);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>
