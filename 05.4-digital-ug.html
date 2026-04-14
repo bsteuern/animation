@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#E37383;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#E37383;}
+.badge{font-size:.59em;font-weight:700;padding:.2em .62em;border-radius:.28em;white-space:nowrap;}
+.bdg-rose{background:#E37383;color:#fff;}
+.ncard{width:3.4em;height:3.4em;background:#F9F4EC;border-radius:.52em;box-shadow:0 2px 10px rgba(14,12,28,.1);display:flex;align-items:center;justify-content:center;border:1.5px solid transparent;transition:border-color .4s ease,box-shadow .4s ease,transform .4s cubic-bezier(.34,1.3,.64,1);}
+.nlabel{font-size:.56em;font-weight:500;color:rgba(249,244,236,.5);transition:color .4s ease,font-weight .4s ease;text-align:center;white-space:nowrap;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:5% 9%;gap:.65em;opacity:0;transition:opacity .55s ease;" id="flow">
+    <div style="display:flex;align-items:center;width:100%;">
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.3em;flex:0 0 auto;">
+        <div class="ncard" id="ni0"><svg width="1.5em" height="1.5em" viewBox="0 0 20 20" fill="none"><rect x="3.5" y="2" width="13" height="16" rx=".8" stroke="rgba(14,12,28,.22)" stroke-width="1.3" id="s0a"/><line x1="7" y1="7" x2="13" y2="7" stroke="rgba(14,12,28,.22)" stroke-width="1.1" stroke-linecap="round" id="s0b"/><line x1="7" y1="10" x2="13" y2="10" stroke="rgba(14,12,28,.22)" stroke-width="1.1" stroke-linecap="round" id="s0c"/><line x1="7" y1="13" x2="10.5" y2="13" stroke="rgba(14,12,28,.22)" stroke-width="1.1" stroke-linecap="round" id="s0d"/></svg></div>
+        <span class="nlabel" id="nl0">Beleg</span>
+      </div>
+
+      <div style="flex:1;position:relative;height:1.5px;margin:0 .25em;margin-bottom:.88em;">
+        <div style="position:absolute;inset:0;background:rgba(249,244,236,.2);border-radius:1px;"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:0%;background:rgba(249,244,236,.8);border-radius:1px;transition:width .42s cubic-bezier(.4,0,.2,1);" id="nc0"></div>
+        <div style="position:absolute;top:50%;left:0;width:.55em;height:.55em;background:#F9F4EC;border-radius:50%;transform:translateY(-50%) translateX(-50%);opacity:0;" id="dot0"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.3em;flex:0 0 auto;">
+        <div class="ncard" id="ni1"><svg width="1.5em" height="1.5em" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7.5" r="3" stroke="rgba(14,12,28,.22)" stroke-width="1.3" id="s1a"/><path d="M3.5 18c0-3.5 2.9-5.5 6.5-5.5s6.5 2 6.5 5.5" stroke="rgba(14,12,28,.22)" stroke-width="1.3" stroke-linecap="round" id="s1b"/></svg></div>
+        <span class="nlabel" id="nl1">KI-Scan</span>
+      </div>
+
+      <div style="flex:1;position:relative;height:1.5px;margin:0 .25em;margin-bottom:.88em;">
+        <div style="position:absolute;inset:0;background:rgba(249,244,236,.2);border-radius:1px;"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:0%;background:rgba(249,244,236,.8);border-radius:1px;transition:width .42s cubic-bezier(.4,0,.2,1);" id="nc1"></div>
+        <div style="position:absolute;top:50%;left:0;width:.55em;height:.55em;background:#F9F4EC;border-radius:50%;transform:translateY(-50%) translateX(-50%);opacity:0;" id="dot1"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.3em;flex:0 0 auto;">
+        <div class="ncard" id="ni2"><svg width="1.5em" height="1.5em" viewBox="0 0 20 20" fill="none"><polyline points="2.5,14 6.5,8.5 10,11.5 14,5.5" stroke="rgba(14,12,28,.22)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" id="s2a"/><line x1="2.5" y1="17" x2="17.5" y2="17" stroke="rgba(14,12,28,.22)" stroke-width="1.1" stroke-linecap="round" id="s2b"/></svg></div>
+        <span class="nlabel" id="nl2">Buchhal­tung</span>
+      </div>
+
+      <div style="flex:1;position:relative;height:1.5px;margin:0 .25em;margin-bottom:.88em;">
+        <div style="position:absolute;inset:0;background:rgba(249,244,236,.2);border-radius:1px;"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:0%;background:rgba(249,244,236,.8);border-radius:1px;transition:width .42s cubic-bezier(.4,0,.2,1);" id="nc2"></div>
+        <div style="position:absolute;top:50%;left:0;width:.55em;height:.55em;background:#F9F4EC;border-radius:50%;transform:translateY(-50%) translateX(-50%);opacity:0;" id="dot2"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.3em;flex:0 0 auto;">
+        <div class="ncard" id="ni3"><svg width="1.5em" height="1.5em" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="rgba(14,12,28,.22)" stroke-width="1.3" id="s3a"/><path d="M6.5 10l3 3 4.5-4.5" stroke="rgba(14,12,28,.22)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" id="s3b"/></svg></div>
+        <span class="nlabel" id="nl3">Bericht</span>
+      </div>
+
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;background:#F9F4EC;border-radius:.46em;padding:.48em .75em;box-shadow:0 2px 14px rgba(14,12,28,.1);opacity:0;transform:translateY(.32em);transition:opacity .5s ease,transform .5s ease;" id="fres">
+      <span style="font-size:.63em;color:rgba(14,12,28,.5);">Vollautomatischer GoBD-konformer Prozess</span>
+      <span class="badge bdg-rose">Echtzeit</span>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+
+const flow=document.getElementById("flow");
+const cards=[0,1,2,3].map(i=>document.getElementById("ni"+i));
+const labels=[0,1,2,3].map(i=>document.getElementById("nl"+i));
+const conns=[0,1,2].map(i=>document.getElementById("nc"+i));
+const dots=[0,1,2].map(i=>document.getElementById("dot"+i));
+const fres=document.getElementById("fres");
+const H=3400,DO=450,STEP=680,CONN=360;
+
+const strokeIds=[["s0a","s0b","s0c","s0d"],["s1a","s1b"],["s2a","s2b"],["s3a","s3b"]];
+const strokes=strokeIds.map(ids=>ids.map(id=>document.getElementById(id)));
+
+function setStroke(i,color){strokes[i].forEach(el=>{if(el.getAttribute("stroke")!=="none")el.setAttribute("stroke",color);});}
+
+function setActive(i){
+  cards[i].style.borderColor="#E37383";
+  cards[i].style.boxShadow="0 4px 20px rgba(14,12,28,.18)";
+  cards[i].style.transform="scale(1.1)";
+  labels[i].style.color="rgba(249,244,236,.95)";
+  labels[i].style.fontWeight="700";
+  setStroke(i,"#E37383");
+}
+function setDone(i){
+  cards[i].style.borderColor="transparent";
+  cards[i].style.boxShadow="0 2px 10px rgba(14,12,28,.1)";
+  cards[i].style.transform="scale(1)";
+  labels[i].style.color="rgba(249,244,236,.5)";
+  labels[i].style.fontWeight="500";
+  setStroke(i,"rgba(14,12,28,.4)");
+}
+function resetAll(){
+  cards.forEach((c,i)=>{c.style.transition="none";c.style.borderColor="transparent";c.style.boxShadow="0 2px 10px rgba(14,12,28,.1)";c.style.transform="scale(1)";setStroke(i,"rgba(14,12,28,.22)");});
+  labels.forEach(l=>{l.style.transition="none";l.style.color="rgba(249,244,236,.5)";l.style.fontWeight="500";});
+  conns.forEach(c=>{c.style.transition="none";c.style.width="0%";});
+  dots.forEach(d=>{d.style.opacity="0";});
+  fres.style.transition="none";fres.style.opacity="0";fres.style.transform="translateY(.32em)";
+  flow.style.opacity="0";
+}
+
+function activateStep(i,done){
+  cards[i].style.transition="border-color .4s ease,box-shadow .4s ease,transform .4s cubic-bezier(.34,1.3,.64,1)";
+  labels[i].style.transition="color .4s ease";
+  setActive(i);
+  if(i>0)setDone(i-1);
+  if(i<3){
+    setTimeout(()=>{
+      dots[i].style.opacity="1";
+      dots[i].animate([{left:"0%"},{left:"100%"}],{duration:CONN,easing:"cubic-bezier(.4,0,.2,1)",fill:"forwards"}).onfinish=()=>{dots[i].style.opacity="0";};
+      conns[i].style.transition=`width ${CONN}ms cubic-bezier(.4,0,.2,1)`;conns[i].style.width="100%";
+      setTimeout(()=>activateStep(i+1,done),CONN+80);
+    },STEP);
+  } else {
+    setTimeout(()=>{
+      setDone(3);
+      fres.style.transition="opacity .5s ease,transform .5s ease";fres.style.opacity="1";fres.style.transform="translateY(0)";
+      setTimeout(done,800);
+    },STEP);
+  }
+}
+
+function show(){
+  resetAll();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    flow.style.transition="opacity .55s ease";flow.style.opacity="1";
+    setTimeout(()=>activateStep(0,()=>{setTimeout(()=>{flow.style.transition=`opacity ${DO}ms ease`;flow.style.opacity="0";setTimeout(show,DO+100);},H);}),400);
+  }));
+}
+setTimeout(show,250);
+</script>
+</body>
+</html>
