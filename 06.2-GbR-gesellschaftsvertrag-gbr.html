@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#FF0670;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#FF0670;}
+.badge{font-size:.59em;font-weight:700;padding:.2em .62em;border-radius:.28em;white-space:nowrap;}
+.bdg-pink{background:#FF0670;color:#fff;}
+.bdg-green{background:rgba(21,128,61,.11);color:#15803D;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:4.5% 10%;">
+    <div id="tbl" style="width:100%;background:#F9F4EC;border-radius:.46em;overflow:hidden;opacity:0;transform:translateY(.3em);box-shadow:0 8px 32px rgba(14,12,28,.22);">
+      <!-- header -->
+      <div style="display:flex;align-items:center;background:#FF0670;padding:.42em .7em;">
+        <span style="flex:2;font-size:.6em;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.08em;">Regelung</span>
+        <span style="flex:1;font-size:.6em;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.08em;text-align:right;">Anteil</span>
+        <span style="flex:1;font-size:.6em;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.08em;text-align:right;">Steuer</span>
+      </div>
+      <!-- rows -->
+      <div class="tr" style="display:flex;align-items:center;padding:.42em .7em;border-bottom:1px solid rgba(14,12,28,.06);opacity:0;transform:translateX(-.5em);">
+        <span style="flex:2;font-size:.64em;color:#0E0C1C;font-weight:500;">Gewinnverteilung</span>
+        <span style="flex:1;font-size:.64em;color:rgba(14,12,28,.45);text-align:right;">60 / 40</span>
+        <span style="flex:1;text-align:right;"><span class="badge bdg-green">optimiert</span></span>
+      </div>
+      <div class="tr" style="display:flex;align-items:center;padding:.42em .7em;border-bottom:1px solid rgba(14,12,28,.06);opacity:0;transform:translateX(-.5em);">
+        <span style="flex:2;font-size:.64em;color:#0E0C1C;font-weight:500;">Entnahmen</span>
+        <span style="flex:1;font-size:.64em;color:rgba(14,12,28,.45);text-align:right;">flexibel</span>
+        <span style="flex:1;text-align:right;"><span class="badge bdg-green">steuerfrei</span></span>
+      </div>
+      <div class="tr" style="display:flex;align-items:center;padding:.42em .7em;border-bottom:1px solid rgba(14,12,28,.06);opacity:0;transform:translateX(-.5em);">
+        <span style="flex:2;font-size:.64em;color:#0E0C1C;font-weight:500;">Gesellschafterwechsel</span>
+        <span style="flex:1;font-size:.64em;color:rgba(14,12,28,.45);text-align:right;">geregelt</span>
+        <span style="flex:1;text-align:right;"><span class="badge bdg-pink">abgesichert</span></span>
+      </div>
+      <div class="tr" style="display:flex;align-items:center;padding:.42em .7em;opacity:0;transform:translateX(-.5em);">
+        <span style="flex:2;font-size:.64em;color:#0E0C1C;font-weight:500;">Gewinnentnahme EÜR</span>
+        <span style="flex:1;font-size:.64em;color:rgba(14,12,28,.45);text-align:right;">jährlich</span>
+        <span style="flex:1;text-align:right;"><span class="badge bdg-green">fristgerecht</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const tbl=document.getElementById("tbl");
+const rows=document.querySelectorAll(".tr");
+const H=3400,DO=450;
+function show(){
+  tbl.style.transition="none";tbl.style.opacity="0";tbl.style.transform="translateY(.3em)";
+  rows.forEach(r=>{r.style.transition="none";r.style.opacity="0";r.style.transform="translateX(-.5em)";});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    tbl.style.transition="opacity .55s ease,transform .55s cubic-bezier(.4,0,.2,1)";
+    tbl.style.opacity="1";tbl.style.transform="translateY(0)";
+    rows.forEach((r,i)=>setTimeout(()=>{
+      r.style.transition="opacity .4s ease,transform .4s ease";r.style.opacity="1";r.style.transform="translateX(0)";
+    },300+i*300));
+    setTimeout(()=>{
+      tbl.style.transition=`opacity ${DO}ms ease`;tbl.style.opacity="0";
+      setTimeout(show,DO+100);
+    },H);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>

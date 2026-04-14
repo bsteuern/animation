@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#FF0670;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#FF0670;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:5% 10%;">
+    <div id="card" style="width:100%;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 14px rgba(14,12,28,.1);padding:.65em .85em;display:flex;flex-direction:column;gap:.3em;opacity:0;transform:translateY(.35em);">
+      <div style="font-size:.6em;font-weight:700;color:#0E0C1C;margin-bottom:.1em;letter-spacing:-.01em;">GbR Risiko-Status</div>
+      <div style="display:flex;align-items:center;gap:.5em;padding:.3em .1em;">
+        <div id="led0" style="width:.65em;height:.65em;border-radius:50%;background:#B91C1C;flex-shrink:0;box-shadow:0 0 6px rgba(185,28,28,.5);transition:background .4s ease,box-shadow .4s ease;"></div>
+        <span style="font-size:.64em;font-weight:500;color:#0E0C1C;flex:1;">Haftungsrisiko</span>
+        <span id="lb0" style="font-size:.56em;font-weight:600;color:#B91C1C;transition:color .4s ease;">unbeschränkt</span>
+      </div>
+      <div style="height:1px;background:rgba(14,12,28,.06);"></div>
+      <div style="display:flex;align-items:center;gap:.5em;padding:.3em .1em;">
+        <div id="led1" style="width:.65em;height:.65em;border-radius:50%;background:#B91C1C;flex-shrink:0;box-shadow:0 0 6px rgba(185,28,28,.5);transition:background .4s ease,box-shadow .4s ease;"></div>
+        <span style="font-size:.64em;font-weight:500;color:#0E0C1C;flex:1;">Privatvermögen</span>
+        <span id="lb1" style="font-size:.56em;font-weight:600;color:#B91C1C;transition:color .4s ease;">gefährdet</span>
+      </div>
+      <div style="height:1px;background:rgba(14,12,28,.06);"></div>
+      <div style="display:flex;align-items:center;gap:.5em;padding:.3em .1em;">
+        <div id="led2" style="width:.65em;height:.65em;border-radius:50%;background:#B91C1C;flex-shrink:0;box-shadow:0 0 6px rgba(185,28,28,.5);transition:background .4s ease,box-shadow .4s ease;"></div>
+        <span style="font-size:.64em;font-weight:500;color:#0E0C1C;flex:1;">Steuerplanung</span>
+        <span id="lb2" style="font-size:.56em;font-weight:600;color:#B91C1C;transition:color .4s ease;">nicht vorhanden</span>
+      </div>
+      <div style="height:1px;background:rgba(14,12,28,.06);"></div>
+      <div style="display:flex;align-items:center;gap:.5em;padding:.3em .1em;">
+        <div id="led3" style="width:.65em;height:.65em;border-radius:50%;background:#B91C1C;flex-shrink:0;box-shadow:0 0 6px rgba(185,28,28,.5);transition:background .4s ease,box-shadow .4s ease;"></div>
+        <span style="font-size:.64em;font-weight:500;color:#0E0C1C;flex:1;">Transparenz</span>
+        <span id="lb3" style="font-size:.56em;font-weight:600;color:#B91C1C;transition:color .4s ease;">ungenutzt</span>
+      </div>
+      <div id="action" style="background:#FF0670;border-radius:.38em;padding:.35em .6em;display:flex;align-items:center;justify-content:space-between;margin-top:.1em;opacity:0;transform:translateY(.25em);">
+        <span style="font-size:.6em;color:rgba(255,255,255,.75);">b'steuern aktiviert</span>
+        <span style="font-size:.6em;font-weight:700;color:#fff;">Alle Risiken behoben ✓</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card");
+const leds=[0,1,2,3].map(i=>document.getElementById("led"+i));
+const labels=[0,1,2,3].map(i=>document.getElementById("lb"+i));
+const action=document.getElementById("action");
+const greenText=["strukturiert","geschützt","optimiert","genutzt"];
+const H=3600,DO=450,SI=380;
+function show(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.35em)";
+  leds.forEach(l=>{l.style.transition="none";l.style.background="#B91C1C";l.style.boxShadow="0 0 6px rgba(185,28,28,.5)";});
+  labels.forEach((lb,i)=>{lb.style.transition="none";lb.style.color="#B91C1C";lb.textContent=["unbeschränkt","gefährdet","nicht vorhanden","ungenutzt"][i];});
+  action.style.transition="none";action.style.opacity="0";action.style.transform="translateY(.25em)";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .6s ease,transform .6s cubic-bezier(.4,0,.2,1)";
+    card.style.opacity="1";card.style.transform="translateY(0)";
+    leds.forEach((l,i)=>setTimeout(()=>{
+      l.style.background="#15803D";l.style.boxShadow="0 0 8px rgba(21,128,61,.5)";
+      labels[i].style.color="#15803D";labels[i].textContent=greenText[i];
+    },800+i*SI));
+    const afterT=800+3*SI+400;
+    setTimeout(()=>{
+      action.style.transition="opacity .45s ease,transform .45s ease";
+      action.style.opacity="1";action.style.transform="translateY(0)";
+    },afterT);
+    setTimeout(()=>{
+      card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";
+      setTimeout(show,DO+100);
+    },H);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>

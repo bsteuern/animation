@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#FF0670;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#FF0670;}
+.badge{font-size:.59em;font-weight:700;padding:.2em .62em;border-radius:.28em;white-space:nowrap;}
+.bdg-pink{background:#FF0670;color:#fff;}
+.bdg-green{background:rgba(21,128,61,.11);color:#15803D;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5% 10%;gap:.5em;">
+
+    <!-- transform row -->
+    <div id="morphrow" style="display:flex;align-items:center;gap:.5em;width:100%;opacity:0;">
+
+      <!-- FROM: GbR -->
+      <div style="flex:1;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 12px rgba(14,12,28,.1);padding:.62em .7em;text-align:center;">
+        <div style="font-size:.56em;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(14,12,28,.35);margin-bottom:.15em;">Vorher</div>
+        <div style="font-size:1.15em;font-weight:700;color:#0E0C1C;margin:.08em 0;">GbR</div>
+        <div style="font-size:.55em;color:#B91C1C;line-height:1.4;">Unbeschränkte<br>Haftung</div>
+      </div>
+
+      <!-- Arrow -->
+      <div id="arrow" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:2.5em;height:2.5em;border-radius:50%;background:rgba(249,244,236,.18);opacity:0;transform:scale(.4);transition:opacity .45s ease,transform .45s cubic-bezier(.34,1.5,.64,1);">
+        <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="none"><path d="M2.5 8h11M9 4l4.5 4-4.5 4" stroke="#F9F4EC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- TO: GmbH -->
+      <div id="tobox" style="flex:1;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 12px rgba(14,12,28,.1);padding:.62em .7em;text-align:center;border:1.5px solid #FF0670;opacity:0;transform:scale(.82);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.4,.64,1);">
+        <div style="font-size:.56em;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(14,12,28,.35);margin-bottom:.15em;">Nachher</div>
+        <div style="font-size:1.15em;font-weight:700;color:#FF0670;margin:.08em 0;">GmbH</div>
+        <div style="font-size:.55em;color:#15803D;line-height:1.4;">Beschränkte<br>Haftung</div>
+      </div>
+
+    </div>
+
+    <!-- benefit rows -->
+    <div style="display:flex;flex-direction:column;gap:.28em;width:100%;">
+      <div id="mb0" style="display:flex;align-items:center;justify-content:space-between;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 12px rgba(14,12,28,.1);padding:.42em .68em;opacity:0;transform:translateY(.3em);">
+        <span style="font-size:.63em;color:rgba(14,12,28,.5);">Steueroptimale Umwandlung</span>
+        <span class="badge bdg-pink">§ UmwStG</span>
+      </div>
+      <div id="mb1" style="display:flex;align-items:center;justify-content:space-between;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 12px rgba(14,12,28,.1);padding:.42em .68em;opacity:0;transform:translateY(.3em);">
+        <span style="font-size:.63em;color:rgba(14,12,28,.5);">Stille Reserven geschont</span>
+        <span class="badge bdg-green">gesichert</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+
+const morphrow=document.getElementById("morphrow");
+const arrow=document.getElementById("arrow");
+const tobox=document.getElementById("tobox");
+const mb=[document.getElementById("mb0"),document.getElementById("mb1")];
+const H=3400,DO=450;
+
+function show(){
+  morphrow.style.transition="none";morphrow.style.opacity="0";
+  arrow.style.transition="none";arrow.style.opacity="0";arrow.style.transform="scale(.4)";
+  tobox.style.transition="none";tobox.style.opacity="0";tobox.style.transform="scale(.82)";
+  mb.forEach(e=>{e.style.transition="none";e.style.opacity="0";e.style.transform="translateY(.3em)";});
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // FROM box + row appears
+    morphrow.style.transition="opacity .5s ease";morphrow.style.opacity="1";
+
+    // arrow pops in
+    setTimeout(()=>{
+      arrow.style.opacity="1";arrow.style.transform="scale(1)";
+    },500);
+
+    // TO box bounces in
+    setTimeout(()=>{
+      tobox.style.opacity="1";tobox.style.transform="scale(1)";
+    },900);
+
+    // benefit rows slide up
+    mb.forEach((e,i)=>setTimeout(()=>{
+      e.style.transition="opacity .4s ease,transform .4s ease";
+      e.style.opacity="1";e.style.transform="translateY(0)";
+    },1300+i*280));
+
+    setTimeout(()=>{
+      [morphrow,...mb].forEach(e=>{e.style.transition=`opacity ${DO}ms ease`;e.style.opacity="0";});
+      setTimeout(show,DO+100);
+    },H);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>
