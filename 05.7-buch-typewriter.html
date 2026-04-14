@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#E37383;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;align-items:center;justify-content:center}
+
+/* Inner layout: top-aligned so both columns share the same top edge */
+.layout{display:flex;align-items:flex-start;gap:.7em}
+
+/* LEFT: hero typewriter card */
+.tw-card{background:#F9F4EC;border-radius:.65em;width:17em;box-shadow:0 .5em 2.5em rgba(0,0,0,.18);overflow:hidden;opacity:0;transition:opacity .6s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;flex-shrink:0}
+.tw-h{background:#E37383;padding:.52em .82em;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:1.2em}
+.tw-h-left{display:flex;align-items:center;gap:.32em;flex-shrink:0}
+.tw-dot{width:.42em;height:.42em;border-radius:50%;background:rgba(249,244,236,.35)}
+.tw-dot.on{background:#F9F4EC}
+.tw-title{font-size:.62em;font-weight:700;color:#F9F4EC;margin-left:.32em;white-space:nowrap}
+.tw-badge{font-size:.52em;font-weight:600;background:rgba(249,244,236,.22);color:#F9F4EC;padding:.15em .6em;border-radius:20px;white-space:nowrap;flex-shrink:0}
+
+/* Typewriter body — monospace, grows with content, no fixed height */
+.tw-body{padding:.58em .82em .45em;display:flex;flex-direction:column;gap:.2em;font-family:"DM Mono","Courier New",monospace}
+.tw-line{font-size:.62em;color:#0E0C1C;white-space:nowrap;overflow:hidden;line-height:1.5;display:flex;align-items:center}
+.tw-line.cmd{color:#E37383;font-weight:500}
+.tw-line.muted{color:rgba(14,12,28,.32)}
+.tw-line.ok{color:rgba(14,12,28,.55)}
+.cursor{display:inline-block;width:.52em;height:.84em;background:#E37383;margin-left:.07em;animation:blink .7s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* Conclusion block — appears after typing, stays until fade-out */
+.tw-conc{margin:.32em .82em 0;background:#E37383;border-radius:.42em;padding:.42em .7em;display:flex;align-items:center;justify-content:space-between;gap:.4em;opacity:0;transform:translateY(.25em);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.16,1,.3,1)}
+.tw-conc.v{opacity:1;transform:none}
+.tc-text{font-size:.62em;font-weight:700;color:#F9F4EC}
+.tc-sub{font-size:.52em;color:rgba(249,244,236,.65);margin-top:.04em}
+.tc-chk{width:1.4em;height:1.4em;border-radius:50%;background:rgba(249,244,236,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transform:scale(0);transition:transform .45s cubic-bezier(.34,1.5,.64,1)}
+.tc-chk.v{transform:scale(1)}
+.tc-chk svg{width:55%;height:55%}
+
+/* Footer — subtle, below conclusion */
+.tw-foot{padding:.32em .82em .38em;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;opacity:0;transition:opacity .4s;gap:.5em;border-top:1px solid rgba(14,12,28,.07);margin-top:.28em}
+.tf-l{font-size:.52em;color:rgba(14,12,28,.32);flex-shrink:0}
+.tf-r{font-size:.56em;font-weight:600;color:rgba(14,12,28,.4);white-space:nowrap;flex-shrink:0}
+
+/* RIGHT: smaller tool cards, top-aligned */
+.tools{display:flex;flex-direction:column;gap:.38em}
+.tool-card{background:#F9F4EC;border-radius:.52em;padding:.46em .72em;box-shadow:0 .2em 1em rgba(0,0,0,.13);opacity:0;transform:translateX(.55em);transition:opacity .42s ease,transform .48s cubic-bezier(.16,1,.3,1)}
+.tc-row{display:flex;align-items:flex-start;justify-content:space-between;gap:.4em}
+.tci-name{font-size:.64em;font-weight:700;color:#0E0C1C;display:block}
+.tci-desc{font-size:.5em;color:rgba(14,12,28,.4);margin-top:.05em;display:block;line-height:1.35}
+.tci-pill{font-size:.49em;font-weight:700;background:rgba(227,115,131,.12);color:#E37383;border-radius:20px;padding:.13em .48em;flex-shrink:0;align-self:center;white-space:nowrap;opacity:0;transform:scale(.7);transition:opacity .35s,transform .38s cubic-bezier(.34,1.5,.64,1)}
+.tci-pill.pop{opacity:1;transform:scale(1)}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 -1 -1 4.45905e-08 315.359 157.914)" fill="#E37383"/>
+<rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 -1 -1 4.45905e-08 315.359 315.516)" fill="#E37383"/>
+<rect width="157.602" height="157.758" transform="matrix(-1 -8.74228e-08 -8.65437e-08 1 157.602 0)" fill="#E37383"/>
+<rect width="157.602" height="157.758" transform="matrix(-1 -8.74228e-08 -8.65437e-08 1 157.602 157.758)" fill="#E37383"/>
+<path d="M157.602 157.914L157.602 157.758C136.905 157.758 116.411 161.838 97.2902 169.766C78.169 177.695 60.7952 189.315 46.1605 203.964C31.5258 218.613 19.917 236.004 11.9967 255.144C4.0765 274.285 0 294.799 0 315.516L157.602 315.516L315.36 315.516C315.36 294.819 311.279 274.325 303.351 255.204C295.423 236.083 283.803 218.709 269.153 204.074C254.504 189.44 237.113 177.831 217.973 169.911C198.833 161.99 178.319 157.914 157.602 157.914Z" fill="#F4C7CD"/>
+<path d="M157.602 157.758L0 157.758C0 137.041 4.0765 116.527 11.9967 97.3866C19.917 78.2466 31.5258 60.8554 46.1605 46.2062C60.7952 31.5571 78.169 19.9367 97.2902 12.0086C116.411 4.08053 136.905 -2.71492e-06 157.602 0V0.312317C178.319 0.312348 198.833 4.38884 217.973 12.309C237.113 20.2293 254.504 31.8381 269.153 46.4728C283.803 61.1075 295.423 78.4813 303.351 97.6025C311.279 116.724 315.36 137.217 315.36 157.914H157.602L157.602 157.758Z" fill="#F4C7CD"/></svg>
+<div class="stage" id="stage">
+  <div class="layout">
+    <div class="tw-card" id="twcard">
+      <div class="tw-h">
+        <div class="tw-h-left">
+          <div class="tw-dot on"></div><div class="tw-dot"></div><div class="tw-dot"></div>
+          <span class="tw-title">Buchhaltung · automatisiert</span>
+        </div>
+        <span class="tw-badge">UG 2024</span>
+      </div>
+      <div class="tw-body" id="tbody"></div>
+      <div class="tw-conc" id="twconc">
+        <div>
+          <div class="tc-text">Buchhaltung vollständig</div>
+          <div class="tc-sub">24 / 24 Belege · GoBD-konform · −80 % Aufwand</div>
+        </div>
+        <div class="tc-chk" id="tcchk">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#F9F4EC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="tw-foot" id="twfoot">
+        <span class="tf-l">GoBD-konform · laufend</span>
+        <span class="tf-r">24 / 24 Belege ✓</span>
+      </div>
+    </div>
+
+    <div class="tools" id="tools">
+      <div class="tool-card" id="tc0">
+        <div class="tc-row">
+          <div><span class="tci-name">PennyLane</span><span class="tci-desc">Rechnungen &amp; Zahlungen · automatisch kategorisiert</span></div>
+          <span class="tci-pill" id="tp0">verbunden</span>
+        </div>
+      </div>
+      <div class="tool-card" id="tc1">
+        <div class="tc-row">
+          <div><span class="tci-name">LexOffice</span><span class="tci-desc">Belege erfassen · GoBD-Archivierung in Echtzeit</span></div>
+          <span class="tci-pill" id="tp1">aktiv</span>
+        </div>
+      </div>
+      <div class="tool-card" id="tc2">
+        <div class="tc-row">
+          <div><span class="tci-name">DATEV</span><span class="tci-desc">Direkter Export an Steuerberater · keine Medienbrüche</span></div>
+          <span class="tci-pill" id="tp2">synchron</span>
+        </div>
+      </div>
+      <div class="tool-card" id="tc3">
+        <div class="tc-row">
+          <div><span class="tci-name">Administration</span><span class="tci-desc">Weniger Verwaltung · mehr Fokus auf dein Business</span></div>
+          <span class="tci-pill" id="tp3">−80 % Zeit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+
+const twcard=document.getElementById("twcard"),tbody=document.getElementById("tbody");
+const twconc=document.getElementById("twconc"),tcchk=document.getElementById("tcchk"),twfoot=document.getElementById("twfoot");
+const tcs=[0,1,2,3].map(i=>document.getElementById("tc"+i));
+const tps=[0,1,2,3].map(i=>document.getElementById("tp"+i));
+const H=4800,DO=600;
+
+const lines=[
+  {text:"→ Verbinde PennyLane, LexOffice…",cls:"muted"},
+  {text:"✓ Verbindung hergestellt",cls:"ok"},
+  {text:"→ Importiere 24 neue Belege",cls:"muted"},
+  {text:"→ Automatische Kategorienzuordnung",cls:"muted"},
+  {text:"✓ 24 / 24 gebucht",cls:"ok"},
+  {text:"→ DATEV-Export vorbereitet",cls:"muted"},
+];
+
+function typeLine(el,text,speed,done){
+  el.innerHTML="";let i=0;
+  const iv=setInterval(()=>{
+    el.innerHTML=text.slice(0,i)+(i<text.length?'<span class="cursor"></span>':"");
+    i++;if(i>text.length){clearInterval(iv);if(done)done()}
+  },speed);
+}
+function runLines(idx,done){
+  if(idx>=lines.length){done();return}
+  const d=document.createElement("div");d.className=`tw-line ${lines[idx].cls}`;tbody.appendChild(d);
+  const spd=lines[idx].cls==="muted"?25:31;
+  typeLine(d,lines[idx].text,spd,()=>setTimeout(()=>runLines(idx+1,done),75));
+}
+
+function run(){
+  twcard.style.transition="none";twcard.style.opacity="0";
+  twconc.classList.remove("v");tcchk.classList.remove("v");
+  twfoot.style.transition="none";twfoot.style.opacity="0";
+  tbody.innerHTML="";
+  tcs.forEach(t=>{t.style.transition="none";t.style.opacity="0";t.style.transform="translateX(.55em)"});
+  tps.forEach(p=>{p.style.transition="none";p.classList.remove("pop")});
+  // Reset conclusion transition to none so it resets without animating
+  twconc.style.transition="none";twconc.style.opacity="0";twconc.style.transform="translateY(.25em)";
+  tcchk.style.transition="none";tcchk.style.transform="scale(0)";
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // Card fades in
+    twcard.style.transition="opacity .6s cubic-bezier(.4,0,.2,1)";twcard.style.opacity="1";
+    // Tool cards stagger in
+    tcs.forEach((tc,i)=>setTimeout(()=>{
+      tc.style.transition="opacity .42s ease,transform .48s cubic-bezier(.16,1,.3,1)";
+      tc.style.opacity="1";tc.style.transform="none";
+      setTimeout(()=>tps[i].classList.add("pop"),260);
+    },180+i*240));
+    // Typewriter runs, then conclusion appears and stays
+    setTimeout(()=>{
+      runLines(0,()=>{
+        // Conclusion slides in
+        setTimeout(()=>{
+          twconc.style.transition="opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.16,1,.3,1)";
+          twconc.classList.add("v");
+          // Checkmark pops with slight delay
+          setTimeout(()=>{tcchk.style.transition="transform .45s cubic-bezier(.34,1.5,.64,1)";tcchk.classList.add("v")},350);
+          // Footer appears subtly after conclusion
+          setTimeout(()=>{twfoot.style.transition="opacity .4s";twfoot.style.opacity="1"},500);
+        },200);
+      });
+    },300);
+
+    // Everything fades out together at the end (conclusion stays the full hold)
+    setTimeout(()=>{
+      const t=`opacity ${DO}ms ease`;
+      [twcard,...tcs].forEach(el=>{el.style.transition=t;el.style.opacity="0"});
+      setTimeout(run,DO+150);
+    },900+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>

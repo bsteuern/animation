@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#E37383;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;align-items:center;justify-content:center;gap:2.2em}
+
+/* Left: stack — no wrapper needed, sits directly in flex */
+.stack{position:relative;width:11em;height:7.8em;opacity:0;transition:opacity .55s;flex-shrink:0}
+.scard{position:absolute;inset:0;background:#F9F4EC;border-radius:.6em;box-shadow:0 .4em 2em rgba(0,0,0,.18);padding:.6em .85em;display:flex;flex-direction:column;gap:.18em;will-change:transform,opacity}
+.sc-tag{font-size:.5em;font-weight:700;border-radius:20px;padding:.14em .55em;width:fit-content;background:rgba(14,12,28,.08);color:rgba(14,12,28,.35)}
+.sc-t{font-size:.68em;font-weight:700;color:#0E0C1C;margin-top:.1em}
+.sc-s{font-size:.54em;color:rgba(14,12,28,.42);line-height:1.4}
+.sc-badge{display:inline-flex;align-items:center;margin-top:.25em;font-size:.5em;font-weight:700;background:rgba(14,12,28,.07);color:rgba(14,12,28,.45);border-radius:20px;padding:.16em .55em}
+
+
+
+/* Right: summary list */
+.summary-wrap{display:flex;flex-direction:column;gap:.35em;opacity:0;transition:opacity .55s}
+.sum-row{display:flex;align-items:center;gap:.45em;background:#F9F4EC;border-radius:.5em;padding:.42em .65em;border-left:3px solid transparent;transition:opacity .4s ease,border-color .35s ease,box-shadow .35s ease;box-shadow:none;will-change:opacity,border-color}
+.sum-row.dim{opacity:.28}
+.sum-row.active{opacity:1;border-left-color:#E37383;box-shadow:0 .2em 1em rgba(0,0,0,.12)}
+.sr-icon{width:1.7em;height:1.7em;border-radius:.35em;background:rgba(227,115,131,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.68em;font-weight:700;color:#E37383;transition:background .35s,color .35s}
+.sum-row.active .sr-icon{background:#E37383;color:#F9F4EC}
+.sr-info{display:flex;flex-direction:column}
+.sri-t{font-size:.62em;font-weight:700;color:#0E0C1C}
+.sri-s{font-size:.5em;color:rgba(14,12,28,.42);margin-top:.04em}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.308397 0L157.758 2.75293e-05C137.081 2.30086e-05 116.607 4.08055 97.5045 12.0086C78.4019 19.9367 61.0448 31.5571 46.4243 46.2063C31.8037 60.8555 20.2061 78.2466 12.2935 97.3867C4.38196 116.524 0.309423 137.036 0.30837 157.75L0.308397 0Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.30837 157.75C0.30837 157.753 0.30837 157.747 0.30837 157.75Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L315.359 0.339678L157.758 0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L157.758 157.758H157.601Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758ZM6.88899e-06 157.75L0 315.352L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789ZM315.359 158.009C315.325 178.638 311.25 199.061 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L315.36 315.508L315.359 158.009Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789Z" fill="#F4C7CD"/>
+<path d="M157.758 2.75293e-05V0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601L0.30837 157.75C0.309423 137.036 4.38196 116.524 12.2935 97.3867C20.2061 78.2466 31.8037 60.8555 46.4243 46.2063C61.0448 31.5571 78.4019 19.9367 97.5045 12.0086C116.607 4.08055 137.081 2.30086e-05 157.758 2.75293e-05Z" fill="#E37383"/>
+<path d="M157.758 157.789L315.359 157.789L315.36 157.75C315.36 178.467 311.283 198.981 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75L0.30837 157.75L157.601 157.758V157.789H157.758Z" fill="#F4C7CD"/></svg>
+<div class="stage" id="stage">
+  <div class="stack" id="stack">
+      <!-- Bottom to top in DOM = top to bottom visually (last child = on top) -->
+      <div class="scard" id="sc3" style="transform:rotate(4deg) translateY(.35em)">
+        <div class="sc-tag idle" id="tag3">Darlehen</div>
+        <div class="sc-t">Gesellschafterdarlehen</div>
+        <div class="sc-s">Fremdvergleich gewahrt, klare Dokumentation</div>
+        <div class="sc-badge" id="bdg3">✓ konform</div>
+      </div>
+      <div class="scard" id="sc2" style="transform:rotate(-2.5deg) translateY(.22em)">
+        <div class="sc-tag idle" id="tag2">Trennung</div>
+        <div class="sc-t">Privat vs. Geschäftlich</div>
+        <div class="sc-s">Klare Trennung der Finanzströme, keine Vermischung</div>
+        <div class="sc-badge" id="bdg2">✓ sauber</div>
+      </div>
+      <div class="scard" id="sc1" style="transform:rotate(2deg) translateY(.1em)">
+        <div class="sc-tag idle" id="tag1">Tantieme</div>
+        <div class="sc-t">Tantieme &amp; Ausschüttung</div>
+        <div class="sc-s">25 % KapErtrSt, gewinnabhängige Gestaltung optimiert</div>
+        <div class="sc-badge" id="bdg1">✓ optimiert</div>
+      </div>
+      <div class="scard" id="sc0">
+        <div class="sc-tag idle" id="tag0">Gehalt</div>
+        <div class="sc-t">GF-Vergütung 2024</div>
+        <div class="sc-s">Steueroptimale Strukturierung aller Gehaltskomponenten</div>
+        <div class="sc-badge" id="bdg0">✓ strukturiert</div>
+      </div>
+  </div>
+
+  <!-- Right list -->
+  <div class="summary-wrap" id="sumw">
+    <div class="sum-row dim" id="sr0">
+      <div class="sr-icon" id="si0">€</div>
+      <div class="sr-info"><span class="sri-t">Gehalt optimiert</span><span class="sri-s">66.000 € p.a. · steueroptimal</span></div>
+    </div>
+    <div class="sum-row dim" id="sr1">
+      <div class="sr-icon" id="si1">%</div>
+      <div class="sr-info"><span class="sri-t">Tantieme &amp; Ausschüttung</span><span class="sri-s">25 % KapErtrSt · günstig angerechnet</span></div>
+    </div>
+    <div class="sum-row dim" id="sr2">
+      <div class="sr-icon" id="si2">§</div>
+      <div class="sr-info"><span class="sri-t">Keine Vermischung</span><span class="sri-s">Privat / Geschäftlich klar getrennt</span></div>
+    </div>
+    <div class="sum-row dim" id="sr3">
+      <div class="sr-icon" id="si3">✓</div>
+      <div class="sr-info"><span class="sri-t">Darlehen konform</span><span class="sri-s">Fremdvergleich · vGA vermieden</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/18.7,h/9.3),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+
+const stack=document.getElementById("stack"),sumw=document.getElementById("sumw");
+const scards=[0,1,2,3].map(i=>document.getElementById("sc"+i));
+const srows=[0,1,2,3].map(i=>document.getElementById("sr"+i));
+const initTx=["none","rotate(2deg) translateY(.1em)","rotate(-2.5deg) translateY(.22em)","rotate(4deg) translateY(.35em)"];
+const H=5000,DO=600,STEP=1100;
+
+function setActive(rowIdx){
+  // Only the right list changes — cards stay visually unchanged
+  srows.forEach((r,i)=>{
+    if(i===rowIdx){r.classList.remove("dim");r.classList.add("active")}
+    else{r.classList.remove("active");r.classList.add("dim")}
+  });
+}
+
+function run(){
+  [stack,sumw].forEach(el=>{el.style.transition="none";el.style.opacity="0"});
+  scards.forEach((c,i)=>{c.style.transition="none";c.style.opacity="1";c.style.transform=initTx[i]});
+  srows.forEach(r=>{r.style.transition="none";r.classList.remove("active");r.classList.add("dim")});
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    setTimeout(()=>{stack.style.transition="opacity .55s";stack.style.opacity="1"},100);
+    setTimeout(()=>{sumw.style.transition="opacity .55s";sumw.style.opacity="1"},250);
+
+    // Phase 0: sr0 highlighted
+    setTimeout(()=>setActive(0),600);
+
+    // Phase 1: swipe sc0 → sr1 active
+    setTimeout(()=>{
+      scards[0].style.transition="transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease";
+      scards[0].style.transform="translateX(9em) rotate(14deg)";
+      scards[0].style.opacity="0";
+      setTimeout(()=>setActive(1),280);
+    },600+STEP);
+
+    // Phase 2: swipe sc1 → sr2 active
+    setTimeout(()=>{
+      scards[1].style.transition="transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease";
+      scards[1].style.transform="translateX(9em) rotate(14deg)";
+      scards[1].style.opacity="0";
+      setTimeout(()=>setActive(2),280);
+    },600+STEP*2);
+
+    // Phase 3: swipe sc2 → sr3 active
+    setTimeout(()=>{
+      scards[2].style.transition="transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease";
+      scards[2].style.transform="translateX(9em) rotate(14deg)";
+      scards[2].style.opacity="0";
+      setTimeout(()=>setActive(3),280);
+    },600+STEP*3);
+
+    // Fade out
+    setTimeout(()=>{
+      const t=`opacity ${DO}ms ease`;
+      [stack,sumw].forEach(el=>{el.style.transition=t;el.style.opacity="0"});
+      setTimeout(run,DO+150);
+    },600+STEP*3+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
