@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#FF0670;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:100%;height:100%;position:relative;overflow:hidden;background:transparent;z-index:1;z-index:1;display:flex;align-items:center;justify-content:center}
+/* Card: auto height from content, width caps at 22em, never wider than 92% of container */
+.card{background:#F9F4EC;box-shadow:0 .4em 2em rgba(0,0,0,.18);overflow:hidden;opacity:0;transform:translateY(.4em);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1);
+  width:min(92%,22em);border-radius:.65em;display:flex;flex-direction:column}
+.card-h{background:#FF0670;padding:.65em .9em;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.ch-t{font-size:.7em;font-weight:700;color:#F9F4EC}
+.ch-brand{font-size:.62em;font-weight:700;color:rgba(249,244,236,.85)}
+/* 4 stage blocks: natural height from content, separated by thin lines */
+.stages{display:flex;flex-direction:column;padding:.45em .9em .55em;gap:0}
+.sblock{display:flex;flex-direction:column;gap:.1em;opacity:0;padding:.52em 0}
+.sblock+.sblock{border-top:none}
+/* Each sblock reveals: number first, then title, then desc */
+.sb-num{font-size:.5em;font-weight:700;color:rgba(255,6,112,.4);letter-spacing:.1em;opacity:0;transform:translateY(-.2em);transition:opacity .3s ease,transform .3s cubic-bezier(.16,1,.3,1)}
+.sb-num.v{opacity:1;transform:none}
+.sb-t{font-size:.72em;font-weight:700;color:#0E0C1C;opacity:0;transform:translateY(-.15em);transition:opacity .32s ease,transform .32s cubic-bezier(.16,1,.3,1)}
+.sb-t.v{opacity:1;transform:none}
+.sb-s{font-size:.58em;color:rgba(14,12,28,.42);line-height:1.35;opacity:0;transform:translateY(-.12em);transition:opacity .35s ease,transform .35s cubic-bezier(.16,1,.3,1)}
+.sb-s.v{opacity:1;transform:none}
+.sb-line{height:2px;background:rgba(255,6,112,.12);border-radius:1px;overflow:hidden;margin-top:.2em}
+.sb-fill{height:100%;background:#FF0670;transform-origin:left;transform:scaleX(0);transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.sb-fill.v{transform:scaleX(1)}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.308397 0L157.758 2.75293e-05C137.081 2.30086e-05 116.607 4.08055 97.5045 12.0086C78.4019 19.9367 61.0448 31.5571 46.4243 46.2063C31.8037 60.8555 20.2061 78.2466 12.2935 97.3867C4.38196 116.524 0.309423 137.036 0.30837 157.75L0.308397 0Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.30837 157.75C0.30837 157.753 0.30837 157.747 0.30837 157.75Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L315.359 0.339678L157.758 0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L157.758 157.758H157.601Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758ZM6.88899e-06 157.75L0 315.352L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789ZM315.359 158.009C315.325 178.638 311.25 199.061 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L315.36 315.508L315.359 158.009Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789Z" fill="#FF9BC6"/>
+<path d="M157.758 2.75293e-05V0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601L0.30837 157.75C0.309423 137.036 4.38196 116.524 12.2935 97.3867C20.2061 78.2466 31.8037 60.8555 46.4243 46.2063C61.0448 31.5571 78.4019 19.9367 97.5045 12.0086C116.607 4.08055 137.081 2.30086e-05 157.758 2.75293e-05Z" fill="#FF0670"/>
+<path d="M157.758 157.789L315.359 157.789L315.36 157.75C315.36 178.467 311.283 198.981 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75L0.30837 157.75L157.601 157.758V157.789H157.758Z" fill="#FF9BC6"/></svg>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="card-h">
+      <span class="ch-t">Rechtsformwechsel GbR</span>
+      <span class="ch-brand">b'steuern</span>
+    </div>
+    <div class="stages">
+      <div class="sblock" id="sb0">
+        <div class="sb-num" id="sn0">01</div>
+        <div class="sb-t" id="st0">Bewertung</div>
+        <div class="sb-s" id="ss0">Unternehmenswert professionell ermittelt</div>
+        <div class="sb-line"><div class="sb-fill" id="sf0"></div></div>
+      </div>
+      <div class="sblock" id="sb1">
+        <div class="sb-num" id="sn1">02</div>
+        <div class="sb-t" id="st1">Steuern</div>
+        <div class="sb-s" id="ss1">Belastung minimiert, Gestaltung optimiert</div>
+        <div class="sb-line"><div class="sb-fill" id="sf1"></div></div>
+      </div>
+      <div class="sblock" id="sb2">
+        <div class="sb-num" id="sn2">03</div>
+        <div class="sb-t" id="st2">Umwandlung</div>
+        <div class="sb-s" id="ss2">Rechtssicher in GmbH oder UG umgewandelt</div>
+        <div class="sb-line"><div class="sb-fill" id="sf2"></div></div>
+      </div>
+      <div class="sblock" id="sb3">
+        <div class="sb-num" id="sn3">04</div>
+        <div class="sb-t" id="st3">Nachfolge</div>
+        <div class="sb-s" id="ss3">Nachhaltige Nachfolgeplanung &amp; Transaktionsbegleitung</div>
+        <div class="sb-line"><div class="sb-fill" id="sf3"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card");
+const sbs=[0,1,2,3].map(i=>document.getElementById("sb"+i));
+const sns=[0,1,2,3].map(i=>document.getElementById("sn"+i));
+const sts=[0,1,2,3].map(i=>document.getElementById("st"+i));
+const sss=[0,1,2,3].map(i=>document.getElementById("ss"+i));
+const sfs=[0,1,2,3].map(i=>document.getElementById("sf"+i));
+const H=5000,DO=600,BLOCK=700;
+function revealBlock(idx){
+  sbs[idx].style.opacity="1";
+  // Stagger: num → title → desc → line, each 130ms apart
+  setTimeout(()=>sns[idx].classList.add("v"),0);
+  setTimeout(()=>sts[idx].classList.add("v"),130);
+  setTimeout(()=>sss[idx].classList.add("v"),260);
+  setTimeout(()=>{sfs[idx].style.transition="transform .6s cubic-bezier(.4,0,.2,1)";sfs[idx].classList.add("v")},380);
+}
+function run(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.4em)";
+  sbs.forEach(b=>{b.style.opacity="0"});
+  [sns,sts,sss].forEach(arr=>arr.forEach(el=>{el.style.transition="none";el.classList.remove("v")}));
+  sfs.forEach(f=>{f.style.transition="none";f.classList.remove("v")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)";card.style.opacity="1";card.style.transform="translateY(0)";
+    // Re-enable transitions after reset
+    setTimeout(()=>{
+      [sns,sts,sss].forEach(arr=>arr.forEach(el=>{el.style.transition=""}));
+      [0,1,2,3].forEach(i=>setTimeout(()=>revealBlock(i),i*BLOCK));
+    },200);
+    setTimeout(()=>{card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";setTimeout(run,DO+150)},200+4*BLOCK+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>

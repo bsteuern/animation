@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#FF0670;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:100%;height:100%;position:relative;overflow:hidden;background:transparent;z-index:1;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5em}
+.card{background:#F9F4EC;border-radius:.6em;width:min(90%,21em);box-shadow:0 .4em 2em rgba(0,0,0,.18);overflow:hidden;opacity:0;transform:translateY(.4em);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.card-h{background:#FF0670;padding:.6em .9em;display:flex;justify-content:space-between;align-items:center}
+.ch-t{font-size:.66em;font-weight:700;color:#F9F4EC}
+.ch-s{font-size:.54em;font-weight:600;background:rgba(249,244,236,.2);color:#F9F4EC;padding:.15em .5em;border-radius:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;padding:.5em .9em .65em;gap:.4em}
+.gitem{display:flex;flex-direction:column;gap:.18em;padding:.38em .55em;background:rgba(255,6,112,.05);border-radius:.42em;opacity:0;transform:scale(.88);transition:opacity .42s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.34,1.4,.64,1)}
+.gitem.v{opacity:1;transform:scale(1)}
+.gi-lbl{font-size:.52em;color:rgba(14,12,28,.45);font-weight:500}
+.gi-val{font-size:.82em;font-weight:700;color:#0E0C1C}
+.gi-sub{font-size:.5em;color:rgba(255,6,112,.7);font-weight:600}
+.bbar{background:#FF0670;padding:.44em .9em;display:flex;justify-content:space-between;align-items:center;opacity:0;transition:opacity .4s}
+.bb-l{font-size:.58em;color:rgba(249,244,236,.65)}
+.bb-r{font-size:.64em;font-weight:700;color:#F9F4EC}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 315.508L157.602 315.508C178.278 315.508 198.752 311.427 217.855 303.499C236.958 295.571 254.315 283.951 268.935 269.302C283.556 254.652 295.154 237.261 303.066 218.121C310.978 198.984 315.05 178.472 315.051 157.758L315.051 315.508Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 157.758C315.051 157.755 315.051 157.761 315.051 157.758Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L0.000213653 315.168L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719ZM315.36 157.758L315.36 0.156125L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#FF9BC6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719ZM0.000257954 157.498C0.0341648 136.87 4.10964 116.447 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L8.86177e-05 0L0.000257954 157.498Z" fill="#FF0670"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719Z" fill="#FF9BC6"/>
+<path d="M157.602 315.508L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75L315.051 157.758C315.05 178.472 310.978 198.984 303.066 218.121C295.154 237.261 283.556 254.652 268.935 269.302C254.315 283.951 236.958 295.571 217.855 303.499C198.752 311.427 178.278 315.508 157.602 315.508Z" fill="#FF0670"/>
+<path d="M157.602 157.719L0.000257935 157.719L4.43085e-05 157.758C4.61197e-05 137.041 4.07656 116.527 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758L315.051 157.758L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#FF9BC6"/></svg>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="card-h"><span class="ch-t">Laufende Buchhaltung GbR</span><span class="ch-s">b'steuern</span></div>
+    <div class="grid">
+      <div class="gitem" id="g0"><div class="gi-lbl">EÜR erstellt</div><div class="gi-val" id="v0">0 €</div><div class="gi-sub">Jahresgewinn</div></div>
+      <div class="gitem" id="g1"><div class="gi-lbl">USt-Voranmeldungen</div><div class="gi-val">12 / 12</div><div class="gi-sub">Fristgerecht ✓</div></div>
+      <div class="gitem" id="g2"><div class="gi-lbl">Gewerbesteuer</div><div class="gi-val" id="v2">0 €</div><div class="gi-sub">optimiert</div></div>
+      <div class="gitem" id="g3"><div class="gi-lbl">Lohnbuchhaltung</div><div class="gi-val">aktiv</div><div class="gi-sub">Gesellschafter ✓</div></div>
+    </div>
+    <div class="bbar" id="bb"><span class="bb-l">Steueroptimierung laufend</span><span class="bb-r">Alle Pflichten erfüllt ✓</span></div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card"),bb=document.getElementById("bb"),v0=document.getElementById("v0"),v2=document.getElementById("v2");
+const gitems=[0,1,2,3].map(i=>document.getElementById("g"+i));
+const H=4500,DO=600;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function countUp(el,target,delay){setTimeout(()=>{const s=Date.now();(function t(){const p=Math.min((Date.now()-s)/1100,1);el.textContent=Math.round(ease(p)*target).toLocaleString("de-DE")+" €";if(p<1)requestAnimationFrame(t)})()},delay)}
+function run(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.4em)";bb.style.transition="none";bb.style.opacity="0";
+  gitems.forEach(g=>{g.style.transition="none";g.classList.remove("v")});v0.textContent="0 €";v2.textContent="0 €";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)";card.style.opacity="1";card.style.transform="none";
+    gitems.forEach((g,i)=>setTimeout(()=>g.classList.add("v"),350+i*280));
+    countUp(v0,84200,450);countUp(v2,12400,700);
+    setTimeout(()=>{bb.style.transition="opacity .4s";bb.style.opacity="1"},350+4*280);
+    setTimeout(()=>{card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";setTimeout(run,DO+150)},350+4*280+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
