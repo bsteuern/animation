@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#C531A4;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:100%;height:100%;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card{background:#F9F4EC;border-radius:.65em;width:min(92%,22em);box-shadow:0 .4em 2em rgba(0,0,0,.18);overflow:hidden;opacity:0;transform:translateY(.4em);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.card-h{background:#C531A4;padding:.6em .9em;display:flex;justify-content:space-between;align-items:center}
+.ch-t{font-size:.66em;font-weight:700;color:#F9F4EC}
+.ch-leg{display:flex;gap:.55em}
+.leg{display:flex;align-items:center;gap:.22em;font-size:.52em;font-weight:600;color:rgba(249,244,236,.75)}
+.leg-dot{width:.5em;height:.5em;border-radius:50%;flex-shrink:0}
+.chart-area{padding:.55em .9em .45em;position:relative}
+.chart-svg{width:100%;overflow:visible;display:block}
+/* grid lines */
+.g-line{stroke:rgba(14,12,28,.07);stroke-width:1}
+.g-lbl{font-size:8px;fill:rgba(14,12,28,.3);font-family:"DM Sans",sans-serif}
+/* Animated paths */
+.line-e{fill:none;stroke:#C531A4;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+.line-a{fill:none;stroke:rgba(14,12,28,.25);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1) .25s}
+.line-e.v,.line-a.v{stroke-dashoffset:0}
+/* Area fill */
+.area-e{fill:rgba(197,49,164,.08);stroke:none;opacity:0;transition:opacity .6s .8s}
+.area-e.v{opacity:1}
+/* Month labels */
+.mlabels{display:flex;justify-content:space-between;padding:0 .9em .5em;margin-top:-.1em}
+.ml{font-size:.48em;color:rgba(14,12,28,.3)}
+/* Bottom metrics */
+.metrics{display:flex;border-top:1px solid rgba(14,12,28,.07);padding:.42em .9em}
+.metric{flex:1;display:flex;flex-direction:column;opacity:0;transform:translateY(.2em);transition:opacity .38s ease,transform .4s cubic-bezier(.16,1,.3,1)}
+.metric.v{opacity:1;transform:none}
+.metric+.metric{border-left:1px solid rgba(14,12,28,.07);padding-left:.7em;margin-left:.7em}
+.m-lbl{font-size:.5em;color:rgba(14,12,28,.38)}
+.m-val{font-size:.78em;font-weight:700;color:#0E0C1C;margin-top:.06em}
+.m-sub{font-size:.48em;color:#C531A4;font-weight:600}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 315.508L157.602 315.508C178.278 315.508 198.752 311.427 217.855 303.499C236.958 295.571 254.315 283.951 268.935 269.302C283.556 254.652 295.154 237.261 303.066 218.121C310.978 198.984 315.05 178.472 315.051 157.758L315.051 315.508Z" fill="#E8ADDB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 157.758C315.051 157.755 315.051 157.761 315.051 157.758Z" fill="#C531A4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L0.000213653 315.168L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#E8ADDB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#C531A4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719ZM315.36 157.758L315.36 0.156125L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758Z" fill="#C531A4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#E8ADDB"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719ZM0.000257954 157.498C0.0341648 136.87 4.10964 116.447 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L8.86177e-05 0L0.000257954 157.498Z" fill="#C531A4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719Z" fill="#E8ADDB"/>
+<path d="M157.602 315.508L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75L315.051 157.758C315.05 178.472 310.978 198.984 303.066 218.121C295.154 237.261 283.556 254.652 268.935 269.302C254.315 283.951 236.958 295.571 217.855 303.499C198.752 311.427 178.278 315.508 157.602 315.508Z" fill="#C531A4"/>
+<path d="M157.602 157.719L0.000257935 157.719L4.43085e-05 157.758C4.61197e-05 137.041 4.07656 116.527 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758L315.051 157.758L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#E8ADDB"/></svg>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="card-h">
+      <span class="ch-t">Cashflow-Übersicht 2024</span>
+    </div>
+    <div class="chart-area">
+      <svg class="chart-svg" id="csvg" viewBox="0 0 295 90">
+        <!-- Grid -->
+        <line class="g-line" x1="0" y1="20" x2="280" y2="20"/>
+        <line class="g-line" x1="0" y1="50" x2="280" y2="50"/>
+        <line class="g-line" x1="0" y1="80" x2="280" y2="80"/>
+        <text class="g-lbl" x="0" y="18" text-anchor="start">9k</text>
+        <text class="g-lbl" x="0" y="48" text-anchor="start">6k</text>
+        <text class="g-lbl" x="0" y="78" text-anchor="start">3k</text>
+        <!-- Area fill (below einnahmen line) -->
+        <path class="area-e" id="area" d="M 22,68 C 62,58 102,42 142,38 S 202,22 242,18 L 242,80 L 22,80 Z"/>
+        <!-- Lines -->
+        <path class="line-a" id="la" d="M 22,72 C 62,68 102,64 142,60 S 202,58 242,55"/>
+        <path class="line-e" id="le" d="M 22,68 C 62,58 102,42 142,38 S 202,22 242,18"/>
+        <!-- End dots with callout labels -->
+        <circle id="de" cx="242" cy="18" r="3.5" fill="#C531A4" opacity="0"/>
+        <circle id="da" cx="242" cy="55" r="3" fill="rgba(14,12,28,.3)" opacity="0"/>
+        <!-- Inline labels that appear at end of each line -->
+        <g id="label-e" opacity="0">
+          <rect x="248" y="10" width="30" height="12" rx="3" fill="#C531A4"/>
+          <text x="263" y="19" text-anchor="middle" font-size="7.5" font-weight="700" fill="#F9F4EC" font-family="DM Sans, sans-serif">Einn.</text>
+        </g>
+        <g id="label-a" opacity="0">
+          <rect x="248" y="48" width="30" height="12" rx="3" fill="rgba(14,12,28,.18)"/>
+          <text x="263" y="57" text-anchor="middle" font-size="7.5" font-weight="700" fill="rgba(14,12,28,.65)" font-family="DM Sans, sans-serif">Ausg.</text>
+        </g>
+      </svg>
+    </div>
+    <div class="mlabels"><span class="ml">Jan</span><span class="ml">Mrz</span><span class="ml">Mai</span><span class="ml">Jul</span><span class="ml">Sep</span><span class="ml">Nov</span></div>
+    <div class="metrics">
+      <div class="metric" id="m0"><div class="m-lbl">Einnahmen</div><div class="m-val">72.000 €</div><div class="m-sub">↑ 18 % YoY</div></div>
+      <div class="metric" id="m1"><div class="m-lbl">Ausgaben</div><div class="m-val">23.700 €</div><div class="m-sub">optimiert</div></div>
+      <div class="metric" id="m2"><div class="m-lbl">Gewinn</div><div class="m-val" style="color:#C531A4">48.300 €</div><div class="m-sub">steueroptimal</div></div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card"),le=document.getElementById("le"),la=document.getElementById("la"),area=document.getElementById("area");
+const de=document.getElementById("de"),da=document.getElementById("da"),labelE=document.getElementById("label-e"),labelA=document.getElementById("label-a");
+const mets=[0,1,2].map(i=>document.getElementById("m"+i));
+const H=4500,DO=600;
+function run(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.4em)";
+  const ca=card.querySelector(".chart-area");if(ca){ca.style.transition="none";ca.style.transform="translateY(1.2em)";ca.style.opacity="0"}
+  le.style.transition="none";le.classList.remove("v");le.style.strokeDashoffset="400";
+  la.style.transition="none";la.classList.remove("v");la.style.strokeDashoffset="400";
+  area.style.transition="none";area.classList.remove("v");
+  de.style.opacity="0";da.style.opacity="0";labelE.style.opacity="0";labelA.style.opacity="0";
+  mets.forEach(m=>{m.style.transition="none";m.classList.remove("v")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)";card.style.opacity="1";card.style.transform="none";
+    setTimeout(()=>{le.classList.add("v");la.classList.add("v");area.classList.add("v");
+      // Rise effect: the whole chart-area shifts up from below
+      const ca=card.querySelector(".chart-area");
+      ca.style.transition="none";ca.style.transform="translateY(1.2em)";ca.style.opacity="0";
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ca.style.transition="transform 1.6s cubic-bezier(.16,1,.3,1),opacity .6s ease";ca.style.transform="translateY(0)";ca.style.opacity="1"}));
+    },350);
+    setTimeout(()=>{de.style.transition="opacity .3s";de.style.opacity="1";da.style.transition="opacity .3s";da.style.opacity="1";labelE.style.transition="opacity .3s";labelE.style.opacity="1";labelA.style.transition="opacity .3s .1s";labelA.style.opacity="1"},1900);
+    mets.forEach((m,i)=>setTimeout(()=>m.classList.add("v"),1600+i*220));
+    setTimeout(()=>{card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";setTimeout(run,DO+150)},2100+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
