@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#E37383;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:#E37383;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:5% 10%;">
+    <div style="width:100%;background:#F9F4EC;border-radius:.46em;box-shadow:0 2px 14px rgba(14,12,28,.1);overflow:hidden;display:flex;flex-direction:column;" id="card">
+      <!-- formula rows with padding -->
+      <div style="padding:6% 8% 5%;display:flex;flex-direction:column;gap:.36em;">
+        <div class="frow" style="display:flex;align-items:baseline;justify-content:space-between;opacity:0;transform:translateX(-.4em);transition:opacity .4s ease,transform .4s ease;"><span style="font-size:.64em;color:rgba(14,12,28,.45);">Gewinn</span><span style="font-size:.72em;font-weight:700;color:#0E0C1C;">120.000 €</span></div>
+        <div class="frow" style="height:1px;background:rgba(14,12,28,.08);opacity:0;transition:opacity .4s ease;transform:none;"></div>
+        <div class="frow" style="display:flex;align-items:baseline;justify-content:space-between;opacity:0;transform:translateX(-.4em);transition:opacity .4s ease,transform .4s ease;"><span style="font-size:.64em;color:rgba(14,12,28,.45);">KSt 15 % + SolZ + GewSt</span><span style="font-size:.72em;font-weight:700;color:#B91C1C;">= 34.200 €</span></div>
+        <div class="frow" style="height:1px;background:rgba(14,12,28,.08);opacity:0;transition:opacity .4s ease;transform:none;"></div>
+        <div class="frow" style="display:flex;align-items:baseline;justify-content:space-between;opacity:0;transform:translateX(-.4em);transition:opacity .4s ease,transform .4s ease;"><span style="font-size:.64em;color:rgba(14,12,28,.45);">− Verlustvortrag</span><span style="font-size:.72em;font-weight:700;color:#15803D;">– 6.400 €</span></div>
+        <div class="frow" style="display:flex;align-items:baseline;justify-content:space-between;opacity:0;transform:translateX(-.4em);transition:opacity .4s ease,transform .4s ease;"><span style="font-size:.64em;color:rgba(14,12,28,.45);">− Thesaurierung</span><span style="font-size:.72em;font-weight:700;color:#15803D;">– 4.800 €</span></div>
+        <div class="frow" style="height:1px;background:rgba(14,12,28,.08);opacity:0;transition:opacity .4s ease;transform:none;"></div>
+      </div>
+      <!-- full-width footer result row -->
+      <div id="resrow" style="background:#E37383;padding:.58em 8%;display:flex;align-items:center;justify-content:space-between;opacity:0;transform:translateY(.4em);transition:opacity .5s ease,transform .5s ease;margin-top:auto;">
+        <span style="font-size:.68em;color:rgba(255,255,255,.7);">Optimierte Steuerlast</span>
+        <span style="font-size:.88em;font-weight:700;color:#fff;">23.000 €</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;stage.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px";}
+new ResizeObserver(sf).observe(stage);sf();
+const rows=document.querySelectorAll(".frow"),res=document.getElementById("resrow"),card=document.getElementById("card");
+const H=5800,DO=450,SI=370;
+function show(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.35em)";
+  rows.forEach(r=>{r.style.transition="none";r.style.opacity="0";r.style.transform=r.style.height?"none":"translateX(-.4em)";});
+  res.style.transition="none";res.style.opacity="0";res.style.transform="translateY(.4em)";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .6s ease,transform .6s cubic-bezier(.4,0,.2,1)";card.style.opacity="1";card.style.transform="translateY(0)";
+    rows.forEach((r,i)=>setTimeout(()=>{r.style.transition="opacity .4s ease,transform .4s ease";r.style.opacity="1";r.style.transform="none";},200+i*SI));
+    setTimeout(()=>{res.style.transition="opacity .5s ease,transform .5s ease";res.style.opacity="1";res.style.transform="translateY(0)";},200+rows.length*SI);
+    setTimeout(()=>{card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";setTimeout(show,DO+100);},H);
+  }));
+}
+setTimeout(show,200);
+</script>
+</body>
+</html>
