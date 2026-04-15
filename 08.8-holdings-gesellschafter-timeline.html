@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#6A6872;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:100%;height:100%;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card{background:#F9F4EC;border-radius:.65em;width:min(92%,22em);box-shadow:0 .45em 2.2em rgba(0,0,0,.2);overflow:hidden;opacity:0;transform:translateY(.4em);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.card-h{background:#6A6872;padding:.58em .9em;display:flex;justify-content:space-between;align-items:center}
+.ch-t{font-size:.65em;font-weight:700;color:#F9F4EC}
+.ch-s{font-size:.52em;font-weight:600;background:rgba(249,244,236,.18);color:#F9F4EC;padding:.13em .48em;border-radius:20px}
+/* Generational rows — clean layout without meaningless bar */
+.gentree{padding:.5em .9em .6em}
+.gen-row{display:flex;align-items:center;gap:.62em;padding:.3em 0;opacity:0;transform:translateX(-.4em);transition:opacity .42s ease,transform .48s cubic-bezier(.16,1,.3,1)}
+.gen-row.v{opacity:1;transform:none}
+.gen-icon{width:2em;height:2em;border-radius:50%;background:#CACACD;display:flex;align-items:center;justify-content:center;font-size:.6em;font-weight:700;color:#0E0C1C;flex-shrink:0}
+.gen-info{flex:1;display:flex;flex-direction:column;gap:.06em}
+.gi-t{font-size:.62em;font-weight:700;color:#0E0C1C}
+.gi-s{font-size:.5em;color:rgba(14,12,28,.42);line-height:1.3}
+.gen-pill{font-size:.49em;font-weight:700;background:rgba(202,202,205,.3);color:#0E0C1C;border-radius:20px;padding:.2em .6em;flex-shrink:0;white-space:nowrap;opacity:0;transform:scale(.7);transition:opacity .32s,transform .36s cubic-bezier(.34,1.5,.64,1)}
+.gen-pill.pop{opacity:1;transform:scale(1)}
+/* Vertical connector between rows */
+.gen-connector{margin-left:1em;height:.55em;border-left:1.5px dashed rgba(14,12,28,.18)}
+.foot{background:rgba(14,12,28,.04);border-top:1px solid rgba(14,12,28,.08);padding:.38em .9em;display:flex;justify-content:space-between;opacity:0;transition:opacity .4s}
+.fl{font-size:.54em;color:rgba(14,12,28,.42)}
+.fr{font-size:.6em;font-weight:700;color:#0E0C1C}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.308397 0L157.758 2.75293e-05C137.081 2.30086e-05 116.607 4.08055 97.5045 12.0086C78.4019 19.9367 61.0448 31.5571 46.4243 46.2063C31.8037 60.8555 20.2061 78.2466 12.2935 97.3867C4.38196 116.524 0.309423 137.036 0.30837 157.75L0.308397 0Z" fill="#CACACD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.30837 157.75C0.30837 157.753 0.30837 157.747 0.30837 157.75Z" fill="#9F9EA4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L315.359 0.339678L157.758 0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601Z" fill="#CACACD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.601 157.758V157.789H157.758L315.359 157.789L315.36 157.75L157.758 157.758H157.601Z" fill="#9F9EA4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758ZM6.88899e-06 157.75L0 315.352L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75Z" fill="#9F9EA4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.789V157.758H157.601V157.789H157.758Z" fill="#CACACD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789ZM315.359 158.009C315.325 178.638 311.25 199.061 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L315.36 315.508L315.359 158.009Z" fill="#9F9EA4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.359 157.789L157.758 157.789V157.758L315.36 157.75L315.359 157.789Z" fill="#CACACD"/>
+<path d="M157.758 2.75293e-05V0.339735C178.422 0.360192 198.881 4.43215 217.973 12.3248C237.113 20.2374 254.504 31.835 269.153 46.4555C283.802 61.0761 295.423 78.4331 303.351 97.5358C311.274 116.626 315.354 137.087 315.36 157.75L157.758 157.758H157.601L0.30837 157.75C0.309423 137.036 4.38196 116.524 12.2935 97.3867C20.2061 78.2466 31.8037 60.8555 46.4243 46.2063C61.0448 31.5571 78.4019 19.9367 97.5045 12.0086C116.607 4.08055 137.081 2.30086e-05 157.758 2.75293e-05Z" fill="#9F9EA4"/>
+<path d="M157.758 157.789L315.359 157.789L315.36 157.75C315.36 178.467 311.283 198.981 303.363 218.121C295.443 237.261 283.834 254.652 269.199 269.302C254.564 283.951 237.191 295.571 218.069 303.499C198.948 311.427 178.454 315.508 157.758 315.508L157.758 315.352C137.041 315.352 116.527 311.275 97.3867 303.355C78.2466 295.435 60.8554 283.826 46.2063 269.191C31.5571 254.557 19.9367 237.183 12.0086 218.062C4.08054 198.941 5.07875e-06 178.447 6.88899e-06 157.75L0.30837 157.75L157.601 157.758V157.789H157.758Z" fill="#CACACD"/></svg>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="card-h"><span class="ch-t">Nachfolgeplanung · 30-Jahres-Modell</span><span class="ch-s">Holding</span></div>
+    <div class="gentree">
+      <div class="gen-row" id="g0">
+        <div class="gen-icon">G1</div>
+        <div class="gen-info"><div class="gi-t">Gründer</div><div class="gi-s">Holding aufgebaut · Vermögensschutz aktiv</div></div>
+        <div class="gen-pill" id="gp0">Heute</div>
+      </div>
+      <div class="gen-connector"></div>
+      <div class="gen-row" id="g1">
+        <div class="gen-icon">G2</div>
+        <div class="gen-info"><div class="gi-t">Kind 1</div><div class="gi-s">400.000 € Freibetrag · schenkungsteuerfrei</div></div>
+        <div class="gen-pill" id="gp1">Jahr 10</div>
+      </div>
+      <div class="gen-connector"></div>
+      <div class="gen-row" id="g2">
+        <div class="gen-icon">G3</div>
+        <div class="gen-info"><div class="gi-t">Kind 2</div><div class="gi-s">400.000 € · 2. Tranche erneut steuerfrei</div></div>
+        <div class="gen-pill" id="gp2">Jahr 20</div>
+      </div>
+      <div class="gen-connector"></div>
+      <div class="gen-row" id="g3">
+        <div class="gen-icon">G4</div>
+        <div class="gen-info"><div class="gi-t">Enkel</div><div class="gi-s">800.000 € kumuliert · nächste Generation</div></div>
+        <div class="gen-pill" id="gp3">Jahr 30</div>
+      </div>
+    </div>
+    <div class="foot" id="foot"><span class="fl">Erbschaftsteuer gesamt</span><span class="fr">stark reduziert ✓</span></div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card"),foot=document.getElementById("foot");
+const gens=[0,1,2,3].map(i=>document.getElementById("g"+i));
+const pills=[0,1,2,3].map(i=>document.getElementById("gp"+i));
+const H=5000,DO=600;
+function run(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.4em)";foot.style.transition="none";foot.style.opacity="0";
+  gens.forEach(g=>{g.style.transition="none";g.classList.remove("v")});
+  pills.forEach(p=>{p.style.transition="none";p.classList.remove("pop")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)";card.style.opacity="1";card.style.transform="none";
+    gens.forEach((g,i)=>setTimeout(()=>{g.classList.add("v");setTimeout(()=>pills[i].classList.add("pop"),280)},300+i*420));
+    setTimeout(()=>{foot.style.transition="opacity .4s";foot.style.opacity="1"},300+4*420+100);
+    setTimeout(()=>{card.style.transition=`opacity ${DO}ms ease`;card.style.opacity="0";setTimeout(run,DO+150)},300+4*420+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
