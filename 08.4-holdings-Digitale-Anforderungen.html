@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04A</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#6A6872;display:flex;align-items:center;justify-content:center}
+.stage{position:relative;width:100%;aspect-ratio:1116/558;max-height:100vh;background:#6A6872;overflow:hidden;font-family:'DM Sans',sans-serif;color:#0E0C1C}
+.f{opacity:0;transition:opacity .5s ease}
+.f.in{opacity:1}
+.u{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s cubic-bezier(.25,.46,.45,.94)}
+.u.in{opacity:1;transform:translateY(0)}
+.card{background:#F9F4EC;border-radius:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);overflow:hidden;width:50%}
+.ch{padding:.85em 1.4em;border-bottom:1px solid rgba(202,202,205,.35);display:flex;justify-content:space-between;align-items:center}
+.ch-t{font-size:.73em;font-weight:600;color:#0E0C1C}
+.tag{display:inline-block;background:#0E0C1C;color:#F9F4EC;border-radius:100px;padding:.15em .7em;font-size:.52em;font-weight:500}
+.tag-l{background:rgba(202,202,205,.3);color:#0E0C1C}
+.item{display:flex;align-items:center;gap:.75em;padding:.6em 1.4em;border-bottom:1px solid rgba(202,202,205,.15)}
+.item:last-child{border-bottom:none}
+.cb{width:1.5em;height:1.5em;border-radius:6px;border:1.5px solid #CACACD;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65em;color:#0E0C1C;transition:all .3s ease}
+.cb.done{background:#0E0C1C;border-color:#0E0C1C;color:#F9F4EC}
+.it{font-size:.62em;font-weight:500;color:#0E0C1C;flex:1}
+.ir{font-size:.5em;color:#CACACD}
+.foot{padding:.75em 1.4em;background:#0E0C1C;display:flex;justify-content:space-between;align-items:center}
+.ft{font-size:.6em;color:#F9F4EC}
+.fv{font-size:.6em;font-weight:600;color:#F9F4EC}
+</style>
+</head><body><div class="stage" id="stage">
+<div class="card f" id="card">
+  <div class="ch"><span class="ch-t">GoBD Compliance</span><span class="tag tag-l" id="cnt">0 / 5</span></div>
+  <div class="item u" id="i0"><div class="cb" id="cb0"></div><span class="it">Unveränderliche Aufzeichnung</span><span class="ir">§ 146 AO</span></div>
+  <div class="item u" id="i1"><div class="cb" id="cb1"></div><span class="it">10-Jahres-Archivierung</span><span class="ir">§ 147 AO</span></div>
+  <div class="item u" id="i2"><div class="cb" id="cb2"></div><span class="it">Vollständigkeit der Belege</span><span class="ir">GoBD Nr. 64</span></div>
+  <div class="item u" id="i3"><div class="cb" id="cb3"></div><span class="it">Nachvollziehbarkeit · Audit Trail</span><span class="ir">§ 145 AO</span></div>
+  <div class="item u" id="i4"><div class="cb" id="cb4"></div><span class="it">Datenexport Betriebsprüfung</span><span class="ir">§ 147 Abs. 6</span></div>
+  <div class="foot f" id="foot"><span class="ft">Alle Anforderungen erfüllt</span><span class="fv">Prüfbereit ✓</span></div>
+</div></div>
+<script>const S=document.getElementById('stage');
+const rz=()=>{const w=S.offsetWidth,h=S.offsetHeight;S.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+'px'};
+new ResizeObserver(rz).observe(S);rz();
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const $=id=>document.getElementById(id);
+const show=id=>{const e=$(id);if(e)e.classList.add('in')};
+const hide=id=>{const e=$(id);if(e)e.classList.remove('in')};
+async function run(){
+  hide('card'); hide('foot');
+  for(let i=0;i<5;i++){hide('i'+i);const c=$('cb'+i);if(c){c.className='cb';c.textContent=''}}
+  $('cnt').textContent='0 / 5';
+  await wait(300); show('card'); await wait(400);
+  for(let i=0;i<5;i++){
+    show('i'+i); await wait(350);
+    const c=$('cb'+i);if(c){c.className='cb done';c.textContent='✓';}
+    $('cnt').textContent=(i+1)+' / 5';
+    await wait(250);
+  }
+  await wait(400); show('foot'); await wait(4500); run();
+}
+run();</script></body></html>

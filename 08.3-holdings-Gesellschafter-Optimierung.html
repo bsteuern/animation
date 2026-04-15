@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>03B</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#6A6872;display:flex;align-items:center;justify-content:center}
+.stage{position:relative;width:100%;aspect-ratio:1116/558;max-height:100vh;background:#6A6872;overflow:hidden;font-family:'DM Sans',sans-serif;color:#0E0C1C}
+.f{opacity:0;transition:opacity .5s ease}
+.f.in{opacity:1}
+.u{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s cubic-bezier(.25,.46,.45,.94)}
+.u.in{opacity:1;transform:translateY(0)}
+.wrap{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:flex;
+  gap:1em;
+  width:90%;
+  align-items:stretch;
+}
+.chart-card{
+  flex:1.8;
+  background:#F9F4EC;
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+.cc-head{
+  padding:.75em 1em;
+  border-bottom:1px solid rgba(202,202,205,.35);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:.6em;
+  flex-shrink:0;
+}
+/* Title forced to single line */
+.cc-t{
+  font-size:.63em;
+  font-weight:600;
+  color:#0E0C1C;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.leg{
+  display:flex;
+  gap:.7em;
+  flex-shrink:0;
+}
+.li{display:flex;align-items:center;gap:.3em;font-size:.5em;color:#0E0C1C;white-space:nowrap}
+.ld{width:14px;height:2.5px;border-radius:2px;flex-shrink:0}
+/* canvas fills remaining height */
+.chart-cv-wrap{
+  flex:1;
+  min-height:0;
+  padding:.4em .8em .6em;
+}
+.stats{
+  display:flex;
+  flex-direction:column;
+  gap:.6em;
+  flex:1;
+  min-width:0;
+}
+.sb{
+  background:#F9F4EC;
+  border-radius:18px;
+  padding:.8em 1em;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.sb-dark{background:#0E0C1C}
+.sb-n{
+  font-size:1.05em;
+  font-weight:700;
+  color:#0E0C1C;
+  line-height:1;
+  /* prevent layout jump while counting */
+  min-height:1.1em;
+}
+.sb-dark .sb-n{color:#F9F4EC}
+.sb-l{font-size:.5em;color:#CACACD;margin-top:.28em}
+</style>
+</head><body><div class="stage" id="stage">
+<div class="wrap f" id="wrap">
+  <div class="chart-card">
+    <div class="cc-head">
+      <div class="cc-t">Vermögensentwicklung 20 Jahre</div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#0E0C1C"></div>Thesaurierung</div>
+        <div class="li"><div class="ld" style="background:#CACACD"></div>Ausschüttung</div>
+      </div>
+    </div>
+    <div class="chart-cv-wrap">
+      <canvas id="cv" style="width:100%;height:100%;display:block"></canvas>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="sb">
+      <div class="sb-n" id="sn0">–</div>
+      <div class="sb-l">Thesaurierung · 20 Jahre</div>
+    </div>
+    <div class="sb">
+      <div class="sb-n" id="sn1" style="color:#CACACD">–</div>
+      <div class="sb-l">Ausschüttung · 20 Jahre</div>
+    </div>
+    <div class="sb sb-dark">
+      <div class="sb-n" id="sn2">–</div>
+      <div class="sb-l">Mehr Vermögen durch Holding</div>
+    </div>
+  </div>
+</div></div>
+<script>const S=document.getElementById('stage');
+const rz=()=>{const w=S.offsetWidth,h=S.offsetHeight;S.style.fontSize=Math.max(Math.min(Math.min(w/28,h/14),22),9)+'px'};
+new ResizeObserver(rz).observe(S);rz();
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const $=id=>document.getElementById(id);
+const show=id=>{const e=$(id);if(e)e.classList.add('in')};
+const hide=id=>{const e=$(id);if(e)e.classList.remove('in')};
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let prog = 0, raf = null, active = false;
+
+function rsz() {
+  const pr = devicePixelRatio || 1;
+  cv.width  = cv.offsetWidth  * pr;
+  cv.height = cv.offsetHeight * pr;
+  ctx.setTransform(pr, 0, 0, pr, 0, 0);
+  if (active) draw(); // redraw on resize
+}
+new ResizeObserver(rsz).observe(cv);
+
+// Curve helpers
+const curves = [
+  { c:'#0E0C1C', w:2.2, f: t => Math.pow(1 + t * 3.84, 1.5) / Math.pow(4.84, 1.5) },
+  { c:'#CACACD', w:1.5, f: t => Math.pow(1 + t * 1.5,  1.1) / Math.pow(2.5,  1.1) * 0.65 + 0.04 },
+];
+
+function draw() {
+  const W = cv.offsetWidth, H = cv.offsetHeight;
+  const P = { l:8, r:8, t:10, b:18 };
+  const CW = W - P.l - P.r, CH = H - P.t - P.b;
+  ctx.clearRect(0, 0, W, H);
+
+  // grid lines
+  for (let i = 0; i <= 4; i++) {
+    const y = P.t + CH - (i / 4) * CH;
+    ctx.strokeStyle = 'rgba(202,202,205,.2)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(P.l, y); ctx.lineTo(P.l + CW, y); ctx.stroke();
+  }
+  // year labels
+  ctx.fillStyle = 'rgba(202,202,205,.55)';
+  ctx.font = '9px DM Sans'; ctx.textAlign = 'center';
+  ['0', '5J', '10J', '15J', '20J'].forEach((yr, i) => {
+    ctx.fillText(yr, P.l + (i / 4) * CW, P.t + CH + 14);
+  });
+
+  // curves
+  curves.forEach(l => {
+    ctx.strokeStyle = l.c; ctx.lineWidth = l.w;
+    ctx.beginPath(); let started = false;
+    for (let i = 0; i <= 120; i++) {
+      const t = (i / 120) * prog; if (t > 1) break;
+      const x = P.l + t * CW;
+      const y = P.t + CH - l.f(t) * CH;
+      if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  });
+}
+
+// Update stat numbers in sync with prog (0→1)
+function updateStats() {
+  const t = prog;
+  const v0 = (t * 4.8).toFixed(2);
+  const v1 = (t * 1.25).toFixed(2);
+  const v2 = (t * 3.8).toFixed(1);
+  const sn0 = $('sn0'), sn1 = $('sn1'), sn2 = $('sn2');
+  if (sn0) sn0.textContent = t > 0 ? '€ ' + v0 + ' Mio.' : '–';
+  if (sn1) sn1.textContent = t > 0 ? '€ ' + v1 + ' Mio.' : '–';
+  if (sn2) sn2.textContent = t > 0 ? '× ' + v2 : '–';
+}
+
+function loop() {
+  raf = requestAnimationFrame(loop);
+  if (active) {
+    prog = Math.min(1, prog + 0.005);
+    draw();
+    updateStats();
+  }
+}
+
+async function run() {
+  cancelAnimationFrame(raf);
+  active = false; prog = 0;
+  hide('wrap');
+  ['sn0','sn1','sn2'].forEach(id => { const e = $(id); if(e) e.textContent = '–'; });
+  ctx.clearRect(0, 0, cv.offsetWidth, cv.offsetHeight);
+  await wait(300);
+  show('wrap');
+  // wait one frame so canvas has its layout size
+  await new Promise(r => requestAnimationFrame(r));
+  rsz(); // set canvas pixel size correctly
+  await wait(400);
+  active = true;
+  loop();
+  await wait(6500);
+  run();
+}
+run();</script></body></html>
