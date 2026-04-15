@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#6A6872;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:100%;height:100%;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+/* SVG org tree fills the stage — no caption */
+.tree-wrap{width:min(94%,28em);opacity:0;transition:opacity .5s}
+.tree-wrap svg{width:100%;overflow:visible;display:block}
+.node-box{fill:#F9F4EC;rx:6}
+.node-title{font-family:"DM Sans",sans-serif;font-weight:700;fill:#0E0C1C}
+.node-sub{font-family:"DM Sans",sans-serif;fill:rgba(14,12,28,.42)}
+.node-accent{fill:#CACACD}
+.conn{stroke:rgba(14,12,28,.55);stroke-width:1.5;fill:none;stroke-dasharray:200;stroke-dashoffset:200;transition:none}
+.conn.v{stroke-dashoffset:0}
+.node-g{opacity:0;transition:opacity .45s cubic-bezier(.4,0,.2,1)}
+.node-g.v{opacity:1}
+
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 1 1 4.28323e-08 0.000213623 157.602)" fill="#9F9EA4"/>
+<rect width="157.602" height="157.758" transform="matrix(-4.37114e-08 1 1 4.28323e-08 0.000213623 0.00027171)" fill="#9F9EA4"/>
+<rect width="157.602" height="157.758" transform="matrix(1 1.74846e-07 1.73966e-07 -1 157.758 315.516)" fill="#9F9EA4"/>
+<rect width="157.602" height="157.758" transform="matrix(1 1.74846e-07 1.73966e-07 -1 157.758 157.758)" fill="#9F9EA4"/>
+<path d="M157.758 157.602L157.758 157.758C178.454 157.758 198.948 153.678 218.069 145.749C237.191 137.821 254.564 126.201 269.199 111.552C283.834 96.9026 295.443 79.5115 303.363 60.3714C311.283 41.2314 315.36 20.7171 315.36 5.80872e-05L157.758 0.00028845L2.75833e-05 0.000244141C2.57739e-05 20.6968 4.08059 41.1907 12.0087 60.3119C19.9367 79.433 31.5571 96.8069 46.2063 111.442C60.8555 126.076 78.2466 137.685 97.3867 145.605C116.527 153.526 137.041 157.602 157.758 157.602Z" fill="#CACACD"/>
+<path d="M157.758 157.758L315.36 157.758C315.36 178.475 311.283 198.989 303.363 218.129C295.443 237.269 283.834 254.66 269.199 269.31C254.564 283.959 237.191 295.579 218.069 303.507C198.948 311.435 178.454 315.516 157.758 315.516L157.758 315.204C137.041 315.204 116.527 311.127 97.3867 303.207C78.2466 295.287 60.8555 283.678 46.2063 269.043C31.5571 254.408 19.9367 237.035 12.0086 217.913C4.08058 198.792 1.19959e-05 178.298 1.38053e-05 157.602L157.758 157.602L157.758 157.758Z" fill="#CACACD"/></svg>
+<div class="stage" id="stage">
+  <div class="tree-wrap" id="tw">
+    <svg viewBox="0 0 320 180" id="svg">
+      <!-- Connections drawn first (behind nodes) -->
+      <!-- Root → L child -->
+      <path class="conn" id="c0" d="M 160,38 V 60 H 80 V 72"/>
+      <!-- Root → R child -->
+      <path class="conn" id="c1" d="M 160,38 V 60 H 240 V 72"/>
+      <!-- L → LL -->
+      <path class="conn" id="c2" d="M 80,102 V 114 H 40 V 126"/>
+      <!-- L → LR -->
+      <path class="conn" id="c3" d="M 80,102 V 114 H 120 V 126"/>
+      <!-- R → RL -->
+      <path class="conn" id="c4" d="M 240,102 V 114 H 200 V 126"/>
+      <!-- R → RR -->
+      <path class="conn" id="c5" d="M 240,102 V 114 H 280 V 126"/>
+
+      <!-- ROOT -->
+      <g class="node-g" id="n0">
+        <rect x="110" y="10" width="100" height="28" rx="5" fill="#F9F4EC" filter="url(#sh)"/>
+        <rect x="110" y="10" width="6" height="28" rx="3" fill="#CACACD"/>
+        <text x="162" y="22" text-anchor="middle" font-size="7.5" font-weight="700" fill="#0E0C1C" font-family="DM Sans,sans-serif">Holding GmbH</text>
+        <text x="162" y="32" text-anchor="middle" font-size="6" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">Muttergesellschaft</text>
+      </g>
+      <!-- L child -->
+      <g class="node-g" id="n1">
+        <rect x="42" y="72" width="76" height="30" rx="5" fill="#F9F4EC" filter="url(#sh)"/>
+        <rect x="42" y="72" width="5" height="30" rx="2.5" fill="#CACACD"/>
+        <text x="82" y="84" text-anchor="middle" font-size="7" font-weight="700" fill="#0E0C1C" font-family="DM Sans,sans-serif">Op. GmbH A</text>
+        <text x="82" y="94" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">§ 8b KStG</text>
+      </g>
+      <!-- R child -->
+      <g class="node-g" id="n2">
+        <rect x="202" y="72" width="76" height="30" rx="5" fill="#F9F4EC" filter="url(#sh)"/>
+        <rect x="202" y="72" width="5" height="30" rx="2.5" fill="#CACACD"/>
+        <text x="242" y="84" text-anchor="middle" font-size="7" font-weight="700" fill="#0E0C1C" font-family="DM Sans,sans-serif">Op. GmbH B</text>
+        <text x="242" y="94" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">§ 8b KStG</text>
+      </g>
+      <!-- LL -->
+      <g class="node-g" id="n3">
+        <rect x="12" y="126" width="56" height="26" rx="4" fill="#F9F4EC" filter="url(#sh)"/>
+        <text x="40" y="137" text-anchor="middle" font-size="6.5" font-weight="600" fill="#0E0C1C" font-family="DM Sans,sans-serif">Immo KG</text>
+        <text x="40" y="147" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">§ 21 UmwStG</text>
+      </g>
+      <!-- LR -->
+      <g class="node-g" id="n4">
+        <rect x="92" y="126" width="56" height="26" rx="4" fill="#F9F4EC" filter="url(#sh)"/>
+        <text x="120" y="137" text-anchor="middle" font-size="6.5" font-weight="600" fill="#0E0C1C" font-family="DM Sans,sans-serif">IP-Box</text>
+        <text x="120" y="147" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">Organschaft</text>
+      </g>
+      <!-- RL -->
+      <g class="node-g" id="n5">
+        <rect x="172" y="126" width="56" height="26" rx="4" fill="#F9F4EC" filter="url(#sh)"/>
+        <text x="200" y="137" text-anchor="middle" font-size="6.5" font-weight="600" fill="#0E0C1C" font-family="DM Sans,sans-serif">EU-Sub</text>
+        <text x="200" y="147" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">DBA-konform</text>
+      </g>
+      <!-- RR -->
+      <g class="node-g" id="n6">
+        <rect x="252" y="126" width="56" height="26" rx="4" fill="#F9F4EC" filter="url(#sh)"/>
+        <text x="280" y="137" text-anchor="middle" font-size="6.5" font-weight="600" fill="#0E0C1C" font-family="DM Sans,sans-serif">Neue GmbH</text>
+        <text x="280" y="147" text-anchor="middle" font-size="5.5" fill="rgba(14,12,28,.4)" font-family="DM Sans,sans-serif">Formwechsel</text>
+      </g>
+      <defs>
+        <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0,0,0,.15)"/>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/23.3,h/11.7),22),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const tw=document.getElementById("tw");
+const nodes=[0,1,2,3,4,5,6].map(i=>document.getElementById("n"+i));
+const conns=[0,1,2,3,4,5].map(i=>document.getElementById("c"+i));
+const H=5000,DO=600;
+function run(){
+  tw.style.transition="none";tw.style.opacity="0";
+  nodes.forEach(n=>{n.style.transition="none";n.classList.remove("v")});
+  conns.forEach(c=>{c.style.transition="none";c.style.strokeDashoffset="200";c.classList.remove("v")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    tw.style.transition="opacity .5s";tw.style.opacity="1";
+    const rev=(i,delay)=>setTimeout(()=>{conns[i].style.transition="stroke-dashoffset .55s cubic-bezier(.4,0,.2,1)";conns[i].style.strokeDashoffset="0"},delay);
+    // Strict top-down: root → connectors L+R → children L+R → leaf connectors → grandchildren
+    setTimeout(()=>nodes[0].classList.add("v"),150);
+    rev(0,480);rev(1,580);
+    setTimeout(()=>nodes[1].classList.add("v"),900);
+    setTimeout(()=>nodes[2].classList.add("v"),1000);
+    rev(2,1280);rev(3,1380);rev(4,1280);rev(5,1380);
+    setTimeout(()=>nodes[3].classList.add("v"),1680);
+    setTimeout(()=>nodes[4].classList.add("v"),1780);
+    setTimeout(()=>nodes[5].classList.add("v"),1680);
+    setTimeout(()=>nodes[6].classList.add("v"),1780);
+    setTimeout(()=>{tw.style.transition=`opacity ${DO}ms ease`;tw.style.opacity="0";setTimeout(run,DO+150)},1900+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
