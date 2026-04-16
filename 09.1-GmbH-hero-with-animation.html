@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GmbH Hero · b'steuern</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; background: transparent; }
+
+  /* ── Hero wrapper ── */
+  .hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    /* ↓ Swap this URL for your Webflow asset URL */
+    background-image: url('01-GMBH-hero-section-image.png');
+    background-size: cover;
+    background-position: center top;
+  }
+
+  /* ── Animation stage – lower third ── */
+  .anim-stage {
+    position: absolute;
+    /* lower third: top = 67%, height = 33% */
+    top: 67%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 58%;        /* card feels natural at this scale */
+    height: 33%;
+    font-family: 'DM Sans', sans-serif;
+    color: #0E0C1C;
+  }
+
+  /* ── Card ── */
+  @keyframes spr {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(.9); }
+    65%  { transform: translate(-50%, -50%) scale(1.02); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  .card {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(.9);
+    width: 100%;
+    background: #F9F4EC;
+    border-radius: 1.2em;
+    box-shadow:
+      0 .8em 3.5em rgba(0,0,0,.18),
+      0 .15em .6em rgba(0,0,0,.08);
+    opacity: 0;
+    overflow: hidden;
+  }
+  .card.in { animation: spr .55s cubic-bezier(.25,.46,.45,.94) forwards; }
+
+  /* header */
+  .ch {
+    padding: .65em .9em;
+    border-bottom: 1px solid rgba(14,12,28,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ch-t { font-size: .72em; font-weight: 700; }
+  .ch-s { font-size: .52em; color: #0E0C1C; opacity: .4; }
+
+  /* rows */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    padding: .55em .9em;
+    border-bottom: 1px solid rgba(14,12,28,.07);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .4s ease, transform .4s cubic-bezier(.25,.46,.45,.94);
+  }
+  .row:last-child { border-bottom: none; }
+  .row.in  { opacity: 1; transform: translateY(0); }
+
+  /* avatar chip */
+  .av {
+    width: 2em; height: 2em;
+    border-radius: .5em;
+    background: rgba(0,161,170,.1);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .52em; font-weight: 700; color: #00A1AA;
+  }
+
+  .rn { flex: 1; font-size: .67em; font-weight: 500; }
+
+  /* badge */
+  .rbadge {
+    border-radius: 100px;
+    padding: .16em .65em;
+    font-size: .52em;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity .35s ease .15s;
+  }
+  .rbadge.in { opacity: 1; }
+  .rb-teal { background: rgba(0,161,170,.12); color: #00A1AA; }
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+
+  <!-- ── Animated card ── -->
+  <div class="anim-stage" id="stage">
+    <div class="card" id="card">
+      <div class="ch">
+        <span class="ch-t">GmbH · Verwaltung</span>
+        <span class="ch-s">b'steuern</span>
+      </div>
+      <div class="row" id="r0">
+        <div class="av">§</div>
+        <span class="rn">Steuererklärung</span>
+        <span class="rbadge rb-teal" id="rb0">Erledigt ✓</span>
+      </div>
+      <div class="row" id="r1">
+        <div class="av">⏱</div>
+        <span class="rn">Fristen</span>
+        <span class="rbadge rb-teal" id="rb1">Eingehalten ✓</span>
+      </div>
+      <div class="row" id="r2">
+        <div class="av">📄</div>
+        <span class="rn">Finanzamt</span>
+        <span class="rbadge rb-teal" id="rb2">Geprüft ✓</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* Responsive font-size relative to the stage width */
+  const stage = document.getElementById('stage');
+  const resize = () => {
+    const w = stage.offsetWidth;
+    stage.style.fontSize = Math.max(Math.min(w / 20, 26), 8) + 'px';
+  };
+  new ResizeObserver(resize).observe(stage);
+  resize();
+
+  /* Animation loop */
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const $ = id => document.getElementById(id);
+
+  async function run() {
+    const c = $('card');
+    c.classList.remove('in');
+    ['r0','r1','r2'].forEach(id => $(id)?.classList.remove('in'));
+    ['rb0','rb1','rb2'].forEach(id => $(id)?.classList.remove('in'));
+
+    await wait(300);
+    c.classList.add('in');
+    await wait(450);
+
+    for (const [r, b] of [['r0','rb0'],['r1','rb1'],['r2','rb2']]) {
+      $(r).classList.add('in');
+      await wait(280);
+      $(b).classList.add('in');
+      await wait(320);
+    }
+
+    await wait(4500);
+    run();
+  }
+
+  run();
+</script>
+</body>
+</html>
