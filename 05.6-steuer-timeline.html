@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#E37383;font-family:"DM Sans",sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{width:min(100vw,calc(100vh*(1116/558)));aspect-ratio:1116/558;position:relative;overflow:hidden;background:transparent;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5em}
+.card{background:#F9F4EC;border-radius:.6em;box-shadow:0 1em 4em rgba(0,0,0,.08),0 .25em .8em rgba(0,0,0,.04);width:28em;overflow:hidden;opacity:0;transform:translateY(.4em);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.card-h{background:#0E0C1C;padding:.58em .9em;display:flex;justify-content:space-between;align-items:center}
+.ch-t{font-size:.66em;font-weight:700;color:#F9F4EC}
+.ch-s{font-size:.55em;font-weight:600;color:#E37383}
+/* Horizontal stepper — two-row layout for perfect optical alignment */
+.stepper{padding:.65em .9em .45em;display:flex;flex-direction:column;gap:.3em}
+.sr{display:flex;align-items:center}
+.lr{display:flex;align-items:flex-start}
+.step-circle{width:2.1em;height:2.1em;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58em;font-weight:700;border:2px solid rgba(14,12,28,.15);color:rgba(14,12,28,.25);flex-shrink:0;transition:background .4s,color .4s,border-color .4s,transform .4s cubic-bezier(.34,1.5,.64,1)}
+.step-circle.done{background:#E37383;border-color:#E37383;color:#F9F4EC}
+.step-label{font-size:.5em;color:rgba(14,12,28,.4);text-align:center;width:4.2em;flex-shrink:0;line-height:1.3;transition:color .3s}
+.step-label.done{color:#0E0C1C;font-weight:600}
+.conn{flex:1;height:2px;background:rgba(14,12,28,.1);position:relative;overflow:hidden}
+.conn-lbl{flex:1}
+.conn-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:#E37383;transition:width .55s cubic-bezier(.4,0,.2,1)}
+.conn-fill.v{width:100%}
+/* Summary row */
+.summary{display:flex;justify-content:space-between;padding:.45em .9em;background:rgba(14,12,28,.04);border-top:1px solid rgba(14,12,28,.07)}
+.sv{font-size:.6em;font-weight:700;color:#E37383}
+.sl{font-size:.6em;color:rgba(14,12,28,.4)}
+
+.bg-svg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+</style></head><body>
+<svg class="bg-svg" viewBox="0 0 316 316" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 315.508L157.602 315.508C178.278 315.508 198.752 311.427 217.855 303.499C236.958 295.571 254.315 283.951 268.935 269.302C283.556 254.652 295.154 237.261 303.066 218.121C310.978 198.984 315.05 178.472 315.051 157.758L315.051 315.508Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M315.051 157.758C315.051 157.755 315.051 157.761 315.051 157.758Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L0.000213653 315.168L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.758 157.75L157.758 157.719L157.602 157.719L0.000257935 157.719L4.43085e-05 157.758L157.602 157.75L157.758 157.75Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719ZM315.36 157.758L315.36 0.156125L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M157.602 157.719L157.602 157.75L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#F4C7CD"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719ZM0.000257954 157.498C0.0341648 136.87 4.10964 116.447 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L8.86177e-05 0L0.000257954 157.498Z" fill="#E37383"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.000257935 157.719L157.602 157.719L157.602 157.75L4.43085e-05 157.758L0.000257935 157.719Z" fill="#F4C7CD"/>
+<path d="M157.602 315.508L157.602 315.168C136.938 315.148 116.479 311.076 97.3869 303.183C78.2468 295.271 60.8557 283.673 46.2065 269.052C31.5573 254.432 19.9369 237.075 12.0089 217.972C4.0858 198.882 0.00519997 178.421 4.43085e-05 157.758L157.602 157.75L157.758 157.75L315.051 157.758C315.05 178.472 310.978 198.984 303.066 218.121C295.154 237.261 283.556 254.652 268.935 269.302C254.315 283.951 236.958 295.571 217.855 303.499C198.752 311.427 178.278 315.508 157.602 315.508Z" fill="#E37383"/>
+<path d="M157.602 157.719L0.000257935 157.719L4.43085e-05 157.758C4.61197e-05 137.041 4.07656 116.527 11.9968 97.3867C19.917 78.2466 31.5259 60.8555 46.1605 46.2063C60.7952 31.5571 78.1691 19.9367 97.2902 12.0086C116.411 4.08058 136.905 4.24862e-05 157.602 4.42956e-05L157.602 0.156081C178.319 0.156082 198.833 4.23262 217.973 12.1528C237.113 20.073 254.504 31.6819 269.153 46.3166C283.803 60.9513 295.423 78.3251 303.351 97.4463C311.279 116.567 315.36 137.061 315.36 157.758L315.051 157.758L157.758 157.75L157.758 157.719L157.602 157.719Z" fill="#F4C7CD"/></svg>
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="card-h"><span class="ch-t">Steuerpflichten Jahresverlauf</span><span class="ch-s">UG 2024</span></div>
+    <div class="stepper">
+      <div class="sr">
+        <div class="step-circle" id="sc0">Q1</div>
+        <div class="conn"><div class="conn-fill" id="cf0"></div></div>
+        <div class="step-circle" id="sc1">Q2</div>
+        <div class="conn"><div class="conn-fill" id="cf1"></div></div>
+        <div class="step-circle" id="sc2">Q3</div>
+        <div class="conn"><div class="conn-fill" id="cf2"></div></div>
+        <div class="step-circle" id="sc3">Q4</div>
+      </div>
+      <div class="lr">
+        <div class="step-label" id="sl0">USt-VA Jan</div>
+        <div class="conn-lbl"></div>
+        <div class="step-label" id="sl1">Lohnsteuer</div>
+        <div class="conn-lbl"></div>
+        <div class="step-label" id="sl2">VZ-Anpassung</div>
+        <div class="conn-lbl"></div>
+        <div class="step-label" id="sl3">KSt-Erkl.</div>
+      </div>
+    </div>
+    <div class="summary"><span class="sl">Jahresgesamtbelastung</span><span class="sv" id="sv">wird berechnet…</span></div>
+  </div>
+</div>
+<script>
+const stage=document.getElementById("stage");
+function sf(){const w=stage.offsetWidth,h=stage.offsetHeight;document.documentElement.style.fontSize=Math.max(Math.min(Math.min(w/32,h/16),32),9)+"px"}
+new ResizeObserver(sf).observe(stage);sf();
+const card=document.getElementById("card"),sv=document.getElementById("sv");
+const scs=[0,1,2,3].map(i=>document.getElementById("sc"+i));
+const sls=[0,1,2,3].map(i=>document.getElementById("sl"+i));
+const cfs=[0,1,2].map(i=>document.getElementById("cf"+i));
+const H=4500,DO=600,STEP=700;
+function run(){
+  card.style.transition="none";card.style.opacity="0";card.style.transform="translateY(.4em)";sv.textContent="wird berechnet…";
+  scs.forEach(s=>{s.classList.remove("done")});sls.forEach(s=>{s.classList.remove("done")});
+  cfs.forEach(f=>{f.style.transition="none";f.classList.remove("v")});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.style.transition="opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.16,1,.3,1)";card.style.opacity="1";card.style.transform="none";
+    [0,1,2,3].forEach(i=>{
+      setTimeout(()=>{scs[i].classList.add("done");sls[i].classList.add("done");if(i<3){cfs[i].style.transition="width .55s cubic-bezier(.4,0,.2,1)";cfs[i].classList.add("v")}},400+i*STEP);
+    });
+    setTimeout(()=>sv.textContent="29.400 € optimiert",400+4*STEP);
+    setTimeout(()=>{const t=`opacity ${DO}ms ease`;card.style.transition=t;card.style.opacity="0";setTimeout(run,DO+150)},400+4*STEP+H);
+  }));
+}
+setTimeout(run,250);
+</script></body></html>
