@@ -1,0 +1,669 @@
+<!-- STEP NAV (MOBILE) -->
+<nav class="step-nav" id="stepNav" aria-label="Fortschritt">
+  <div class="step-nav__content">
+    <div class="step-nav__slider" id="stepNavSlider">
+      <div class="step-nav__item"><span class="step-nav__num">01</span><span class="step-nav__title">Unternehmensform</span></div>
+      <div class="step-nav__item"><span class="step-nav__num">02</span><span class="step-nav__title">Paket wählen</span></div>
+      <div class="step-nav__item"><span class="step-nav__num">03</span><span class="step-nav__title">Konfiguration</span></div>
+    </div>
+  </div>
+  <div class="step-nav__nums">
+    <button class="step-nav__num-btn is-active" data-step-target="step-1" aria-label="Schritt 1">01</button>
+    <button class="step-nav__num-btn" data-step-target="step-2" aria-label="Schritt 2">02</button>
+    <button class="step-nav__num-btn" data-step-target="step-config" aria-label="Schritt 3">03</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="hero__meta">
+      <span class="hero__meta-dot"></span>
+      <span>Preisrechner</span>
+      <span class="hero__meta-sep">·</span>
+      <span>Individuell in 60 Sekunden</span>
+    </span>
+    <h1 class="hero__headline">
+      Finde Dein<br>
+      <em>passendes Paket.</em>
+    </h1>
+    <p class="hero__sub">
+      Beantworte die Fragen — wir stellen Dir Dein passendes Paket zusammen.
+    </p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="calc-grid">
+    <div class="calc-steps">
+
+      <section class="step" id="step-1">
+        <header class="step__head">
+          <span class="step__num">01</span>
+          <h2 class="step__title">Welche Unternehmensform passt zu Dir?</h2>
+          <span class="step__pill" id="step1Pill" hidden>
+            <span class="step__pill-text" id="step1PillText"></span>
+            <button type="button" class="step__pill-close" id="step1PillClose" aria-label="Auswahl ändern">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+            </button>
+          </span>
+        </header>
+        <div class="options options--4 options--compact" role="radiogroup">
+          <button class="option option--compact" role="radio" aria-pressed="true" data-form="einzelunternehmer" data-accent="indigo">
+            <span class="option__label">Einzelunternehmer</span>
+            <span class="option__desc">Freiberufler, Gewerbe, Kleinunternehmer</span>
+          </button>
+          <button class="option option--compact" role="radio" aria-pressed="false" data-form="personengesellschaft" data-accent="indigo">
+            <span class="option__label">Personengesellschaft</span>
+            <span class="option__desc">GbR, OHG, KG, Partnerschaft</span>
+          </button>
+          <button class="option option--compact" role="radio" aria-pressed="false" data-form="juristische" data-accent="indigo">
+            <span class="option__label">Juristische Person</span>
+            <span class="option__desc">GmbH, UG, AG</span>
+          </button>
+          <button class="option option--compact" role="radio" aria-pressed="false" data-form="holdings" data-accent="indigo">
+            <span class="option__label">Holdings</span>
+            <span class="option__desc">Holding-Gesellschaften & Beteiligungs­strukturen</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- HOLDINGS-Erklärungs-Card — nur sichtbar wenn Holdings gewählt -->
+      <section class="step step--card step-holdings" id="step-holdings" hidden>
+        <div class="holdings-card">
+          <header class="holdings-card__header">
+            <span class="holdings-card__eyebrow">Holdings · Individuelle Lösung</span>
+            <h3 class="holdings-card__title">Holdings sind anders.</h3>
+            <p class="holdings-card__desc">
+              Beteiligungs­strukturen, Konzern­bilanzen und strategische Steuer­planung lassen sich nicht in
+              Standard­paketen abbilden. Wir kalkulieren passgenau zu Deiner Struktur.
+            </p>
+          </header>
+
+          <div class="holdings-card__sections">
+            <div class="holdings-card__section">
+              <span class="holdings-card__section-label">Was wir abdecken</span>
+              <ul class="holdings-card__list">
+                <li>Beteiligungs­struktur &amp; Anteils­verwaltung</li>
+                <li>Konzern­konsolidierung &amp; Konzern­bilanz</li>
+                <li>Strategische Steuer­planung</li>
+                <li>Verrechnungs­preise &amp; Holding-Cashflow</li>
+              </ul>
+            </div>
+
+            <div class="holdings-card__section">
+              <span class="holdings-card__section-label">Was Du bekommst</span>
+              <ul class="holdings-card__list">
+                <li>Persönliche/r Steuer­berater/in als feste/r Ansprech­partner/in</li>
+                <li>Quartals­weise Strategie-Calls</li>
+                <li>Individuelle Honorar­vereinbarung — keine versteckten Kosten</li>
+                <li>30-Tage-Probelaufzeit mit voller Geld-zurück-Garantie</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="holdings-card__foot">
+            Die genaue Kalkulation erstellen wir gemeinsam in einem unverbindlichen
+            Erstgespräch — nutze dafür den Button rechts.
+          </p>
+        </div>
+      </section>
+
+      <section class="step step--card" id="step-config">
+        <header class="step__head">
+          <span class="step__num">02</span>
+          <h2 class="step__title">Stell Deine Eckdaten ein.</h2>
+        </header>
+        <div class="config-card">
+          <div class="config-card__grid">
+
+            <!-- 03 Vertragsbeginn -->
+            <div class="config-field">
+              <div class="config-field__label">
+                <span class="config-field__icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="0.7" y="2.7" width="12.6" height="10.6" stroke="currentColor" stroke-width="1.4"/><path d="M0.7 5.5H13.3" stroke="currentColor" stroke-width="1.4"/><path d="M4 0.5V4M10 0.5V4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+                </span>
+                <span class="config-field__name">Vertragsbeginn</span>
+                <span class="tooltip-wrap">
+                  <button type="button" class="tooltip-trigger" id="tipContractStart" aria-label="Wann sollte ich starten?" aria-expanded="false">i</button>
+                  <div class="tooltip-bubble" role="tooltip">
+                    <strong>Wann startest Du?</strong>
+                    Wir empfehlen den Vertragsstart zum Monatsanfang. Vormonate vor Deinem Startdatum (also Monate, die wir im laufenden Jahr noch nachträglich buchen) verteilen wir fair auf 6 Raten.
+                    <div class="tooltip-bubble__example" id="tipContractStartExample">
+                      Beispiel: Bei Start im Mai 2026 buchen wir die Monate Januar bis April 2026 nach — verteilt auf 6 Monatsraten.
+                    </div>
+                  </div>
+                </span>
+              </div>
+              <div class="config-field__control config-field__control--dropdowns">
+                <div class="dd" data-dd="month">
+                  <button type="button" class="dd__trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Startmonat">
+                    <span class="dd__value" data-dd-value>Januar</span>
+                    <svg class="dd__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                  </button>
+                  <ul class="dd__list" role="listbox">
+                    <li class="dd__item is-selected" role="option" tabindex="-1" data-value="1"><span class="dd__item-text">Januar</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="2"><span class="dd__item-text">Februar</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="3"><span class="dd__item-text">März</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="4"><span class="dd__item-text">April</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="5"><span class="dd__item-text">Mai</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="6"><span class="dd__item-text">Juni</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="7"><span class="dd__item-text">Juli</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="8"><span class="dd__item-text">August</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="9"><span class="dd__item-text">September</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="10"><span class="dd__item-text">Oktober</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="11"><span class="dd__item-text">November</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="12"><span class="dd__item-text">Dezember</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                  </ul>
+                </div>
+                <div class="dd" data-dd="year">
+                  <button type="button" class="dd__trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Startjahr">
+                    <span class="dd__value" data-dd-value>2026</span>
+                    <svg class="dd__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                  </button>
+                  <ul class="dd__list" role="listbox">
+                    <li class="dd__item is-selected" role="option" tabindex="-1" data-value="2026"><span class="dd__item-text">2026</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="2027"><span class="dd__item-text">2027</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="2028"><span class="dd__item-text">2028</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 04 Jahresumsatz -->
+            <div class="config-field">
+              <div class="config-field__label">
+                <span class="config-field__icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="0.7" y="2" width="12.6" height="10" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="7" r="2.4" stroke="currentColor" stroke-width="1.4"/></svg>
+                </span>
+                <span class="config-field__name">Jahresumsatz</span>
+                <span class="tooltip-wrap">
+                  <button type="button" class="tooltip-trigger" id="tipRevenue" aria-label="Mehr Info zum Aufschlag" aria-expanded="false">i</button>
+                  <div class="tooltip-bubble" role="tooltip">
+                    <strong>Umsatz-Aufschlag</strong>
+                    Mit steigendem Umsatz steigt der Buchhaltungsaufwand. Der Aufschlag wird prozentual auf den Paketpreis berechnet — fair und nachvollziehbar.
+                    <div class="tooltip-bubble__example" id="tipRevenueExample">Bei 350.000 € Umsatz wären das <em>+12,45 €</em> pro Monat.</div>
+                  </div>
+                </span>
+              </div>
+              <div class="config-field__control">
+                <div class="dd dd--with-icon" data-dd="revenue">
+                  <button type="button" class="dd__trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Jahresumsatz">
+                    <span class="dd__icon" aria-hidden="true">
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0.7" y="0.7" width="14.6" height="10.6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6" r="2.2" stroke="currentColor" stroke-width="1.4"/></svg>
+                    </span>
+                    <span class="dd__value" data-dd-value>bis 250k (0%)</span>
+                    <svg class="dd__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+                  </button>
+                  <ul class="dd__list" role="listbox">
+                    <li class="dd__item is-selected" role="option" tabindex="-1" data-value="0"><span class="dd__item-text">bis 250k (0%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="250000"><span class="dd__item-text">250–500k (5%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="500000"><span class="dd__item-text">500k–1Mio (10%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="1000000"><span class="dd__item-text">1–2Mio (15%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="2000000"><span class="dd__item-text">2–3Mio (20%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="3000000"><span class="dd__item-text">3–4Mio (25%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="4000000"><span class="dd__item-text">4–5Mio (30%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                    <li class="dd__item" role="option" tabindex="-1" data-value="5000000"><span class="dd__item-text">&gt;5Mio (35%)</span><svg class="dd__check" width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="bevel"/></svg></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 05 Transaktionen / Monat -->
+            <div class="config-field">
+              <div class="config-field__label">
+                <span class="config-field__icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M0.5 7H3L4.5 2L7 12L9.5 4L11 7H13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="bevel"/></svg>
+                </span>
+                <span class="config-field__name">Transaktionen / Monat</span>
+                <span class="tooltip-wrap">
+                  <button type="button" class="tooltip-trigger" id="tipTransactions" aria-label="Was zählt als Transaktion?" aria-expanded="false">i</button>
+                  <div class="tooltip-bubble" role="tooltip">
+                    <strong>Was zählt als Transaktion?</strong>
+                    Eine Transaktion ist jeder einzelne Geschäftsvorfall — zum Beispiel ein verkaufter Artikel, eine eingehende Zahlung oder eine ausgestellte Rechnung. Bis 100 Transaktionen pro Monat sind in jedem Paket inkludiert.
+                    <div class="tooltip-bubble__example" id="tipTransactionsExample">
+                      Schritte à 50 Transaktionen, je <em>+5 €</em> pro Monat. Du zahlst nur für tatsächlich genutzte Kapazität.
+                    </div>
+                  </div>
+                </span>
+              </div>
+              <div class="config-field__control">
+                <div class="ctrl ctrl--stepper">
+                  <button type="button" class="ctrl__btn" id="txDecrement" aria-label="50 weniger Transaktionen">
+                    <svg width="12" height="2" viewBox="0 0 12 2" fill="none" aria-hidden="true"><path d="M0 1H12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  </button>
+                  <span class="ctrl__value" id="txValue">100</span>
+                  <button type="button" class="ctrl__btn" id="txIncrement" aria-label="50 mehr Transaktionen">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0V12M0 6H12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 06 Vorjahreserklärungen -->
+            <div class="config-field">
+              <div class="config-field__label">
+                <span class="config-field__icon" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6.3" stroke="currentColor" stroke-width="1.4"/><path d="M7 3.5V7L9.5 8.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+                </span>
+                <span class="config-field__name">Vorjahres&shy;erklärungen</span>
+                <span class="config-field__optional">optional</span>
+                <span class="tooltip-wrap">
+                  <button type="button" class="tooltip-trigger" id="tipPrevYears" aria-label="Mehr Info zu Vorjahreserklärungen" aria-expanded="false">i</button>
+                  <div class="tooltip-bubble" role="tooltip">
+                    <strong>Wie wird das berechnet?</strong>
+                    Pro Vorjahr fällt das volle Jahres­paket­honorar an. Du zahlst es nicht auf einmal, sondern verteilt auf 6 Monats­raten.
+                    <div class="tooltip-bubble__example" id="tipPrevYearsExample">2 Vorjahre × 12 Monate × 199 € = 4.776 € → <em>6 × 796 €/Monat</em></div>
+                  </div>
+                </span>
+              </div>
+              <div class="config-field__control">
+                <div class="ctrl ctrl--stepper">
+                  <button type="button" class="ctrl__btn" id="pyDecrement" aria-label="Ein Vorjahr weniger">
+                    <svg width="12" height="2" viewBox="0 0 12 2" fill="none" aria-hidden="true"><path d="M0 1H12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  </button>
+                  <span class="ctrl__value" id="pyValue">0</span>
+                  <button type="button" class="ctrl__btn" id="pyIncrement" aria-label="Ein Vorjahr mehr">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0V12M0 6H12" stroke="currentColor" stroke-width="1.6"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section class="step" id="step-2">
+        <header class="step__head">
+          <span class="step__num">03</span>
+          <h2 class="step__title">Wähle Dein passendes Paket.</h2>
+          <button type="button" class="compare-toggle" id="compareToggle" aria-pressed="false" aria-controls="compareTable">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 4H12M2 7H12M2 10H12M5 1V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/>
+            </svg>
+            <span class="compare-toggle__label">Pakete vergleichen</span>
+          </button>
+        </header>
+        <div class="options options--3" role="radiogroup" id="packageOptions"></div>
+
+        <!-- CAROUSEL DOTS — nur Mobile sichtbar -->
+        <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Paket auswählen">
+          <button type="button" class="carousel-dot is-active" data-carousel-idx="0" aria-label="Paket 1"></button>
+          <button type="button" class="carousel-dot" data-carousel-idx="1" aria-label="Paket 2"></button>
+          <button type="button" class="carousel-dot" data-carousel-idx="2" aria-label="Paket 3"></button>
+        </div>
+
+        <!-- COMPARE-TABELLE: hidden by default, toggleable -->
+        <div class="compare-table" id="compareTable" hidden></div>
+      </section>
+
+    </div>
+
+    <aside class="summary" id="summary" data-loading="true">
+      <div class="summary__body">
+        <div class="summary__meta">
+          <div class="summary__eyebrow">Deine Kalkulation</div>
+          <div class="summary__live" id="summaryLive" aria-live="polite">
+            <span class="summary__live-dot"></span>
+            <span>Aktualisiert</span>
+          </div>
+        </div>
+        <div class="summary__price">
+          <span class="summary__price-value" id="sumMonthly">149</span>
+          <span class="summary__price-unit"> € / Monat</span>
+          <span class="summary__price-asterisk" id="sumPriceAsterisk" hidden>*</span>
+        </div>
+        <p class="summary__pkg-line" id="sumPkgLine">Selbststarter · Einzelunternehmer</p>
+
+        <div class="summary__divider"></div>
+
+        <!-- KOSTENAUFSCHLÜSSELUNG (Variante A — konsolidiert) -->
+        <div class="summary__section">
+          <div class="summary__section-label"><span>Kostenaufschlüsselung</span></div>
+          <ul class="summary__list summary__list--badged">
+            <li id="sumLineTransactions" hidden>
+              <span class="summary__list-label">
+                Transactions
+                <span class="summary__type-badge summary__type-badge--monthly">monatlich</span>
+              </span>
+              <span id="sumTransactions">0 €</span>
+            </li>
+            <li id="sumLineBuchhaltung" hidden>
+              <span class="summary__list-label">
+                Aufschlag <small id="sumSurchargePct">(0%)</small>
+                <span class="summary__type-badge summary__type-badge--monthly">monatlich</span>
+              </span>
+              <span id="sumBuchhaltung">0 €</span>
+            </li>
+            <li id="sumLineVormonate" hidden>
+              <span class="summary__list-label">
+                Vormonate <small id="sumPreMonthsCount">(0)</small>
+                <span class="summary__type-badge summary__type-badge--rate">rate</span>
+              </span>
+              <span id="sumPreMonths">0 €</span>
+            </li>
+            <li id="sumLineVorjahre" hidden>
+              <span class="summary__list-label">
+                Vorjahre <small id="sumPreYearsCount">(0)</small>
+                <span class="summary__type-badge summary__type-badge--rate">rate</span>
+              </span>
+              <span id="sumPreYears">0 €</span>
+            </li>
+            <li class="summary__list-item-with-tip">
+              <span class="summary__list-label">
+                Onboarding
+                <span class="summary__type-badge summary__type-badge--once">einmalig</span>
+                <span class="tooltip-wrap tooltip-wrap--inline">
+                  <button type="button" class="tooltip-trigger" id="tipOnboarding" aria-label="Was ist im Onboarding enthalten?" aria-expanded="false">i</button>
+                  <div class="tooltip-bubble tooltip-bubble--left" role="tooltip">
+                    <strong>Was ist im Onboarding?</strong>
+                    Einmalige Pauschale für den sauberen Start — alles damit Du Dich um nichts kümmern musst:
+                    <ul>
+                      <li>Steuerberater-Wechsel inkl. Vollmachten &amp; ELSTER-Anbindung</li>
+                      <li>Datenmigration (DATEV / LexOffice / PennyLane)</li>
+                      <li>Setup Buchhaltungs-Tool &amp; Beleg-Workflows</li>
+                      <li>Kennenlern-Termin &amp; Strategie-Briefing (90 Min)</li>
+                      <li>Einrichtung digitaler Zugänge &amp; Berechtigungen</li>
+                    </ul>
+                  </div>
+                </span>
+              </span>
+              <span id="sumOnboardingValue">299 €</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- TOTALS — kompakt 2-Zeilen -->
+        <div class="summary__totals-compact">
+          <div class="summary__total-compact-row summary__total-compact-row--primary">
+            <div class="summary__total-compact-label-group">
+              <span class="summary__total-compact-label">Heute fällig</span>
+              <span class="summary__total-compact-caption">Onboarding + erster Monat</span>
+            </div>
+            <span class="summary__total-compact-value" id="sumDueToday">299 €</span>
+          </div>
+          <div class="summary__total-compact-row">
+            <div class="summary__total-compact-label-group">
+              <span class="summary__total-compact-label">Ab nächstem Monat</span>
+              <span class="summary__total-compact-caption" id="sumRecurringCaption" hidden>Erste 6 Monate inkl. Ratenzahlung</span>
+            </div>
+            <span class="summary__total-compact-value" id="sumRecurring">149 €<small>/Mo</small></span>
+          </div>
+        </div>
+
+        <!-- VERGLEICH zum klassischen Steuerberater (clean inline) -->
+        <div class="summary__compare" id="sumCompare">
+          <div class="summary__compare-row">
+            <span class="summary__compare-label">
+              Klassischer Steuerberater
+              <span class="tooltip-wrap tooltip-wrap--inline">
+                <button type="button" class="tooltip-trigger" id="tipCompare" aria-label="Wie wird der Vergleichspreis berechnet?" aria-expanded="false">i</button>
+                <div class="tooltip-bubble tooltip-bubble--left" role="tooltip">
+                  <strong>Wie wir vergleichen</strong>
+                  Approximation auf Basis der Steuerberater­vergütungs­verordnung (StBVV) für vergleichbare Unternehmens­größe und Leistungsumfang.
+                  <div class="tooltip-bubble__example">
+                    Je nach Bundesland und Berater variieren die tatsächlichen Honorare — der Wert dient als Orientierung.
+                  </div>
+                </div>
+              </span>
+            </span>
+            <span class="summary__compare-value" id="sumCompareValue">~ 231 €/Mo</span>
+          </div>
+          <div class="summary__compare-saving" id="sumCompareSaving">
+            Du sparst <em id="sumSavingPercent">35 %</em> · <span id="sumSavingAmount">82 €</span> pro Monat
+          </div>
+        </div>
+
+        <!-- HOLDINGS NOTE — only visible when Holdings selected -->
+        <div class="summary__holdings-note">
+          <strong>Holdings benötigen eine individuelle Lösung.</strong>
+          Die genaue Kalkulation erstellen wir gemeinsam in einem unverbindlichen Erstgespräch — passend zu Deiner Beteiligungs&shy;struktur.
+        </div>
+      </div>
+
+      <a href="https://bsteuern.typeform.com/waitinglist" class="summary__cta">
+        Jetzt Erstgespräch buchen
+        <svg class="summary__cta-icon" width="22" height="14" viewBox="0 0 22 14" fill="none" aria-hidden="true">
+          <path d="M14 1L20.5 7L14 13M0.5 7H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </a>
+
+      <!-- TRUST-ANCHOR -->
+      <div class="summary__trust">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 0.5L9 4.5L13.5 5.2L10.2 8.4L11 13L7 10.8L3 13L3.8 8.4L0.5 5.2L5 4.5L7 0.5Z" fill="currentColor"/>
+        </svg>
+        <span>Mehr als <strong>200 GmbH-Kunden</strong> vertrauen b&rsquo;steuern</span>
+      </div>
+
+      <!-- E-MAIL-FUNKTION + Reset + Sublink -->
+      <div class="summary__actions">
+        <button type="button" class="summary__action-btn" id="emailCalcBtn">
+          <svg width="14" height="11" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+            <rect x="0.7" y="0.7" width="14.6" height="10.6" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M1 1.5L8 7L15 1.5" stroke="currentColor" stroke-width="1.4" stroke-linejoin="bevel"/>
+          </svg>
+          Per E-Mail erhalten
+        </button>
+        <button type="button" class="summary__action-btn" id="resetCalcBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7C2 4.24 4.24 2 7 2C9.76 2 12 4.24 12 7C12 9.76 9.76 12 7 12C5.13 12 3.5 10.97 2.66 9.45M2 5.5V2M2 5.5H5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" stroke-linejoin="bevel"/>
+          </svg>
+          Zurücksetzen
+        </button>
+      </div>
+
+      <a href="#raten-info" class="summary__sublink" id="sumRatenLink" hidden>
+        Warum Ratenzahlung? <span aria-hidden="true">↗</span>
+      </a>
+
+      <div class="summary__foot">
+        <span class="summary__foot-item">Netto, zzgl. USt.</span>
+        <span class="summary__foot-item">Monatlich kündbar</span>
+        <span class="summary__foot-item">Nach 3 Monaten</span>
+      </div>
+
+      <!-- TOGGLE — nur auf Mobile sichtbar -->
+      <button type="button" class="summary__toggle" id="summaryToggle" aria-expanded="false" aria-controls="summary">
+        <span id="summaryToggleLabel">Details anzeigen</span>
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+          <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </button>
+    </aside>
+
+    <!-- SETUP-ZEITSTRAHL — separates Grid-Item: Desktop unter Steps (linke Spalte), Mobile unter Summary -->
+    <div class="setup-timeline" id="setupTimeline">
+      <h4 class="setup-timeline__title">Was passiert nach Vertragsabschluss?</h4>
+      <ol class="setup-timeline__steps">
+        <li class="setup-timeline__step">
+          <span class="setup-timeline__num">1</span>
+          <div class="setup-timeline__content">
+            <strong>Woche 1 · Onboarding-Call</strong>
+            <span>Kennenlernen, Datensichtung, ELSTER-Vollmacht.</span>
+          </div>
+        </li>
+        <li class="setup-timeline__step">
+          <span class="setup-timeline__num">2</span>
+          <div class="setup-timeline__content">
+            <strong>Woche 2 – 3 · Setup &amp; Migration</strong>
+            <span>Tool-Anbindung, Datenmigration, Beleg-Workflows einrichten.</span>
+          </div>
+        </li>
+        <li class="setup-timeline__step">
+          <span class="setup-timeline__num">3</span>
+          <div class="setup-timeline__content">
+            <strong id="setupStartLabel">Ab April 2026 · Erste Buchhaltung</strong>
+            <span>Pünktliche USt-Voranmeldung, transparente monatliche Reports.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+  </div>
+
+  <!-- ═════════ FAQ-SECTION ═════════ -->
+  <section class="faq" id="faq" aria-labelledby="faqTitle">
+    <header class="faq__head">
+      <span class="faq__eyebrow">Häufige Fragen</span>
+      <h2 class="faq__title" id="faqTitle">Was Du noch wissen solltest.</h2>
+    </header>
+    <div class="faq__list">
+      <details class="faq__item">
+        <summary class="faq__q">
+          Wann zahle ich was genau?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Den monatlichen Paketpreis zahlst Du jeweils zum Monatsbeginn. Die Onboarding-Pauschale (299 €) wird einmalig zu Vertragsbeginn fällig. Falls Vormonate oder Vorjahre nachzubuchen sind, verteilen wir das auf 6 Monatsraten — fair und transparent.
+        </div>
+      </details>
+      <details class="faq__item">
+        <summary class="faq__q">
+          Was passiert wenn ich kündige?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Nach den ersten 3 Monaten Mindestlaufzeit kannst Du jeden Monat zum Monatsende kündigen. Wir übergeben Deinem neuen Steuerberater alle Daten DSGVO-konform und unterstützen beim Wechsel — kein Lock-in.
+        </div>
+      </details>
+      <details class="faq__item">
+        <summary class="faq__q">
+          Welche Buchhaltungs-Tools muss ich nutzen?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Wir arbeiten primär mit LexOffice, PennyLane und BuchhaltungsButler. Falls Du bereits ein anderes Tool nutzt, prüfen wir im Onboarding-Call eine Migration. DATEV ist auch möglich — sprich uns an.
+        </div>
+      </details>
+      <details class="faq__item">
+        <summary class="faq__q">
+          Wie schnell bekomme ich Antworten?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Anfragen über unser Ticketsystem beantworten wir innerhalb von 24 Stunden an Werktagen. Telefonische Notfälle sind in dringenden Fristen jederzeit möglich. Routine-Fragen klären wir effizient asynchron.
+        </div>
+      </details>
+      <details class="faq__item">
+        <summary class="faq__q">
+          Was ist der Unterschied zu anderen digitalen Steuerberatern?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Wir sind echte Steuerberater — kein Lohnsteuerhilfeverein und keine reine Software. GmbH, UG, AG und komplexe Strukturen können wir vollumfänglich betreuen, inkl. Bilanzen, Jahresabschluss und strategischer Steuerplanung.
+        </div>
+      </details>
+      <details class="faq__item">
+        <summary class="faq__q">
+          Kann ich mit meinem aktuellen Steuerberater wechseln?
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq__a">
+          Ja — der Wechsel ist Teil unseres Onboardings. Wir holen alle Daten ab, kümmern uns um die ELSTER-Vollmacht und stimmen uns mit Deinem bisherigen Berater ab. Du musst nichts tun außer einmal unterschreiben.
+        </div>
+      </details>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═════════ STICKY NAV (DESKTOP, bei Long-Scroll) ═════════ -->
+<nav class="sticky-nav" id="stickyNav" aria-label="Aktuelle Kalkulation">
+  <span class="sticky-nav__brand">b'steuern</span>
+  <span class="sticky-nav__pkg" id="stickyNavPkg">Selbststarter · Einzelunternehmer</span>
+  <span class="sticky-nav__price">
+    <span id="stickyNavPrice">149 €</span><small>/ Monat</small>
+  </span>
+  <a href="https://bsteuern.typeform.com/waitinglist" class="sticky-nav__cta" id="stickyNavCta">
+    Erstgespräch buchen
+    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+      <path d="M9 1L13 5L9 9M0 5H12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+    </svg>
+  </a>
+</nav>
+
+<!-- FLOATING BAR — schlanke Action-Bar (inner aligned auf container) -->
+<div class="floating-bar" id="floatingBar">
+  <div class="floating-bar__inner">
+    <div class="floating-bar__price">
+      <span class="floating-bar__price-line">
+        <span id="barMonthly">149</span>&nbsp;€
+        <span class="floating-bar__price-unit">&nbsp;/&nbsp;Monat</span>
+      </span>
+      <button type="button" class="floating-bar__details-link" id="barDetailsLink" aria-label="Transparente Preiskalkulation anzeigen">
+        <span class="floating-bar__details-label">Transparente Preiskalkulation</span>
+        <svg width="9" height="6" viewBox="0 0 9 6" fill="none" aria-hidden="true">
+          <path d="M1 1L4.5 4.5L8 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/>
+        </svg>
+      </button>
+    </div>
+    <a href="https://bsteuern.typeform.com/waitinglist" class="floating-bar__cta" id="barCtaBtn">
+      <span>Erstgespräch buchen</span>
+      <span class="floating-bar__cta-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═════════ E-MAIL MODAL ═════════ -->
+<div class="email-modal" id="emailModal" role="dialog" aria-modal="true" aria-labelledby="emailModalTitle" hidden>
+  <div class="email-modal__backdrop" id="emailModalBackdrop"></div>
+  <div class="email-modal__panel">
+    <button type="button" class="email-modal__close" id="emailModalClose" aria-label="Schließen">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+    </button>
+    <div class="email-modal__icon" aria-hidden="true">
+      <svg width="36" height="28" viewBox="0 0 36 28" fill="none">
+        <rect x="0.7" y="0.7" width="34.6" height="26.6" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M1 1.5L18 16L35 1.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="bevel"/>
+      </svg>
+    </div>
+    <h2 class="email-modal__title" id="emailModalTitle">Kalkulation per E-Mail erhalten</h2>
+    <p class="email-modal__desc">
+      Wir senden Dir Deinen aktuellen Kalkulations-Stand zu. Kein Newsletter,
+      keine Verkaufs-Mails — nur Deine Konfiguration als Snapshot.
+    </p>
+
+    <div class="email-modal__preview" id="emailModalPreview">
+      <span class="email-modal__preview-label">Snapshot-Vorschau:</span>
+      <div class="email-modal__preview-row">
+        <span id="emailPreviewPkg">Selbststarter · Einzelunternehmer</span>
+      </div>
+      <div class="email-modal__preview-prices">
+        <span><em id="emailPreviewMonthly">149</em> €/Monat</span>
+        <span class="email-modal__preview-plus" aria-hidden="true">+</span>
+        <span><em id="emailPreviewOnetime">299</em> € einmalig</span>
+      </div>
+    </div>
+
+    <form class="email-modal__form" id="emailModalForm" novalidate>
+      <label class="email-modal__field">
+        <span class="email-modal__field-label">E-Mail-Adresse</span>
+        <input type="email" id="emailModalInput" required placeholder="dein@unternehmen.de" autocomplete="email">
+      </label>
+      <label class="email-modal__check">
+        <input type="checkbox" id="emailModalConsent" required>
+        <span>Ich willige ein, dass b'steuern mir die Kalkulation einmalig zusenden darf. <a href="/datenschutz" target="_blank">Datenschutz</a>.</span>
+      </label>
+      <button type="submit" class="email-modal__submit" id="emailModalSubmit">
+        <span class="email-modal__submit-label">Kalkulation senden</span>
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="none" aria-hidden="true">
+          <path d="M10 1L15 5.5L10 10M0 5.5H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </button>
+    </form>
+
+    <!-- Success-State (toggled per JS) -->
+    <div class="email-modal__success" id="emailModalSuccess" hidden>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M14 24L21 31L34 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="bevel"/>
+      </svg>
+      <h3>Snapshot unterwegs.</h3>
+      <p>Wir haben Dir Deine Kalkulation an <strong id="emailSentTo">…</strong> geschickt. Schau gleich mal in Dein Postfach — auch im Spam-Ordner falls nichts ankommt.</p>
+    </div>
+  </div>
+</div>
+
