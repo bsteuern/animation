@@ -444,19 +444,19 @@
 }
 
 /* ── FAQ — Interaktive Effekte (Details/Summary) ── */
-.faq__item{border-bottom:1px solid var(--ink-line);}
-.faq__q{list-style:none;cursor:pointer;padding:1.5rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'General Sans',sans-serif;font-size:1rem;font-weight:500;color:var(--ink);line-height:1.4;transition:color 0.25s ease;}
-.faq__q::-webkit-details-marker{display:none;}
-.faq__q:hover{color:var(--accent);}
-.faq__icon{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid var(--ink-line);border-radius:50%;color:rgba(14,12,28,0.55);font-size:1.1rem;line-height:1;font-weight:300;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.3s ease,color 0.3s ease;}
-.faq__item[open] .faq__icon{transform:rotate(45deg);border-color:var(--accent);color:var(--accent);}
-.faq__a{padding:0 0 1.75rem;font-family:'General Sans',sans-serif;font-size:0.9375rem;line-height:1.6;color:rgba(14,12,28,0.68);max-width:60ch;}
+.faq-item{border-bottom:1px solid var(--ink-line);}
+.faq-q{list-style:none;cursor:pointer;padding:1.5rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'General Sans',sans-serif;font-size:1rem;font-weight:500;color:var(--ink);line-height:1.4;transition:color 0.25s ease;}
+.faq-q::-webkit-details-marker{display:none;}
+.faq-q:hover{color:var(--accent);}
+.faq-icon{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid var(--ink-line);border-radius:50%;color:rgba(14,12,28,0.55);font-size:1.1rem;line-height:1;font-weight:300;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.3s ease,color 0.3s ease;}
+.faq-item[open] .faq-icon{transform:rotate(45deg);border-color:var(--accent);color:var(--accent);}
+.faq-a{padding:0 0 1.75rem;font-family:'General Sans',sans-serif;font-size:0.9375rem;line-height:1.6;color:rgba(14,12,28,0.68);max-width:60ch;}
 @media(max-width:1000px){
   .faq{margin-top:3rem;padding-top:2.5rem;}
-  .faq__head{margin-bottom:1.75rem;}
-  .faq__q{padding:1.25rem 0;font-size:0.95rem;}
-  .faq__a{padding:0 0 1.4rem;font-size:0.875rem;}
+  .faq-head{margin-bottom:1.75rem;}
+  .faq-q{padding:1.25rem 0;font-size:0.95rem;}
+  .faq-a{padding:0 0 1.4rem;font-size:0.875rem;}
 }
 
 /* ── FAQ TITLE: clamp() kann Webflow-Designer nicht setzen → hier ── */
-.faq__title{font-size:clamp(1.875rem,3.5vw,2.5rem) !important;}
+.faq-title{font-size:clamp(1.875rem,3.5vw,2.5rem) !important;}
