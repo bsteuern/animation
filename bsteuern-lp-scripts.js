@@ -1,6 +1,6 @@
 /* b'steuern Landing Page v7 — JS for Webflow Custom Code (paste into Project Settings → Custom Code → Before </body>) */
 
-/* Pricing: Jasper-Style Switcher */
+/* Pricing: Switcher */
 (function(){
   const data = {
     selbststarter: {
@@ -71,7 +71,7 @@ function bindAcc(sel){
 }
 bindAcc('.faq-question');
 
-/* Warum b'steuern · Auto-Advance Accordion (Jasper-Style) */
+/* Warum b'steuern · Auto-Advance Accordion */
 (function(){
   const DURATION=6000;
   const list=document.getElementById('whyList');
