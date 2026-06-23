@@ -947,14 +947,13 @@
   align-items:flex-start;
 }
 .action-banner__digits{
-  font-family:'Feature Deck',Georgia,serif;
-  font-weight:500;          /* FeatureDeck ist nur als 500 geladen — ohne Weight Fallback auf Georgia */
+  font-family:'Feature Deck',serif;   /* identisch zu den funktionierenden Headlines — kein Georgia, kein tabular-nums (iOS-Fallback) */
+  font-weight:500;
   font-size:1.875rem;       /* 30px */
   line-height:1;
   letter-spacing:-0.03em;
   color:var(--ink);
   display:inline-block;
-  font-variant-numeric:tabular-nums;
 }
 .action-banner__label{
   font-family:'General Sans',sans-serif;
@@ -966,7 +965,7 @@
   margin-top:0.25rem;
 }
 .action-banner__sep{
-  font-family:'Feature Deck',Georgia,serif;
+  font-family:'Feature Deck',serif;
   font-weight:500;
   font-size:1.5rem;
   line-height:1;
