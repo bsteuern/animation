@@ -1,0 +1,969 @@
+/* ════════════════════════════════════════════════════════════
+   b'STEUERN PREISRECHNER · STYLES · v37 (Tarifaktion-Banner)
+   Nur was Webflow nicht kann: Variablen, Pseudo-Elemente,
+   Hover/Interaktions-States, Animationen, Media Queries,
+   JS-generierte Elemente.
+
+   ÄNDERUNGEN v36:
+   - Keine CSS-Änderungen nötig (Raten-Pills sind generisch)
+   - Version auf 36 gesetzt (sync mit Engine v35)
+<    
+<    ÄNDERUNGEN v36.1:
+<    - .tooltip bekommt position:relative (Bubble-Positionierung gefixt)
+<    - tooltip-trigger: flex-shrink:0 + min-width/height (Verschwinden bei >1900px gefixt)
+<    - Mobile Bubble-Breite optimiert
+   ════════════════════════════════════════════════════════════ */
+
+/* ── VARIABLEN ── */
+:root {
+  --ink:#0E0C1C; --ink-70:rgba(14,12,28,0.68);
+  --ink-55:rgba(14,12,28,0.55); --ink-40:rgba(14,12,28,0.38);
+  --ink-25:rgba(14,12,28,0.22); --ink-line:rgba(14,12,28,0.09);
+  --cream:#F5EFE3; --paper:#FFFFFF;
+  --indigo:#3B3BC8; --teal:#1DB8C6; --purple:#C531A4;
+  --crimson:#FF0670;
+  --accent:var(--indigo);
+  --accent-10:color-mix(in srgb,var(--accent) 10%,transparent);
+  --shadow-xs:0 1px 1px rgba(14,12,28,0.03);
+  --shadow-sm:0 1px 2px rgba(14,12,28,0.04),0 2px 6px rgba(14,12,28,0.04);
+  --ease-spring:cubic-bezier(0.16,1,0.3,1); --ease-out:cubic-bezier(0,0,0.2,1);
+  --t-fast:150ms; --t-base:250ms;
+}
+
+/* ── BASIS ── */
+.page-wrapper{-webkit-font-smoothing:antialiased;overflow-x:clip;}
+.page-wrapper :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+/* ── HERO ANIMATIONEN ── */
+@keyframes heroFadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.hero-inner>*{opacity:0;animation:heroFadeUp 0.7s var(--ease-spring) both;}
+.hero-meta{animation-delay:0s;}.hero-headline{animation-delay:0.15s;}.hero-subline{animation-delay:0.35s;}
+@media(prefers-reduced-motion:reduce){.hero-inner>*{animation:none;opacity:1;}}
+
+/* ── STEP ANIMATIONEN ── */
+/* fadeUp entfernt — verursachte Sprung/Glitch beim Laden der Seite */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PSEUDO-ELEMENTE ── */
+.config-field-label::after{
+  content:'';position:absolute;
+  left:0.75rem;right:0.75rem;bottom:0;
+  height:1px;background:var(--ink-line);
+}
+
+/* ── CHECK-INDIKATOR ── */
+.package-card::after{
+  content:'';position:absolute;top:0.75rem;right:0.75rem;
+  width:20px;height:20px;background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='10' cy='10' r='9.5' fill='white'/><path d='M4.17 10l4.17 4.17L16.67 5' stroke='black' stroke-width='1.6' stroke-linecap='square' stroke-linejoin='miter' fill='none'/></svg>") center/contain no-repeat;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='10' cy='10' r='9.5' fill='white'/><path d='M4.17 10l4.17 4.17L16.67 5' stroke='black' stroke-width='1.6' stroke-linecap='square' stroke-linejoin='miter' fill='none'/></svg>") center/contain no-repeat;
+  opacity:0;transform:scale(0.6);
+  transition:opacity var(--t-base) var(--ease-spring),transform var(--t-base) var(--ease-spring);
+  pointer-events:none;
+}
+.package-card[aria-pressed="true"]::after{opacity:1;transform:scale(1);}
+
+/* ── BULLETS ── */
+.package-card-feature::before{
+  content:'';position:absolute;left:0;top:0.5em;
+  width:4px;height:4px;border-radius:50%;
+  background:var(--ink-25);
+  transition:background 0.2s var(--ease-out);
+}
+.package-card[aria-pressed="true"] .package-card-feature::before{background:var(--accent);}
+
+/* ════════════════════════════════════════════════════════════
+   TOOLTIPS
+   ════════════════════════════════════════════════════════════ */
+
+/* Wrapper: positioniert relativ für die absolute Bubble */
+.tooltip-wrap,
+.tooltip {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+}
+/* Inline-Variante (in Listen-Items) */
+.tooltip-wrap--inline{
+  margin-left:0.4rem;
+}
+
+/* Der i-Kreis-Button */
+.tooltip-trigger{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:16px;height:16px;
+  min-width:16px;min-height:16px;   /* verhindert Schrumpfen */
+  flex-shrink:0;                     /* verhindert Schrumpfen in Flex */
+  border-radius:50%;
+  background:var(--paper);
+  border:1px solid var(--ink-line);
+  color:var(--ink-55);
+  font-family:'Feature Deck',serif;
+  font-style:italic;
+  font-size:0.65rem;
+  font-weight:400;
+  cursor:pointer;
+  line-height:1;
+  padding:0;
+  transition:
+    background var(--t-base) var(--ease-out),
+    color var(--t-base) var(--ease-out),
+    border-color var(--t-base) var(--ease-out);
+}
+.tooltip-trigger:hover,
+.tooltip-trigger[aria-expanded="true"]{
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+  outline:none;
+}
+
+/* Die dunkle Bubble */
+.tooltip-bubble{
+  /* position:fixed verhindert alle overflow-Clipping-Probleme
+     und funktioniert auf jedem Viewport (inkl. >1900px).
+     Koordinaten werden per JS gesetzt (bindTooltips in engine.js). */
+  position:fixed;
+  z-index:9999;
+  width:280px;
+  max-width:calc(100vw - 1rem);
+  background:var(--ink);
+  color:rgba(245,242,235,0.9);
+  padding:0.85rem 1rem 0.95rem;
+  font-family:'General Sans',sans-serif;
+  font-size:0.78rem;
+  line-height:1.5;
+  box-shadow:0 8px 32px rgba(11,23,48,0.18);
+  opacity:0;
+  transform:translateY(4px);
+  pointer-events:none;
+  transition:
+    opacity 0.22s var(--ease-out),
+    transform 0.22s var(--ease-out);
+}
+/* Sichtbarkeit wird per JS (inline styles) gesteuert — kein CSS-Selektor nötig */
+
+/* Pfeil nach unten zum Trigger */
+.tooltip-bubble::after{
+  content:'';
+  position:absolute;
+  top:100%;
+  left:var(--arrow-left, 8px);
+  right:auto;
+  border:6px solid transparent;
+  border-top-color:var(--ink);
+}
+
+/* Titel in der Bubble */
+.tooltip-bubble strong{
+  color:var(--paper);
+  font-weight:600;
+  display:block;
+  margin-bottom:0.35rem;
+  font-size:0.82rem;
+}
+
+/* Hervorgehobene Zahlen */
+.tooltip-bubble em{
+  color:var(--paper);
+  font-style:normal;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Liste in der Bubble */
+.tooltip-bubble ul{
+  list-style:none;
+  padding:0;margin:0.45rem 0 0;
+  display:flex;flex-direction:column;gap:0.3rem;
+}
+.tooltip-bubble ul li{
+  display:flex;align-items:flex-start;gap:0.5rem;
+  color:rgba(245,242,235,0.85);
+  line-height:1.4;
+}
+.tooltip-bubble ul li::before{
+  content:'·';
+  color:var(--paper);
+  font-weight:700;
+  flex-shrink:0;
+}
+
+/* Beispiel-Box in der Bubble */
+.tooltip-bubble__example{
+  margin-top:0.5rem;
+  padding-top:0.5rem;
+  border-top:1px solid rgba(245,242,235,0.18);
+  color:rgba(245,242,235,0.95);
+  font-size:0.78rem;
+  line-height:1.45;
+}
+
+/* Linksausgerichtete Variante (falls Bubble nach links zeigen soll) */
+.tooltip-bubble--left{right:auto;left:-0.5rem;}
+.tooltip-bubble--left::after{right:auto;left:0.7rem;}
+
+/* Mobile: kein Pfeil, Bubble breiter */
+@media(max-width:1000px){
+  .tooltip-bubble{width:220px;max-width:calc(100vw - 2rem);}
+  .tooltip-bubble::after{display:none;}
+}
+
+/* ── HOVER & INTERAKTIONS-STATES ── */
+.tile-card:hover{border-color:var(--ink-25);box-shadow:var(--shadow-xs);}
+.tile-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10);}
+.config-field:hover{border-color:var(--ink-25);box-shadow:var(--shadow-xs);}
+.config-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10);}
+.startup-toggle:hover{border-color:var(--ink-25);background:rgba(14,12,28,0.03);}
+.startup-toggle[aria-pressed="true"]{background:var(--accent-10);border-color:var(--accent);color:var(--accent);}
+.startup-toggle[aria-pressed="true"] .startup-toggle-check{background:var(--accent);border-color:var(--accent);color:var(--paper);}
+.config-stepper-btn:hover{background:var(--cream);color:var(--accent);}
+.config-stepper-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.dropdown-trigger{transition:border-color var(--t-fast) var(--ease-out);}
+.dropdown-trigger:hover{border-color:var(--ink-25);}
+.dropdown.is-open .dropdown-trigger,.dropdown-trigger[aria-expanded="true"]{border-color:var(--accent);outline:none;}
+.dropdown-chevron{transition:transform 0.3s var(--ease-spring),color var(--t-fast) var(--ease-out);}
+.dropdown-trigger:hover .dropdown-chevron{color:var(--accent);}
+.dropdown.is-open .dropdown-chevron{transform:rotate(180deg);color:var(--accent);}
+.step-pill-close:hover{background:rgba(14,12,28,0.09);}
+.summary-reset-btn svg{transition:transform 0.5s var(--ease-spring);}
+.summary-reset-btn:hover{border-color:var(--ink-25);color:var(--ink);}
+.summary-reset-btn:hover svg{transform:rotate(-180deg);}
+
+/* ── SUMMARY ZEILEN HOVER ── */
+.summary-line{margin:0 -0.6rem;padding:0.2rem 0.6rem;transition:background 0.2s var(--ease-out);border-radius:3px;}
+.summary-line:hover{background:rgba(14,12,28,0.03);}
+
+.package-card:hover{border-color:var(--ink-25);box-shadow:var(--shadow-xs);}
+.package-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-10);}
+.floating-bar-cta:hover{background:var(--ink);}
+.floating-bar.is-ready{transform:translateY(0);opacity:1;}
+.floating-bar.is-hidden{transform:translateY(calc(100% + 2rem));opacity:0;pointer-events:none;}
+
+/* ── CAROUSEL DOTS — Striche ── */
+.carousel-dot{
+  width:20px !important;height:3px !important;
+  border-radius:2px !important;
+  background:rgba(14,12,28,0.18) !important;
+  transition:background 0.2s var(--ease-out),width 0.2s var(--ease-spring) !important;
+}
+.carousel-dot.is-active{
+  background:var(--accent) !important;
+  width:28px !important;
+  transform:none !important;
+}
+
+/* ── COMING SOON ── */
+/* ── coming-soon Karte: 1:1 Prototype ── */
+.package-card.is-coming-soon{cursor:not-allowed;background:var(--paper);user-select:none;}
+@media(hover:hover){.package-card.is-coming-soon:hover{border-color:var(--ink-line) !important;box-shadow:none !important;}}
+.package-card.is-coming-soon::after{display:none;}
+/* Badge schwarz */
+.package-card.is-coming-soon .package-card-badge,
+.package-card-badge[data-tier="coming-soon"]{background:var(--ink);color:var(--paper);letter-spacing:0.12em;}
+/* Inhalt gedimmt via opacity — identisch zum Prototyp */
+.package-card.is-coming-soon .package-card-name,
+.package-card.is-coming-soon .package-card-tagline,
+.package-card.is-coming-soon .package-card-desc,
+.package-card.is-coming-soon .package-card-price,
+.package-card.is-coming-soon .package-card-divider,
+.package-card.is-coming-soon .package-card-features{opacity:0.5;}
+
+/* ── PRICE PREFIX »ab« ── */
+.package-card-price-prefix{font-family:'General Sans',sans-serif;font-size:0.875rem;font-weight:400;color:rgba(14,12,28,0.55);margin-right:0.2em;align-self:flex-end;padding-bottom:0.15em;}
+
+/* ── PACKAGE CARD DESC ── */
+.package-card-desc{font-family:'General Sans',sans-serif;font-size:0.875rem;font-weight:400;color:rgba(14,12,28,0.68);line-height:1.45;margin-top:0.35rem;}
+
+/* ── DROPDOWN-LISTE ── */
+[class*="dropdown-list"]{position:absolute;top:calc(100% + 4px);left:0;width:max-content;min-width:100%;background:var(--paper);border:1px solid var(--ink-line);box-shadow:0 2px 4px -1px rgba(14,12,28,0.06),0 12px 24px -6px rgba(14,12,28,0.12),0 24px 48px -12px rgba(14,12,28,0.10);padding:0.3rem 0;max-height:300px;overflow-y:auto;z-index:100;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity 0.2s var(--ease-out),transform 0.25s var(--ease-spring);}
+.dropdown.is-open [class*="dropdown-list"]{opacity:1;pointer-events:auto;transform:translateY(0);}
+
+/* ── DROPDOWN-ITEMS ── */
+.dropdown-item{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.85rem 0.55rem 1rem;font-family:'General Sans',sans-serif;font-size:0.875rem;font-weight:500;color:var(--ink);line-height:1.2;cursor:pointer;transition:background 0.15s var(--ease-out);text-transform:none;letter-spacing:normal;}
+.dropdown-item:hover{background:var(--cream);}
+.dropdown-item[aria-selected="true"]{font-weight:600;}
+.dropdown-item-text{flex:1;}
+.dropdown-item-check{display:none;}
+
+/* ════════════════════════════════════════════════════════════
+   PACKAGE CARDS GRID — Desktop
+   ════════════════════════════════════════════════════════════ */
+.package-cards{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:0.75rem !important;
+  width:100% !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PACKAGE CARDS CAROUSEL — Mobile (≤1000px)
+   ════════════════════════════════════════════════════════════ */
+@media(max-width:1000px){
+  .package-cards{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    scroll-snap-type:x proximity !important;
+    scroll-padding-left:1.25rem !important;
+    scrollbar-width:none !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    padding-left:1.25rem !important;
+    padding-right:4.5rem !important;
+    padding-bottom:0.5rem !important;
+    gap:0.75rem !important;
+  }
+  .package-cards::-webkit-scrollbar{display:none;}
+  .package-card{
+    flex:0 0 78vw !important;
+    width:78vw !important;
+    min-width:0 !important;
+    scroll-snap-align:start !important;
+  }
+  .carousel-dots{display:flex !important;}
+}
+
+/* ════════════════════════════════════════════════════════════
+   PACKAGE CARD — Struktur & Typografie
+   ════════════════════════════════════════════════════════════ */
+.package-card{
+  position:relative;background:var(--paper);border:1px solid var(--ink-line);
+  padding:1.25rem 1.25rem 1.4rem;cursor:pointer;font-family:inherit;color:inherit;
+  display:flex;flex-direction:column;min-height:100%;
+}
+.package-card-header{
+  display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0;
+}
+.package-card-badge{
+  display:inline-flex;align-self:flex-start;align-items:center;
+  padding:0.28rem 0.45rem;
+  font-size:0.6rem;font-weight:500;letter-spacing:0.18em;
+  text-transform:uppercase;line-height:1;
+  color:var(--paper);background:rgba(14,12,28,0.25);margin-bottom:0.15rem;
+}
+.package-card-badge[data-tier="grundpaket"]{background:var(--teal);}
+.package-card-badge[data-tier="empfehlung"]{background:var(--accent);}
+.package-card-badge[data-tier="vollpaket"]{background:var(--purple);}
+.package-card-tagline{font-size:0.8rem;line-height:1.3;color:rgba(14,12,28,0.42);}
+.package-card-name{
+  font-family:'Feature Deck',serif;font-weight:500;
+  font-size:1.5rem;line-height:1.1;letter-spacing:-0.018em;color:var(--ink);
+}
+.package-card-desc{font-size:0.8125rem;line-height:1.5;color:rgba(14,12,28,0.42);}
+.package-card-startup-hint{
+  align-self:flex-start;color:var(--accent);
+  font-size:0.7rem;font-weight:600;letter-spacing:0.02em;line-height:1.3;
+}
+.package-card-price{
+  display:flex;align-items:baseline;gap:0.15rem;flex-wrap:nowrap;
+  margin-top:auto;padding-top:1.75rem;margin-bottom:0.85rem;
+}
+.package-card-price-prefix{font-size:0.75rem;color:rgba(14,12,28,0.42);margin-right:0.1rem;flex-shrink:0;}
+.package-card-price-value{
+  font-family:'Feature Deck',serif;font-size:1.75rem;font-weight:500;
+  line-height:1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;
+}
+.package-card-price-currency{font-family:'Feature Deck',serif;font-size:1.25rem;font-weight:500;color:rgba(14,12,28,0.55);}
+.package-card-price-unit{font-size:0.8rem;color:rgba(14,12,28,0.55);margin-left:0.15rem;white-space:nowrap;flex-shrink:0;}
+.package-card-divider{height:1px;background:var(--ink-line);margin:0 0 0.75rem;}
+.package-card-features{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem;}
+.package-card-feature{position:relative;padding-left:1.1rem;font-size:0.875rem;line-height:1.35;color:rgba(14,12,28,0.68);}
+
+/* ── em-Tags: nicht kursiv (Browser-Default ist italic) ── */
+/* Verhindert ungewollte Kursivierung von Prozentzahlen und Hervorhebungen */
+.page-wrapper em { font-style:normal; font-weight:600; }
+
+/* ── UTILITY ── */
+.cms-bridge{display:none !important;}
+[hidden]{display:none !important;}
+.step-pill[hidden]{display:none;}
+
+/* ── FLOATING BAR BACKDROP ── */
+.floating-bar{backdrop-filter:saturate(180%) blur(28px);-webkit-backdrop-filter:saturate(180%) blur(28px);box-shadow:0 -0.5px 0 rgba(11,23,48,0.1),0 -4px 32px rgba(11,23,48,0.04);padding-bottom:env(safe-area-inset-bottom);transform:translateY(calc(100% + 2rem));transition:transform 0.6s var(--ease-spring),opacity 0.35s var(--ease-out);}
+
+/* ── MEDIA QUERIES ── */
+@media(min-width:1500px){.calculator-grid{grid-template-columns:minmax(0,1fr) 420px;}}
+@media(min-width:1700px){.calculator-grid{grid-template-columns:minmax(0,1fr) 460px;}}
+/* ── Sticky Kalkulation-Card ──
+   overflow:visible auf allen Eltern — verhindert dass ein Webflow
+   overflow:hidden das sticky blockiert */
+.calculator-section-wrap,
+.calculator-section,
+.calculator-inner,
+.calculator-grid{overflow:visible !important;}
+.calculator-summary{
+  position:sticky !important;
+  top:5rem; /* Webflow kann diesen Wert im Style-Panel überschreiben */
+  align-self:start !important;
+}
+@media(max-width:1200px){
+  .calculator-grid{grid-template-columns:minmax(0,1fr) !important;}
+  .calculator-summary{position:static !important;align-self:auto !important;}
+}
+@media(max-width:720px){.config-grid{grid-template-columns:1fr;}[class*="dropdown-list"]{max-height:50vh;}.dropdown-trigger{height:44px;}}
+@media(max-width:640px){.config-field-label::after{left:0.55rem;right:0.55rem;}}
+
+/* ── BREITEN-FIX v36.2 ── */
+/* .calculator-steps hat in Webflow eine fixe Breite → wächst nicht mit dem Grid mit.
+   width:100% zwingt ihn, immer die volle linke Spalte zu füllen. */
+.calculator-steps{width:100% !important;max-width:100% !important;}
+
+/* ── COMPARE-TOGGLE: margin-left:auto pusht ihn nach rechts im flex header ── */
+.compare-toggle{margin-left:auto;}
+@media(max-width:1000px){
+  .compare-toggle{margin-left:0;width:100%;justify-content:center;margin-top:0.5rem;}
+  #step-2 .step-header,.compare-toggle{flex-wrap:wrap;}
+}
+
+/* ── COMPARE-TOGGLE ACTIVE STATE ── */
+.compare-toggle[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+.compare-toggle:hover{border-color:rgba(14,12,28,0.22);background:rgba(14,12,28,0.03);color:var(--ink) !important;}
+.compare-toggle[aria-pressed="true"]:hover{background:rgba(14,12,28,0.03);border-color:rgba(14,12,28,0.22);color:var(--ink) !important;}
+
+/* ── COMPARE-TABLE ── */
+.compare-table[hidden]{display:none;}
+.compare-table{margin-top:1.25rem;background:var(--paper);border:1px solid var(--ink-line);overflow:hidden;animation:compareTableIn 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes compareTableIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.compare-table__inner{display:flex;flex-direction:column;}
+.compare-table__head{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;border-bottom:1px solid var(--ink-line);background:rgba(14,12,28,0.025);}
+.compare-table__head-cell{padding:1.1rem 1rem 1.25rem;border-left:1px solid var(--ink-line);display:flex;flex-direction:column;gap:0.35rem;font-family:'General Sans',sans-serif;text-align:left;}
+.compare-table__head-cell--label,.compare-table__head-cell:first-child{border-left:0;background:transparent;font-size:0.65rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(14,12,28,0.55);align-self:end;padding-bottom:1.4rem;}
+.compare-table__pkg-badge{display:inline-flex;align-self:flex-start;align-items:center;padding:0.25rem 0.5rem;margin-bottom:0.15rem;font-family:'General Sans',sans-serif;font-size:0.6rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;line-height:1;color:#fff;background:rgba(14,12,28,0.22);}
+.compare-table__pkg-badge[data-tier="grundpaket"]{background:#0D9488;}
+.compare-table__pkg-badge[data-tier="empfehlung"]{background:#3B3BC8;}
+.compare-table__pkg-badge[data-tier="vollpaket"]{background:#7C3AED;}
+.compare-table__pkg-name{font-family:'Feature Deck',serif;font-size:1.125rem;font-weight:500;color:var(--ink);line-height:1.1;letter-spacing:-0.018em;}
+.compare-table__pkg-price{font-family:'General Sans',sans-serif;font-size:0.9rem;font-weight:500;color:rgba(14,12,28,0.68);font-variant-numeric:tabular-nums;}
+.compare-table__pkg-price small{font-size:0.75em;color:rgba(14,12,28,0.55);margin-left:0.15em;}
+.compare-table__body{display:flex;flex-direction:column;}
+.compare-table__row{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;border-bottom:1px solid var(--ink-line);align-items:stretch;}
+.compare-table__row:last-child{border-bottom:0;}
+.compare-table__row:hover{background:rgba(14,12,28,0.02);}
+.compare-table__cell{padding:0.85rem 1rem;border-left:1px solid var(--ink-line);display:flex;align-items:center;justify-content:center;font-family:'General Sans',sans-serif;font-size:0.875rem;color:var(--ink);align-self:stretch;}
+.compare-table__cell--label,.compare-table__cell:first-child{border-left:0;justify-content:flex-start;color:rgba(14,12,28,0.68);font-weight:500;}
+.compare-table__check{color:var(--crimson);display:inline-block;width:1.05rem;height:1.05rem;}
+.compare-table__cross{color:rgba(14,12,28,0.22);font-size:1.1rem;}
+.compare-table__value{font-variant-numeric:tabular-nums;font-weight:500;}
+/* ── Compare-Tabelle coming-soon: 1:1 Prototype ── */
+.compare-table__head-cell.is-coming-soon{background:rgba(14,12,28,0.03);}
+.compare-table__pkg-badge[data-tier="coming-soon"],
+.compare-card__pkg-badge[data-tier="coming-soon"]{background:var(--ink);color:var(--paper);}
+.compare-table__head-cell.is-coming-soon .compare-table__pkg-name,
+.compare-table__head-cell.is-coming-soon .compare-table__pkg-price{opacity:0.5;}
+.compare-table__cell.is-coming-soon{background:rgba(14,12,28,0.025);}
+.compare-table__cell.is-coming-soon .compare-table__check{color:var(--ink);opacity:0.5;}
+.compare-table__cell.is-coming-soon .compare-table__cross,
+.compare-table__cell.is-coming-soon .compare-table__value{opacity:0.5;}
+/* Hover-Highlight in der coming-soon Spalte unterdrücken */
+.compare-table__row:hover .compare-table__cell.is-coming-soon{background:rgba(14,12,28,0.025);}
+/* Mobile Akkordeon */
+.compare-card.is-coming-soon{background:rgba(14,12,28,0.025);}
+.compare-card.is-coming-soon .compare-card__pkg-name,
+.compare-card.is-coming-soon .compare-card__pkg-price{opacity:0.5;}
+.compare-card.is-coming-soon .compare-card__features{opacity:0.55;}
+.compare-card.is-coming-soon .compare-card__feature-value .compare-table__check{color:var(--ink);}
+.compare-table__cell.is-coming-soon{background:rgba(14,12,28,0.015);}
+.compare-table__cell.is-coming-soon .compare-table__check{color:var(--ink);opacity:0.5;}
+.compare-table__cell.is-coming-soon .compare-table__cross,.compare-table__cell.is-coming-soon .compare-table__value{opacity:0.5;}
+
+/* Row animations */
+.compare-table__row{animation:rowFadeIn 0.3s both;}
+.compare-table__row:nth-child(1){animation-delay:0.02s;}.compare-table__row:nth-child(2){animation-delay:0.04s;}
+.compare-table__row:nth-child(3){animation-delay:0.06s;}.compare-table__row:nth-child(4){animation-delay:0.08s;}
+.compare-table__row:nth-child(5){animation-delay:0.10s;}.compare-table__row:nth-child(6){animation-delay:0.12s;}
+.compare-table__row:nth-child(7){animation-delay:0.14s;}.compare-table__row:nth-child(8){animation-delay:0.16s;}
+.compare-table__row:nth-child(9){animation-delay:0.18s;}.compare-table__row:nth-child(10){animation-delay:0.20s;}
+@keyframes rowFadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── COMPARE-CARDS (Mobile < 640px) ── */
+.compare-cards{display:none;flex-direction:column;}
+.compare-card{border-bottom:1px solid var(--ink-line);background:var(--paper);}
+.compare-card:last-child{border-bottom:0;}
+.compare-card__head{display:flex;align-items:center;flex-wrap:wrap;gap:0.5rem 0.75rem;padding:1rem 1.25rem;cursor:pointer;list-style:none;user-select:none;}
+.compare-card__head::-webkit-details-marker{display:none;}
+.compare-card__pkg-badge{display:inline-flex;align-items:center;padding:0.25rem 0.5rem;font-family:'General Sans',sans-serif;font-size:0.6rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;line-height:1;color:#fff;background:rgba(14,12,28,0.22);flex-shrink:0;}
+.compare-card__pkg-badge[data-tier="grundpaket"]{background:#0D9488;}.compare-card__pkg-badge[data-tier="empfehlung"]{background:#3B3BC8;}.compare-card__pkg-badge[data-tier="vollpaket"]{background:#7C3AED;}
+.compare-card__pkg-name{font-family:'Feature Deck',serif;font-size:1rem;font-weight:500;color:var(--ink);line-height:1.1;flex:1;}
+.compare-card__pkg-price{font-family:'General Sans',sans-serif;font-size:0.85rem;font-weight:500;color:rgba(14,12,28,0.68);}
+.compare-card__chevron{color:rgba(14,12,28,0.55);transition:transform 0.22s ease;flex-shrink:0;}
+.compare-card[open] .compare-card__chevron{transform:rotate(180deg);}
+.compare-card__features{list-style:none;padding:0 1.25rem 1rem;margin:0;display:flex;flex-direction:column;border-top:1px solid rgba(14,12,28,0.06);margin-top:0.25rem;}
+.compare-card__features li{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:0.6rem 0;border-bottom:1px solid rgba(14,12,28,0.05);font-family:'General Sans',sans-serif;font-size:0.85rem;}
+.compare-card__features li:last-child{border-bottom:0;}
+.compare-card__feature-label{color:rgba(14,12,28,0.68);font-weight:400;}
+.compare-card__feature-value{color:var(--ink);font-weight:500;text-align:right;}
+@media(max-width:640px){
+  .compare-table__inner{display:none;}
+  .compare-cards{display:flex;}
+}
+
+/* ── FAQ — Interaktive Effekte (Details/Summary) ── */
+.faq-item{border-bottom:1px solid var(--ink-line);}
+.faq-q{list-style:none;cursor:pointer;padding:1.5rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:'General Sans',sans-serif;font-size:1rem;font-weight:500;color:var(--ink);line-height:1.4;transition:color 0.25s ease;}
+.faq-q::-webkit-details-marker{display:none;}
+.faq-q:hover{color:var(--accent);}
+.faq-icon{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid var(--ink-line);border-radius:50%;color:rgba(14,12,28,0.55);font-size:1.1rem;line-height:1;font-weight:300;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),border-color 0.3s ease,color 0.3s ease;}
+.faq-item.is-open .faq-icon{transform:rotate(45deg);border-color:var(--accent);color:var(--accent);}
+.faq-a{padding:0 0 1.75rem;font-family:'General Sans',sans-serif;font-size:0.9375rem;line-height:1.6;color:rgba(14,12,28,0.68);max-width:60ch;}
+@media(max-width:1000px){
+  .faq{margin-top:3rem;padding-top:2.5rem;}
+  .faq-head{margin-bottom:1.75rem;}
+  .faq-q{padding:1.25rem 0;font-size:0.95rem;}
+  .faq-a{padding:0 0 1.4rem;font-size:0.875rem;}
+}
+
+/* ── FAQ TITLE: clamp() kann Webflow-Designer nicht setzen → hier ── */
+.faq-title{font-size:clamp(1.875rem,3.5vw,2.5rem) !important;}
+
+/* ══════════════════════════════════════════════════════════════
+   HOLDINGS-MODE
+   Aktiviert wenn state.form === 'holdings':
+   - #step-holdings         → per JS via toggleEl eingeblendet
+   - #calculatorSummary.is-holdings  → Summary-Card umschalten
+   - #floatingBar.is-holdings        → Floating Bar umschalten
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Holdings-Card (tauscht Step-02 aus) ── */
+#step-holdings[hidden]{display:none !important;}
+
+.holdings-card{
+  background:var(--paper);
+  border:1px solid var(--ink-line);
+  box-shadow:var(--shadow-xs);
+  padding:2.25rem 2.25rem 1.75rem;
+  position:relative;
+}
+.holdings-card-header{
+  margin-bottom:1.75rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--ink-line);
+}
+.holdings-card-eyebrow{
+  display:inline-block;
+  font-size:0.65rem;font-weight:600;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:0.85rem;line-height:1;
+}
+.holdings-card-title{font-family:'Feature Deck',serif;
+  font-size:clamp(1.5rem,2.4vw,2rem);
+  line-height:1.1;letter-spacing:-0.025em;
+  color:var(--ink);margin:0 0 0.85rem;
+}
+.holdings-card-desc{
+  font-size:0.95rem;line-height:1.55;
+  color:var(--ink-70);margin:0;
+}
+.holdings-card-sections{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2.5rem;margin-bottom:1.5rem;
+}
+.holdings-card-section{display:flex;flex-direction:column;gap:0.85rem;}
+.holdings-card-section-label{
+  font-size:0.65rem;font-weight:600;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--accent);line-height:1;
+}
+.holdings-card-list{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:0.65rem;
+}
+.holdings-card-list li{
+  font-size:0.9rem;font-weight:500;color:var(--ink);
+  line-height:1.4;position:relative;padding-left:1.25rem;
+}
+.holdings-card-list li::before{
+  content:'';position:absolute;left:0;top:0.7em;
+  width:8px;height:1px;background:var(--accent);
+  transition:background 0.5s var(--ease-spring);
+}
+.holdings-card-foot{
+  font-size:0.78rem;color:var(--ink-55);line-height:1.5;
+  margin:0;padding-top:1.25rem;border-top:1px solid var(--ink-line);
+}
+@media(max-width:720px){
+  .holdings-card{padding:1.75rem 1.5rem 1.25rem;}
+  .holdings-card-sections{grid-template-columns:1fr;gap:1.5rem;}
+}
+
+/* ── Summary-Card im Holdings-Mode ── */
+
+.summary-holdings-note{display:none !important;}
+#calculatorSummary.is-holdings .summary-holdings-note{
+  display:block !important;
+  font-size:0.875rem;line-height:1.55;color:var(--ink-70);
+  margin-top:1.25rem;padding-top:1.25rem;
+}
+#calculatorSummary.is-holdings .summary-holdings-note strong{
+  font-weight:600;color:var(--ink);display:block;margin-bottom:0.35rem;
+}
+
+/* step-config (Step 02 Dropdowns) + summary-compare bei Holdings verstecken */
+.calculator-steps.is-holdings .step-config{display:none !important;}
+#calculatorSummary.is-holdings .summary-compare{display:none !important;}
+
+/* step-holdings explizit einblenden — toggleEl allein reicht nicht wenn
+   Webflow display:none im eigenen Stylesheet gesetzt hat */
+.calculator-steps.is-holdings #step-holdings{display:block !important;}
+.summary-holdings-criteria{
+  list-style:none;padding:0;margin:0.65rem 0 0;
+  display:flex;flex-direction:column;gap:0.4rem;
+}
+.summary-holdings-criteria li{
+  position:relative;padding-left:1.1rem;
+  font-size:0.8125rem;line-height:1.45;color:var(--ink-70);
+}
+.summary-holdings-criteria li::before{
+  content:'';position:absolute;left:0;top:0.55rem;
+  width:5px;height:5px;background:var(--accent);
+}
+.summary-holdings-disclosure{
+  margin:0.85rem 0 0;padding-top:0.65rem;
+  border-top:1px solid var(--ink-line);
+  font-size:0.75rem;color:var(--ink-55);line-height:1.4;font-style:italic;
+}
+
+/* ── Floating Bar im Holdings-Mode ──
+   Preis (65 €) direkt anzeigen */
+
+
+/* ── FAQ: JS-Toggle via .is-open Klasse ── */
+.faq-a{display:none;}
+.faq-item.is-open .faq-a{
+  display:block !important;
+  animation:faq-open 0.22s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes faq-open{
+  from{opacity:0;transform:translateY(-6px);}
+  to{opacity:1;transform:translateY(0);}
+}
+/* ── Mobile Fixes ── */
+@media(max-width:1000px){
+  /* FAQ: horizontales Padding auf Mobile */
+  .faq-section{padding-left:1.25rem !important;padding-right:1.25rem !important;box-sizing:border-box !important;overflow-x:hidden !important;}
+
+  /* Floating Bar: position + visibility sicherstellen */
+  #floatingBar{
+    display:block !important;
+    position:fixed !important;
+    bottom:0 !important;
+    left:0 !important;
+    right:0 !important;
+    z-index:999 !important;
+  }
+}
+/* ══════════════════════════════════════════════════════════════
+   MOBILE SUMMARY CARD — Collapse/Expand
+   ══════════════════════════════════════════════════════════════ */
+@media(max-width:1000px){
+  /* Toggle-Button — standardmäßig versteckt, auf Mobile sichtbar */
+  /* pkg-line etwas mehr Abstand nach unten */
+  .summary-pkg-line{margin-bottom:0.75rem;}
+
+  #summaryToggle{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    gap:0.5rem;
+    /* Linie geht full-width durch die summary-Card-Padding */
+    margin-left:-1.5rem !important;
+    margin-right:-1.5rem !important;
+    padding:0.875rem 1.5rem;
+    margin-top:1.5rem;
+    border-top:1px solid var(--ink-line);
+    background:transparent;
+    font-family:'General Sans',sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:rgba(14,12,28,0.55);
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+  #summaryToggle:hover{background:rgba(14,12,28,0.04) !important;}
+  #summaryToggle svg{transition:transform 0.3s ease;transform:rotate(0deg);}
+  #calculatorSummary[data-mobile-collapsed="false"] #summaryToggle svg{transform:rotate(180deg);}
+
+  /* Collapsed: Details verstecken */
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-price-note,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-divider,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-section-monatlich,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-section,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-hints,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-compare,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-holdings-note,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-cta,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-trust,
+  #calculatorSummary[data-mobile-collapsed="true"] .summary-foot{
+    display:none !important;
+  }
+}
+/* ── Floating Bar: „/ Monat" auf Grundlinie ── */
+/* ── Floating Bar: Preis — prominente Darstellung ── */
+.floating-bar-price-row{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:0.15em;
+}
+.floating-bar-price-main{
+  display:flex !important;
+  align-items:baseline !important;
+}
+#barMonthly{
+  font-size:2.6rem !important;
+  font-family:var(--font-serif,'Feature Deck',Georgia,serif) !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  letter-spacing:-0.02em;
+}
+.floating-bar-price-unit{
+  font-family:'General Sans',sans-serif !important;
+  font-size:0.8rem !important;
+  color:rgba(14,12,28,0.6);
+  align-self:auto !important;
+  line-height:1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLOATING BAR — Expand/Collapse (Apple/Shopify Pattern)
+   ══════════════════════════════════════════════════════════════ */
+@media(max-width:1000px){
+  /* Floating Bar über Overlay */
+  #floatingBar{z-index:9001 !important;}
+
+  /* floating-bar-inner als flex-column:
+     Sheet oben, Compact Bar + CTA immer unten sichtbar */
+  .floating-bar-inner{
+    display:flex !important;
+    flex-direction:column !important;
+    overflow:hidden !important;
+  }
+
+  /* ── Sheet: versteckt → slides up ── */
+  #barSheet{
+    max-height:0;
+    overflow-y:auto;
+    transition:max-height 0.45s cubic-bezier(0.16,1,0.3,1);
+    border-bottom:none;
+    /* Schatten entfernt — Overlay übernimmt die visuelle Trennung */
+    background:#fff;
+    border-radius:0 !important;
+  }
+  #floatingBar.is-expanded #barSheet{max-height:65vh;border-bottom:1px solid var(--ink-line);}
+
+  /* Compact Bar + CTA nicht komprimieren */
+  .floating-bar-info-btn,
+  .floating-bar-cta{flex-shrink:0 !important;}
+
+  /* CTA im Sheet — nur wenn Sheet offen */
+  #barSheet .floating-bar-cta{
+    display:block !important;
+    max-height:none !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+    margin:0.75rem 0 1rem;
+  }
+
+  /* Drag-Handle — Apple-style */
+  .bar-sheet-handle{
+    width:40px;height:4px;
+    background:rgba(14,12,28,0.18);
+    border-radius:4px;
+    margin:10px auto 12px;
+    flex-shrink:0;cursor:pointer;
+    border-radius:2px !important;
+  }
+
+  /* Sheet + Content volle Breite */
+  #barSheet,#barSheetContent{width:100% !important;box-sizing:border-box;}
+
+  /* Sections mit Trennlinien — Apple Pay Breakdown Pattern */
+  .bar-sheet-section{
+    padding:0.75rem 1.25rem;
+    border-bottom:1px solid var(--ink-line);
+    width:100%;box-sizing:border-box;
+  }
+  /* Letzter Section ohne Trennlinie */
+  .bar-sheet-section:last-of-type{border-bottom:none;}
+  .bar-sheet-label{
+    font-size:0.6rem;font-weight:700;
+    letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:0.5rem;
+  }
+  .bar-sheet-row{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:baseline !important;
+    width:100% !important;
+    box-sizing:border-box;
+    font-size:0.9rem;color:var(--ink);padding:0.25rem 0;
+  }
+  .bar-sheet-val{font-family:'Feature Deck',serif;font-weight:500;margin-left:1rem;flex-shrink:0;}
+
+  /* CTA im Sheet — volle Breite */
+  #barSheet .floating-bar-cta{
+    display:block !important;max-height:none !important;
+    opacity:1 !important;pointer-events:auto !important;
+    margin:0.75rem 1.25rem 1.25rem;
+    width:calc(100% - 2.5rem) !important;
+    box-sizing:border-box;
+  }
+
+  /* Chevron dreht sich beim Expandieren */
+  /* Chevron zeigt nach oben (Richtung wohin Sheet öffnet) — dreht sich nach unten wenn offen */
+  #barDetailsLink svg{transition:transform 0.3s ease;transform:rotate(0deg);}
+  #floatingBar.is-expanded #barDetailsLink svg{transform:rotate(180deg);}
+}
+
+/* ── Bar Sheet: Details-Link ── */
+/* Details-Link nur auf Mobile (innerhalb @media) */
+@media(max-width:1000px){
+  .bar-sheet-details-link-wrap{
+    padding:0.5rem 1.25rem 0.25rem;
+    text-align:center;
+  }
+  .bar-sheet-details-link{
+    font-size:0.75rem;
+    color:var(--accent);
+    cursor:pointer;
+    letter-spacing:0.02em;
+  }
+}
+
+/* ── Floating Bar Mobile: Pill-Handle statt langer Linie ── */
+@media(max-width:1000px){
+  /* Langen Strich von Webflow entfernen */
+  #floatingBar{border-top:none !important;}
+
+  /* Pill-Handle immer sichtbar über dem Compact Bar */
+  .floating-bar-inner::before{
+    content:'';
+    display:block;
+    width:40px;height:4px;
+    background:rgba(14,12,28,0.18);
+    border-radius:2px;
+    margin:10px auto 0;
+    flex-shrink:0;
+    order:-1;
+  }
+  /* Pill im Sheet ausblenden wenn Sheet offen — Sheet hat eigenen Handle */
+  #floatingBar.is-expanded .floating-bar-inner::before{display:none;}
+
+  /* CTA zentriert */
+  #barSheet .floating-bar-cta{text-align:center !important;}
+}
+
+/* ── Konfetti-Canvas ── */
+.confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:99999;}
+
+/* ── Sorglos Plus: "Demnächst" Preisplatzhalter ── */
+.package-card-price-soon{
+  font-size:1.1rem !important;
+  font-family:'General Sans',sans-serif !important;
+  font-weight:500;
+  color:rgba(14,12,28,0.4);
+  letter-spacing:0.01em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TARIFAKTION — Countdown-Banner (temporär · v37)
+   Läuft bis Monatsende; danach entfernt die Engine das Markup.
+   Live-Tokens (--ink, --accent, 'Feature Deck'); Radius global 0.
+   ══════════════════════════════════════════════════════════════ */
+:root{ --lemon:#F6DF35; }
+
+/* ── Banner in der Summary-Card ── */
+.action-banner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.125rem;
+  background:var(--lemon);
+  color:var(--ink);
+  padding:0.875rem 1.5rem;
+  /* Full-bleed: hebt das obere Padding der .summary-body auf.
+     Hat die Card seitliches Padding, die seitliche 0 auf -<pad> setzen. */
+  margin:-1.5rem 0 1.5rem;
+  border-radius:0;
+}
+.action-banner__text{
+  font-family:'General Sans',sans-serif;
+  font-size:0.875rem;
+  line-height:1.35;
+  max-width:13rem;
+  color:var(--ink);
+}
+.action-banner__timer{
+  display:flex;
+  align-items:baseline;
+  gap:0.45rem;
+  flex:none;
+}
+.action-banner__unit{ display:flex; flex-direction:column; align-items:center; }
+.action-banner__mask{
+  height:1.875rem;          /* 30px Ziffernhöhe — Maske für den Flip */
+  overflow:hidden;
+  display:inline-flex;
+  align-items:flex-start;
+}
+.action-banner__digits{
+  font-family:'Feature Deck',Georgia,serif;
+  font-size:1.875rem;       /* 30px */
+  line-height:1;
+  letter-spacing:-0.03em;
+  color:var(--ink);
+  display:inline-block;
+  font-variant-numeric:tabular-nums;
+}
+.action-banner__label{
+  font-family:'General Sans',sans-serif;
+  font-size:0.5rem;         /* 8px */
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:rgba(14,12,28,0.6);
+  margin-top:0.25rem;
+}
+.action-banner__sep{
+  font-family:'Feature Deck',Georgia,serif;
+  font-size:1.5rem;
+  line-height:1;
+  color:rgba(14,12,28,0.35);
+  transform:translateY(-0.45rem);
+}
+
+/* ── Kompakter Streifen in der Floating-Bar (Mobile) ── */
+.action-bar-strip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.4rem;
+  background:var(--lemon);
+  color:var(--ink);
+  font-family:'General Sans',sans-serif;
+  font-size:0.75rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  padding:0.5rem 1rem;
+  /* sitzt am oberen Rand der Bar, volle Breite — ggf. an das
+     Padding von .floating-bar-inner anpassen */
+  margin:0 -1.25rem 0.75rem;
+}
+.action-bar-strip__time{ font-variant-numeric:tabular-nums; }
+
+@media(prefers-reduced-motion:reduce){
+  .action-banner__digits{ animation:none !important; }
+}
+
+/* Etwas kompakter auf kleinen Screens (Banner bleibt in eingeklappter
+   Summary sichtbar, da nicht in der [data-mobile-collapsed] Hide-Liste) */
+@media(max-width:1000px){
+  .action-banner{ gap:0.75rem; padding:0.75rem 1.25rem; }
+  .action-banner__text{ font-size:0.8125rem; max-width:11rem; }
+  .action-banner__mask{ height:1.5rem; }
+  .action-banner__digits{ font-size:1.5rem; }
+  .action-banner__sep{ font-size:1.25rem; transform:translateY(-0.35rem); }
+}
