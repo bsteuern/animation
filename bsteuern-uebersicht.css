@@ -1,0 +1,48 @@
+/* === b'steuern Partner-Übersicht — nur Designer-Unfähiges === */
+:root{
+  --indigo:#3D2BD5; --cream:#F5EFE3; --ink:#0E0C1C;
+  --lemon:#F6DF35; --crimson:#FF0670;
+  --ac:#3D2BD5; /* Default-Akzent; pro Karte/Sektion via data-ac überschrieben */
+}
+/* FeatureDeck-Schutz: nie Georgia-Fallback / tabular-nums (iOS Safari). Klasse .fd im Designer setzen. */
+.fd{
+  font-family:'FeatureDeck', sans-serif !important;
+  font-weight:500;
+  font-variant-numeric:normal !important;
+}
+/* Karten-Bild Hover-Zoom (Parent-Hover → Child) */
+.img-hov{overflow:hidden;}
+.img-hov img{transition:transform .45s ease;}
+.img-hov:hover img{transform:scale(1.18);}
+/* card-plus: Hover wechselt auf Akzent */
+.card-plus{background:var(--ink); color:#fff; transform-origin:100% 100%;
+  transition:background .45s ease, transform .45s ease;}
+.card-plus:hover{background:var(--ac);}
+/* CTA-Buttons: Akzent vs. Ink, Icon schiebt nach rechts */
+.mehr{background:var(--ac);}
+.btn-arrow{background:var(--ink);}
+.mehr, .btn-arrow{transition:background .45s ease;}
+.mehr:hover, .btn-arrow:hover{background:var(--ink);}
+.mehr i, .btn-arrow i{transition:transform .45s ease;}
+.mehr:hover i, .btn-arrow:hover i{transform:translateX(.3125rem);}
+/* deal-badge: dn/dh übereinander stapeln, Klick→„Kopiert!", Hover→Akzent */
+.deal-badge .dstk{display:grid; place-items:center;}
+.deal-badge .dstk > *{grid-area:1 / 1;}
+.deal-badge .dh{visibility:hidden;}
+.deal-badge.copied .dn{visibility:hidden;}
+.deal-badge.copied .dh{visibility:visible;}
+.deal-badge:hover{
+  background:color-mix(in srgb, var(--ac) 12%, transparent);
+  color:var(--ac); border-color:var(--ac);
+}
+.deal-badge .ri-file-copy-line{transition:transform .2s ease;}
+.deal-badge:hover .ri-file-copy-line{transform:translateX(-2px);}
+/* Detail-Reveal für card-plus (falls per JS statt Interaction) */
+.card-detail{display:none;}
+.is-open .card-detail{display:block;}
+/* Motion-Register respektieren */
+@media (prefers-reduced-motion: reduce){
+  .img-hov img,.card-plus,.mehr,.btn-arrow,.mehr i,.btn-arrow i,
+  .deal-badge .ri-file-copy-line{transition:none;}
+  .img-hov:hover img{transform:none;}
+}
