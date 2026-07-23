@@ -1,0 +1,191 @@
+/*
+ * b'steuern — Teamseite
+ * team-page.css
+ *
+ * Enthält NUR, was Webflow nativ nicht (sauber) kann:
+ *   1. 3D-Kartendrehung (backface-visibility, preserve-3d)
+ *   2. Farbsystem über data-c (0–9), vergeben vom Script
+ *   3. Styles für JS-generierte Elemente (Filter-Chips)
+ *   4. Ecken-Button mit Icon-Wechsel per Hover
+ *   5. „neu mischen"-Button (Rotation + Hard Shadow)
+ *
+ * Layout, Typografie, Abstände: alles im Webflow Designer.
+ * Alle @media-Queries konsolidiert am Dateiende (absteigend).
+ */
+
+/* ─────────────────────────────────────────────
+   1. FARBSYSTEM  data-c="0"–"9"
+   5 Akzentfarben × 2 Kontrastrichtungen.
+   Vergeben vom Script nach CMS-Reihenfolge (fix
+   pro Person, wandert NICHT beim Mischen mit).
+   ───────────────────────────────────────────── */
+
+.team-page .team-item {
+  --k-akzent:    #3D2BD5;
+  --k-bild-bg:   #F5EFE3;
+  --k-form:      #3D2BD5;
+  --k-rueck-fg:  #F5EFE3;
+  --k-rueck-mut: rgba(245, 239, 227, 0.6);
+  --k-thema:     #3D2BD5;
+  --k-ecke-fg:   #F5EFE3;
+}
+
+.team-page .team-item[data-c="0"] { --k-akzent:#3D2BD5; --k-bild-bg:#F5EFE3; --k-form:#3D2BD5; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#3D2BD5; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="1"] { --k-akzent:#F6DF35; --k-bild-bg:#F6DF35; --k-form:#F5EFE3; --k-rueck-fg:#0E0C1C; --k-rueck-mut:rgba(14,12,28,0.55);   --k-thema:#0E0C1C; --k-ecke-fg:#0E0C1C; }
+.team-page .team-item[data-c="2"] { --k-akzent:#00A896; --k-bild-bg:#F5EFE3; --k-form:#00A896; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#00A896; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="3"] { --k-akzent:#FF0670; --k-bild-bg:#FF0670; --k-form:#F5EFE3; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#FF0670; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="4"] { --k-akzent:#8B85E8; --k-bild-bg:#F5EFE3; --k-form:#8B85E8; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#8B85E8; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="5"] { --k-akzent:#3D2BD5; --k-bild-bg:#3D2BD5; --k-form:#F5EFE3; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#3D2BD5; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="6"] { --k-akzent:#F6DF35; --k-bild-bg:#F5EFE3; --k-form:#F6DF35; --k-rueck-fg:#0E0C1C; --k-rueck-mut:rgba(14,12,28,0.55);   --k-thema:#0E0C1C; --k-ecke-fg:#0E0C1C; }
+.team-page .team-item[data-c="7"] { --k-akzent:#00A896; --k-bild-bg:#00A896; --k-form:#F5EFE3; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#00A896; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="8"] { --k-akzent:#FF0670; --k-bild-bg:#F5EFE3; --k-form:#FF0670; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#FF0670; --k-ecke-fg:#F5EFE3; }
+.team-page .team-item[data-c="9"] { --k-akzent:#8B85E8; --k-bild-bg:#8B85E8; --k-form:#F5EFE3; --k-rueck-fg:#F5EFE3; --k-rueck-mut:rgba(245,239,227,0.6); --k-thema:#8B85E8; --k-ecke-fg:#F5EFE3; }
+
+/* Anwendung der Variablen auf Karten-Bausteine */
+.team-page .karte-bild   { background: var(--k-bild-bg); }
+.team-page .karte-form   { fill: var(--k-form); }
+.team-page .karte-thema  { color: var(--k-thema); }
+.team-page .karte-hinten { background: var(--k-akzent); }
+.team-page .karte-hinten .rueck-label,
+.team-page .karte-hinten .rueck-name  { color: var(--k-rueck-mut); }
+.team-page .karte-hinten .rueck-tipp { color: var(--k-rueck-fg); }
+
+/* ─────────────────────────────────────────────
+   2. 3D-KARTENDREHUNG
+   .team-item        → Perspektive
+   .karte-flip       → dreht sich (Klasse .ist-offen)
+   .karte-vorne/-hinten → beide Seiten, absolut
+   Gilt auf ALLEN Breakpoints (auch Mobile).
+   ───────────────────────────────────────────── */
+
+.team-page .team-item { perspective: 1400px; }
+
+.team-page .karte-flip {
+  position: relative;
+  width: 100%;
+  height: 22.25rem;              /* 356px */
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+.team-page .karte-flip.ist-offen { transform: rotateY(180deg); }
+
+.team-page .karte-vorne,
+.team-page .karte-hinten {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.team-page .karte-vorne {
+  background: #FFFFFF;
+  border: 1px solid rgba(14, 12, 28, 0.09);
+}
+.team-page .karte-hinten { transform: rotateY(180deg); }
+
+/* Ausgeblendete Items (Filter) */
+.team-page .team-item.ist-verborgen { display: none; }
+
+/* ─────────────────────────────────────────────
+   3. ECKEN-BUTTON  (? → ! bei Hover, × hinten)
+   Div mit role="button" — Webflow-Buttons können
+   keine Kind-Elemente tragen.
+   ───────────────────────────────────────────── */
+
+.team-page .karte-ecke {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 3.125rem;               /* 50px */
+  height: 3.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.375rem;           /* 22px */
+  line-height: 1;
+  background: var(--k-akzent);
+  color: var(--k-ecke-fg);
+  transition: background 240ms ease, color 240ms ease;
+}
+.team-page .karte-ecke::before { content: "?"; }
+.team-page .karte-vorne:hover .karte-ecke,
+.team-page .karte-ecke:focus-visible {
+  background: #3D2BD5;
+  color: #F5EFE3;
+}
+.team-page .karte-vorne:hover .karte-ecke::before { content: "!"; }
+
+.team-page .karte-hinten .karte-ecke {
+  background: #0E0C1C;
+  color: #F5EFE3;
+}
+.team-page .karte-hinten .karte-ecke::before { content: "×"; }
+.team-page .karte-flip.ist-offen:hover .karte-hinten .karte-ecke { background: #3D2BD5; }
+
+/* ─────────────────────────────────────────────
+   4. FILTER-CHIPS  (vom Script erzeugt)
+   ───────────────────────────────────────────── */
+
+.team-page .chip {
+  font-family: 'General Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;          /* 13px */
+  font-weight: 500;
+  padding: 0.5em 1.08em;         /* em: skaliert mit der Chip-Schrift */
+  border-radius: 2px;
+  border: 1px solid rgba(14, 12, 28, 0.18);
+  background: transparent;
+  color: #0E0C1C;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.team-page .chip:hover { border-color: rgba(14, 12, 28, 0.45); }
+.team-page .chip.ist-aktiv {
+  background: #3D2BD5;
+  border-color: #3D2BD5;
+  color: #F5EFE3;
+}
+
+/* ─────────────────────────────────────────────
+   5. „NEU MISCHEN"-BUTTON
+   ───────────────────────────────────────────── */
+
+.team-page .btn-mischen {
+  font-family: 'General Sans', system-ui, sans-serif;
+  font-size: 0.875rem;           /* 14px */
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #0E0C1C;
+  background: #F6DF35;
+  border: none;
+  padding: 0.786em 1.43em;       /* ≈ 11px / 20px bei 14px Schrift */
+  border-radius: 2px;
+  cursor: pointer;
+  transform: rotate(-2.5deg);
+  box-shadow: 4px 4px 0 #0E0C1C;
+  transition: transform 240ms cubic-bezier(0.2, 0.9, 0.25, 1.4), box-shadow 240ms ease;
+}
+.team-page .btn-mischen:hover {
+  transform: rotate(2.5deg) scale(1.06);
+  box-shadow: 6px 6px 0 #0E0C1C;
+}
+.team-page .btn-mischen:active {
+  transform: rotate(0deg) scale(0.95);
+  box-shadow: 2px 2px 0 #0E0C1C;
+}
+
+/* ─────────────────────────────────────────────
+   REDUCED MOTION
+   ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .team-page .karte-flip { transition: none; }
+  .team-page .btn-mischen { transition: none; }
+}
+
+/* ─────────────────────────────────────────────
+   MEDIA QUERIES (absteigend) — bewusst leer bis
+   auf Reduced Motion: Grid-Spalten und Abstände
+   liegen im Webflow Designer, nicht hier.
+   ───────────────────────────────────────────── */
