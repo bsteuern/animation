@@ -364,7 +364,7 @@
 }
 
 .team-page .rolle-pfeil {
-  --pfeil-strich: 1.5;            /* ← HIER Strichstärke ändern (1 / 1.5 / 2) */
+  --pfeil-strich: 1.0;            /* ← HIER Strichstärke ändern (1 / 1.5 / 2) */
   flex: 0 0 auto;
   margin-right: 0.5rem;            /* Puffer = Weg der Hover-Bewegung */
   width: 2rem;                    /* 32px Icon-Breite (langer Schaft) */
