@@ -1,0 +1,205 @@
+/*
+ * b'steuern — Offene Rollen aus Homerun
+ * rollen-homerun.css
+ *
+ * EIGENSTÄNDIG. Setzt nichts im Webflow Designer voraus.
+ * In Webflow existiert genau ein Element: ein leeres Div Block
+ * mit der Klasse `rollen-ziel`. Sonst nichts.
+ *
+ * Alle Klassen tragen das Präfix `stellen-`. Dieses Präfix kommt
+ * im Webflow-Projekt nirgends vor — damit kann keine Designer-Regel
+ * dazwischenfunken und es entsteht kein Kaskadenkonflikt. Genau
+ * deshalb braucht diese Datei auch kein einziges !important.
+ *
+ * Werte 1:1 aus Kapitel 7.5. Die Zeile sieht identisch aus wie die
+ * bisherige `rolle-zeile`, hängt aber an nichts, was jemand im
+ * Designer vergessen könnte.
+ *
+ * Aufbau:
+ *   1. Container (versteckt bis gefüllt)
+ *   2. Zeile
+ *   3. Text
+ *   4. Pfeil
+ *   5. Zustände (Hover, Fokus, Einblenden)
+ *   6. Media Queries, absteigend am Dateiende
+ *
+ * Schriften: die Datei rät NICHT, wie die Fonts im Projekt heißen.
+ * Das Script liest die tatsächlich gerenderte Schrift der Sektions-
+ * Überschrift aus und legt sie auf --stellen-display-font. Die
+ * Angaben unten sind nur der Notnagel, falls das misslingt.
+ */
+
+/* ─────────────────────────────────────────────
+   1. CONTAINER
+   Standardmäßig versteckt. Das Script macht ihn
+   sichtbar, sobald wirklich Zeilen drinstehen.
+   Bewusst kein :empty — ein Zeilenumbruch im Div
+   reicht, damit :empty nicht mehr greift.
+   ───────────────────────────────────────────── */
+
+.rollen-ziel {
+  /* Nur zwei Variablen, beide mit gutem Grund:
+     Die Schriften setzt das Script zur Laufzeit aus der Sektion.
+     Die Strichstärke ist der eine Wert, den man tunen will.
+     Farben und Linien stehen bewusst als Literale — CSS-Variablen
+     in Kurzschreibweisen wie `border-bottom` sind eine bekannte
+     Fehlerquelle: ist die Variable undefiniert, fällt die GANZE
+     Deklaration aus und die Linie verschwindet ersatzlos. */
+  --stellen-display-font: 'FeatureDeck', 'Times New Roman', serif;
+  --stellen-body-font: 'General Sans', system-ui, -apple-system, sans-serif;
+  --pfeil-strich: 1.5;
+
+  display: none;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(14, 12, 28, 0.18);
+}
+
+.rollen-ziel.ist-gefuellt { display: block; }
+
+/* ─────────────────────────────────────────────
+   2. ZEILE
+   Titel links, Pfeil rechts, Trennlinie unten.
+   overflow clippt die Hover-Bewegung des Pfeils.
+   ───────────────────────────────────────────── */
+
+.rollen-ziel .stellen-zeile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.375rem 0.875rem;
+  border-bottom: 1px solid rgba(14, 12, 28, 0.18);
+  border-radius: 0;
+  overflow: hidden;
+  text-decoration: none;
+  color: #0E0C1C;
+  transition: background 200ms ease;
+}
+
+/* Webflow setzt auf <a> global eine Farbe und teils Unterstreichung.
+   Beides hier explizit zurückgeholt, damit die Zeile nicht wie ein
+   Link aussieht. */
+.rollen-ziel .stellen-zeile:link,
+.rollen-ziel .stellen-zeile:visited,
+.rollen-ziel .stellen-zeile:hover {
+  text-decoration: none;
+  color: #0E0C1C;
+}
+
+/* ─────────────────────────────────────────────
+   3. TEXT
+   line-height ist hier explizit gesetzt. Webflow
+   vererbt vom Body oft 1.6 — damit stünden Titel
+   und Unterzeile deutlich luftiger als im Prototyp.
+   ───────────────────────────────────────────── */
+
+.rollen-ziel .stellen-text {
+  min-width: 0;              /* erlaubt Umbruch statt Überlauf */
+}
+
+.rollen-ziel .stellen-titel {
+  font-family: var(--stellen-display-font);
+  font-weight: 500;
+  font-size: 1.375rem;       /* 22px */
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #0E0C1C;
+}
+
+.rollen-ziel .stellen-sub {
+  font-family: var(--stellen-body-font);
+  font-weight: 400;
+  font-size: 0.8125rem;      /* 13px */
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: rgba(14, 12, 28, 0.65);
+  margin-top: 0.25rem;
+}
+
+/* ─────────────────────────────────────────────
+   4. PFEIL
+   Eigenes Inline-SVG, viewBox 0 0 32 24, langer
+   Schaft. Strichstärke an EINER Stelle: --pfeil-strich.
+   Sichtbar bei 2rem Breite:
+     1    → 0.92px  (haarfein)
+     1.5  → 1.38px  (dünn)
+     2    → 1.83px  (mittel)
+   Eckige Enden sind Markenvorgabe für eigene Vektoren.
+   ───────────────────────────────────────────── */
+
+.rollen-ziel .stellen-pfeil {
+  flex: 0 0 auto;
+  width: 2rem;               /* 32px */
+  margin-right: 0.5rem;      /* Puffer = Weg der Hover-Bewegung */
+  line-height: 0;
+  color: #0E0C1C;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rollen-ziel .stellen-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--pfeil-strich, 1.5);
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ─────────────────────────────────────────────
+   5. ZUSTÄNDE
+   ───────────────────────────────────────────── */
+
+.rollen-ziel .stellen-zeile:hover,
+.rollen-ziel .stellen-zeile:focus-visible {
+  background: rgba(14, 12, 28, 0.05);
+}
+
+.rollen-ziel .stellen-zeile:hover .stellen-pfeil,
+.rollen-ziel .stellen-zeile:focus-visible .stellen-pfeil {
+  transform: translateX(0.5rem);
+}
+
+.rollen-ziel .stellen-zeile:focus-visible {
+  outline: 2px solid #0E0C1C;
+  outline-offset: -2px;
+}
+
+/* Die Zeilen erscheinen erst nach einem Netzwerk-Roundtrip.
+   Ohne Übergang springt die Sektion sichtbar auf. */
+.rollen-ziel .stellen-zeile.ist-neu {
+  animation: stellen-ein 350ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@keyframes stellen-ein {
+  from { opacity: 0; transform: translateY(0.25rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   6. MEDIA QUERIES — absteigend, am Dateiende
+   Breakpoints wie in Webflow: 991 / 767 / 479.
+   Werte aus Kapitel 7.5.
+   ───────────────────────────────────────────── */
+
+@media (max-width: 991px) {
+  .rollen-ziel .stellen-zeile { padding: 1.25rem 0.875rem; }
+}
+
+@media (max-width: 767px) {
+  .rollen-ziel .stellen-zeile { padding: 1.125rem 0.5rem; }
+}
+
+@media (max-width: 479px) {
+  .rollen-ziel .stellen-zeile { padding: 1rem 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rollen-ziel .stellen-zeile { transition: none; }
+  .rollen-ziel .stellen-pfeil { transition: none; }
+  .rollen-ziel .stellen-zeile:hover .stellen-pfeil { transform: none; }
+  .rollen-ziel .stellen-zeile.ist-neu { animation: none; }
+}
