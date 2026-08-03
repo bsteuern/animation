@@ -1,0 +1,431 @@
+/*
+ * b'steuern — Teamseite
+ * team-page.css
+ *
+ * Enthält NUR, was Webflow nativ nicht (sauber) kann:
+ *   1. 3D-Kartendrehung (backface-visibility, preserve-3d)
+ *   2. Farbsystem über CMS-Feld (--k-akzent), Kontrast vom Script
+ *   3. Styles für JS-generierte Elemente (Filter-Chips)
+ *   4. Ecken-Button mit Icon-Wechsel per Hover
+ *   5. „neu mischen"-Button (Rotation + Hard Shadow)
+ *   6. „nach oben"-Pille
+ *   7. Join-Karten-Vorlage (versteckt bis Script-Start)
+ *
+ * Layout, Typografie, Abstände: alles im Webflow Designer.
+ * Alle @media-Queries konsolidiert am Dateiende (absteigend).
+ */
+
+/* ─────────────────────────────────────────────
+   1. FARBSYSTEM  (Weg B)
+   Akzentfarbe kommt pro Person aus dem CMS-Feld
+   „Akzent-Hex" → Custom Attribute style="--k-akzent:#…"
+   am .team-item. Kontrastfarbe (Text auf der Rück-
+   seite) wählt das JS anhand der Helligkeit und setzt
+   --k-kontrast. Fallback: Indigo auf Cream.
+   Das Portrait bringt seine Hintergrundfarbe selbst
+   mit (ins Foto eingebrannt) — CSS färbt es nicht.
+   ───────────────────────────────────────────── */
+
+.team-page .team-item {
+  --k-akzent:   #3D2BD5;
+  --k-kontrast: #F5EFE3;
+}
+
+/* Bildfläche: neutral, das Foto trägt die Farbe */
+.team-page .karte-bild {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;          /* zwingt Quadrat — Bild wird nie angeschnitten */
+  overflow: hidden;
+  background: #F5EFE3;
+}
+/* Bauhaus-Formen: liegen im Hintergrund, füllen das Quadrat */
+.team-page .karte-bild > svg,
+.team-page .karte-bild .karte-form-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* Portrait: quadratisch, formatgleich, davor — nie beschnitten */
+.team-page .karte-portrait,
+.team-page .karte-bild img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;          /* ganzes 1000×1000 sichtbar, kein Anschnitt */
+  object-position: bottom center;
+}
+
+/* Rückseite + Ecke: Akzent aus dem CMS */
+.team-page .karte-hinten { background: var(--k-akzent); }
+/* Verhindert, dass ein einzelnes Zeichen (z. B. das Euro-
+   Zeichen) allein in die letzte Zeile rutscht. */
+.team-page .rueck-tipp {
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.team-page .karte-hinten .rueck-label,
+.team-page .karte-hinten .rueck-name  { color: var(--k-kontrast); opacity: 0.6; }
+.team-page .karte-hinten .rueck-tipp  { color: var(--k-kontrast); }
+
+.team-page .karte-thema  { color: #3D2BD5; }
+
+/* -----------------------------------------------
+   1b. THEMEN
+   Vorderseite: umrandete Badges, max. 2 sichtbar,
+                darunter "+N weitere" (vom JS gefuellt).
+   Rueckseite:  alle Themen als Flusstext, ·-getrennt.
+   Sechs Option-Felder Thema 1-6 rendern als
+   .thema-name. Leere Felder werden ausgeblendet.
+   ----------------------------------------------- */
+
+/* --- VORDERSEITE: Badges --- */
+.team-page .karte-thema {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;                 /* 6px */
+  margin-top: 0.5625rem;         /* 9px */
+  padding-right: 2.875rem;       /* 46px - Platz fuer Ecken-Button */
+}
+
+.team-page .karte-thema .thema-name {
+  font-size: 0.75rem;            /* 12px */
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.375rem 0.5625rem;   /* 6px 9px */
+  border: 1px solid rgba(14, 12, 28, 0.14);
+  border-radius: 0;
+  color: var(--k-badge, #3D2BD5);
+}
+
+/* leere Felder verschwinden */
+.team-page .thema-name:empty,
+.team-page .thema-name.w-dyn-bind-empty { display: none; }
+
+/* nur die ersten zwei Badges zeigen */
+.team-page .karte-thema .thema-name:nth-child(n+3) { display: none; }
+
+/* "+N weitere" */
+.team-page .thema-mehr {
+  height: 1.125rem;              /* 18px */
+  margin-top: 0.25rem;           /* 4px */
+  padding-right: 2.875rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.125rem;
+  color: rgba(14, 12, 28, 0.45);
+}
+.team-page .thema-mehr:empty { height: 1.125rem; }
+
+/* "folgt in Kuerze", wenn keine Themen */
+.team-page .thema-leer {
+  font-size: 0.8125rem;          /* 13px */
+  color: rgba(14, 12, 28, 0.4);
+}
+
+/* --- RUECKSEITE: Badges wie vorne, alle Themen --- */
+.team-page .rueck-unten {
+  padding: 0 1.5rem 1.25rem;     /* 0 24px 20px */
+}
+
+.team-page .rueck-themen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;                 /* 6px */
+  margin-top: 0.3125rem;         /* 5px */
+  padding-right: 2.75rem;        /* 44px - Platz fuer Ecken-Button */
+}
+
+.team-page .rueck-themen .thema-name {
+  font-size: 0.75rem;            /* 12px */
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.375rem 0.5625rem;   /* 6px 9px */
+  border: 1px solid var(--k-rand, rgba(245,239,227,0.35));
+  border-radius: 0;
+  color: var(--k-kontrast);
+}
+
+/* Hinweis: Die "nur zwei Badges"-Regel ist auf .karte-thema
+   gescoped und greift hier bewusst nicht - die Rueckseite
+   zeigt alle Themen. Leere Felder blendet die globale
+   :empty-Regel weiter oben aus. */
+
+/* Name unter den Badges - Padding kommt von rueck-unten,
+   Reste aus der alten Struktur neutralisieren */
+.team-page .rueck-unten .rueck-name {
+  padding: 0;
+  margin-top: 0.75rem;           /* 12px */
+  font-size: 0.75rem;
+  color: var(--k-kontrast);
+  opacity: 0.6;
+}
+
+/* ─────────────────────────────────────────────
+   2. 3D-KARTENDREHUNG
+   .team-item        → Perspektive
+   .karte-flip       → dreht sich (Klasse .ist-offen)
+   .karte-vorne → relativ, bestimmt die Kartenhoehe
+   .karte-hinten → absolut darueber
+   Keine feste Kartenhoehe: Bild ist quadratisch,
+   Textblock 194px. Gilt auf allen Breakpoints.
+   ───────────────────────────────────────────── */
+
+.team-page .team-item { perspective: 1400px; }
+
+.team-page .karte-flip {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+.team-page .karte-flip.ist-offen { transform: rotateY(180deg); }
+
+/* Vorderseite steht im normalen Fluss und bestimmt die Kartenhoehe:
+   quadratisches Bild + fester Textblock. KEINE feste Kartenhoehe. */
+.team-page .karte-vorne {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: #FFFFFF;
+  border: 1px solid rgba(14, 12, 28, 0.09);
+}
+
+/* Rueckseite liegt absolut ueber der Vorderseite */
+.team-page .karte-hinten {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Textblock der Vorderseite: MINDESThoehe 194px.
+   Waechst mit dem Inhalt (lange Zeile, mehrere Badges),
+   damit nichts abgeschnitten wird. */
+.team-page .karte-text {
+  min-height: 12.125rem;         /* 194px */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.team-page .karte-meta { margin-top: auto; }
+
+/* Karten einer Rasterzeile auf gleiche Hoehe ziehen,
+   damit keine Luecken entstehen, wenn eine Karte waechst. */
+.team-page .team-item { display: flex; }
+.team-page .karte-flip {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+}
+.team-page .karte-vorne {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+/* Bild bleibt quadratisch, wird nie gestaucht */
+.team-page .karte-bild { flex: 0 0 auto; }
+
+/* Ausgeblendete Items (Filter) */
+.team-page .team-item.ist-verborgen { display: none; }
+
+/* ─────────────────────────────────────────────
+   3. ECKEN-BUTTON  (? → ! bei Hover, × hinten)
+   Div mit role="button" — Webflow-Buttons können
+   keine Kind-Elemente tragen.
+   ───────────────────────────────────────────── */
+
+.team-page .karte-ecke {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 3.125rem;               /* 50px */
+  height: 3.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.375rem;           /* 22px */
+  line-height: 1;
+  background: var(--k-akzent);
+  color: var(--k-kontrast);
+  transition: filter 240ms ease;
+}
+.team-page .karte-ecke::before { content: "?"; }
+.team-page .karte-vorne .karte-ecke:hover,
+.team-page .karte-vorne .karte-ecke:focus-visible {
+  filter: brightness(0.88);
+}
+.team-page .karte-vorne .karte-ecke:hover::before { content: "!"; }
+
+.team-page .karte-hinten .karte-ecke {
+  background: var(--k-akzent);
+  color: var(--k-kontrast);
+  filter: brightness(0.82);
+}
+.team-page .karte-hinten .karte-ecke::before { content: "×"; }
+.team-page .karte-hinten .karte-ecke:hover { filter: brightness(0.72); }
+
+/* ─────────────────────────────────────────────
+   4. FILTER-CHIPS  (vom Script erzeugt)
+   ───────────────────────────────────────────── */
+
+/* Layout der Filterzeile - im CSS statt im Designer,
+   damit es nicht von Panel-Einstellungen abhaengt. */
+.team-page .filter-zeile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;                  /* 20px */
+}
+
+.team-page .chip-liste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;                   /* 8px */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Mischen-Button darf nicht schrumpfen oder umbrechen */
+.team-page .btn-mischen { flex: 0 0 auto; }
+
+.team-page .chip {
+  flex: 0 0 auto;
+  font-family: 'General Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;          /* 13px */
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0.5rem 0.875rem;      /* 8px 14px - exakt wie Prototyp */
+  margin: 0;
+  border-radius: 0;
+  border: 1px solid rgba(14, 12, 28, 0.18);
+  background: transparent;
+  color: #0E0C1C;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.team-page .chip:hover { border-color: rgba(14, 12, 28, 0.45); }
+.team-page .chip.ist-aktiv {
+  background: #3D2BD5;
+  border-color: #3D2BD5;
+  color: #F5EFE3;
+}
+
+/* ─────────────────────────────────────────────
+   5. „NEU MISCHEN"-BUTTON
+   ───────────────────────────────────────────── */
+
+.team-page .btn-mischen {
+  font-family: 'General Sans', system-ui, sans-serif;
+  font-size: 0.875rem;           /* 14px */
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #0E0C1C;
+  background: #F6DF35;
+  border: none;
+  padding: 0.786em 1.43em;       /* ≈ 11px / 20px bei 14px Schrift */
+  border-radius: 0;
+  cursor: pointer;
+  transform: rotate(-2.5deg);
+  box-shadow: 4px 4px 0 #0E0C1C;
+  transition: transform 240ms cubic-bezier(0.2, 0.9, 0.25, 1.4), box-shadow 240ms ease;
+}
+.team-page .btn-mischen:hover {
+  transform: rotate(2.5deg) scale(1.06);
+  box-shadow: 6px 6px 0 #0E0C1C;
+}
+.team-page .btn-mischen:active {
+  transform: rotate(0deg) scale(0.95);
+  box-shadow: 2px 2px 0 #0E0C1C;
+}
+
+/* ─────────────────────────────────────────────
+   6. „NACH OBEN"-PILLE
+   Standard versteckt; JS setzt .ist-sichtbar
+   ───────────────────────────────────────────── */
+
+.team-page .pille-oben {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 40;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  margin: 0 auto;
+  padding: 0.77em 1.38em;
+  font-family: 'General Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: #0E0C1C;
+  color: #F5EFE3;
+  border-radius: 9999px;
+  box-shadow: 0 6px 16px rgba(14, 12, 28, 0.35);
+  cursor: pointer;
+}
+.team-page .pille-oben.ist-sichtbar { display: flex; }
+
+/* ─────────────────────────────────────────────
+   7. JOIN-KARTEN-VORLAGE
+   Versteckt, bis das Script sie ins Raster holt
+   ───────────────────────────────────────────── */
+
+.team-page .ist-vorlage { display: none; }
+
+/* ─────────────────────────────────────────────
+   REDUCED MOTION
+   ───────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE: Filterzeile
+   ───────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .team-page .filter-zeile { gap: 1rem; }
+  .team-page .chip-liste { gap: 0.375rem; }
+  .team-page .chip {
+    font-size: 0.75rem;          /* 12px */
+    padding: 0.4375rem 0.75rem;  /* 7px 12px */
+  }
+}
+
+@media (max-width: 479px) {
+  .team-page .chip {
+    font-size: 0.6875rem;        /* 11px */
+    padding: 0.375rem 0.625rem;  /* 6px 10px */
+  }
+  .team-page .btn-mischen {
+    font-size: 0.8125rem;
+    padding: 0.7em 1.2em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-page .karte-flip { transition: none; }
+  .team-page .btn-mischen { transition: none; }
+}
+
+/* ─────────────────────────────────────────────
+   MEDIA QUERIES (absteigend) — bewusst leer bis
+   auf Reduced Motion: Grid-Spalten und Abstände
+   liegen im Webflow Designer, nicht hier.
+   ───────────────────────────────────────────── */
