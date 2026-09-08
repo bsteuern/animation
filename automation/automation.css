@@ -1,0 +1,323 @@
+/* ============================================================
+   b'steuern automation - /automation
+   Repo: bsteuern/animation -> automation/automation.css
+   Stand: Schritt M3 (Fundament + Hero)
+
+   AKZENTFARBE: steht ausschliesslich in Block 1.
+   Freigabe Joan/Philipp offen. Wechsel = 5 Zeilen, kein Rebuild.
+   ============================================================ */
+
+/* ── 1 · TOKENS ───────────────────────────────────────────── */
+:root {
+  /* Akzent-Set. Nur diese fuenf Werte anfassen, wenn die Leitfarbe wechselt. */
+  --auto-accent:        #C531A4;   /* Fandango, Leitfarbe der Seite      */
+  --auto-accent-mid:    #A02684;   /* Hover, Links                        */
+  --auto-accent-deep:   #8E2178;   /* erste Wipe-Ebene auf Buttons        */
+  --auto-accent-dark:   #4A1240;   /* Custom-Solution-Band                */
+  --auto-tint:          #F7EAF3;   /* Flaechen-Tint                       */
+  --auto-tint-soft:     #FCF6FA;   /* Seitenhintergrund                   */
+
+  /* Kanonische Marken-Tokens (Regelwerk). Driftwerte hier korrigiert. */
+  --auto-ink:           #0E0C1C;
+  --auto-paper:         #FFFFFF;
+  --auto-cream:         #F5EFE3;   /* nicht #F9F4EC                       */
+  --auto-turkis:        #00A1AA;   /* nicht #00A896                       */
+
+  --auto-ink-90:        rgba(14, 12, 28, 0.92);
+  --auto-ink-70:        rgba(14, 12, 28, 0.68);
+  --auto-ink-55:        rgba(14, 12, 28, 0.55);
+  --auto-ink-40:        rgba(14, 12, 28, 0.38);
+  --auto-ink-line:      rgba(14, 12, 28, 0.14);
+
+  --auto-on-dark-90:    rgba(255, 255, 255, 0.88);
+  --auto-on-dark-70:    rgba(255, 255, 255, 0.75);
+
+  /* Schrift. Beide Familien liegen bereits site-weit in Webflow. */
+  --auto-font-display:  'FeatureDeck', 'Times New Roman', serif;
+  --auto-font-body:     'General Sans', system-ui, -apple-system, sans-serif;
+
+  /* Layout */
+  --auto-container:     80rem;   /* 1280px */
+  --auto-pad-x:         32px;
+  --auto-col:           600px;
+
+  /* Motion: Gelassenheit, nicht Energie. Kein Bounce. */
+  --auto-ease:          cubic-bezier(.2, .8, .3, 1);
+  --auto-dur-wipe:      700ms;
+}
+
+/* ── 2 · BASE ─────────────────────────────────────────────── */
+body {
+  background: var(--auto-tint-soft);
+  color: var(--auto-ink);
+  font-family: var(--auto-font-body);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.7;
+  overflow-x: clip;
+}
+
+[class^="auto-"],
+[class^="auto-"] *,
+[class*=" auto-"],
+[class*=" auto-"] * {
+  box-sizing: border-box;   /* Fix H1: Hero lief auf 390px 20px ueber den Rand */
+}
+
+.auto-container {
+  width: 100%;
+  max-width: var(--auto-container);
+  margin: 0 auto;
+  padding-left: var(--auto-pad-x);
+  padding-right: var(--auto-pad-x);
+}
+
+/* ── 3 · BAUSTEINE ────────────────────────────────────────── */
+
+/* Eyebrow */
+.auto-eyebrow {
+  display: inline-block;
+  margin: 0 0 20px;
+  padding: 7px 14px;
+  font-family: var(--auto-font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-radius: 0;
+}
+.auto-eyebrow--solid { background: var(--auto-paper); color: var(--auto-accent); }
+.auto-eyebrow--tint  { background: var(--auto-accent); color: var(--auto-paper); }
+
+/* Button mit Block-Wipe auf Hover */
+.auto-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  overflow: hidden;
+  padding: 15px 28px;
+  font-family: var(--auto-font-body);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 300ms 260ms var(--auto-ease);
+}
+.auto-btn__wipe {
+  position: absolute;
+  inset: 0;
+  transform: translateX(-101%);
+  transition: transform var(--auto-dur-wipe) var(--auto-ease);
+}
+.auto-btn__wipe--2 { transition-delay: 90ms; }
+.auto-btn__label,
+.auto-btn > i { position: relative; }
+.auto-btn > i { font-size: 18px; transition: transform var(--auto-dur-wipe) var(--auto-ease); }
+
+.auto-btn:hover .auto-btn__wipe { transform: translateX(0); }
+.auto-btn:hover > i { transform: translateX(8px); }
+
+.auto-btn--light { background: var(--auto-paper); color: var(--auto-accent); }
+.auto-btn--light .auto-btn__wipe--1 { background: var(--auto-accent-deep); }
+.auto-btn--light .auto-btn__wipe--2 { background: var(--auto-ink); }
+.auto-btn--light:hover { color: var(--auto-paper); }
+
+.auto-btn--accent { background: var(--auto-accent); color: var(--auto-paper); }
+.auto-btn--accent .auto-btn__wipe--1 { background: var(--auto-accent-deep); }
+.auto-btn--accent .auto-btn__wipe--2 { background: var(--auto-ink); }
+.auto-btn--accent:hover { color: var(--auto-paper); }
+
+.auto-btn:focus-visible { outline: 2px solid var(--auto-paper); outline-offset: 3px; }
+
+/* ── 4 · HERO ─────────────────────────────────────────────── */
+.auto-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: var(--auto-accent);
+  color: var(--auto-paper);
+  min-height: 720px;
+}
+
+.auto-hero__field { position: absolute; inset: 0; }
+.auto-hero__field orbit-field { width: 100%; height: 100%; }
+
+.auto-hero__mark {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auto-hero__mark img {
+  display: block;
+  height: 52px;
+  transform: scale(1);
+  transition: transform 420ms var(--auto-ease);
+}
+.auto-hero__mark:hover img { transform: scale(1.05); }
+
+/* Verlauf unter dem Textblock. Fix M3: greift jetzt bis 991px, nicht erst ab 767px. */
+.auto-hero__scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 52%;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+  background: linear-gradient(to top, #C531A4 0%, rgba(197, 49, 164, 0.78) 46%, rgba(197, 49, 164, 0) 100%);
+  background: linear-gradient(
+    to top,
+    var(--auto-accent) 0%,
+    color-mix(in srgb, var(--auto-accent) 78%, transparent) 46%,
+    color-mix(in srgb, var(--auto-accent) 0%, transparent) 100%
+  );
+}
+
+.auto-hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--auto-container);
+  margin: 0 auto;
+  padding: 96px var(--auto-pad-x) 88px;
+  pointer-events: none;
+}
+.auto-hero__col { max-width: var(--auto-col); }
+
+.auto-hero__h1 {
+  margin: 0;
+  max-width: 19ch;
+  font-family: var(--auto-font-display);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 8.4vw, 5.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--auto-paper);
+  text-wrap: pretty;
+}
+
+.auto-hero__sub {
+  margin: 22px 0 0;
+  max-width: 40ch;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--auto-on-dark-90);
+}
+
+.auto-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+  pointer-events: auto;
+}
+
+.auto-hero__trust {
+  margin: 26px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--auto-on-dark-70);
+}
+.auto-tick {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--auto-paper);
+  font-size: 12px;
+}
+
+/* Block-Wipe auf "automatisieren". Laeuft einmal, keine Dauerschleife. */
+.auto-sweep { position: relative; display: inline-block; font-family: var(--auto-font-display); }
+.auto-sweep__word {
+  position: relative;
+  z-index: 1;
+  font-family: var(--auto-font-display);
+  color: var(--auto-paper);
+  animation: auto-sweep-word 3200ms var(--auto-ease) 450ms 1 both;
+}
+.auto-sweep__block {
+  position: absolute;
+  left: -0.08em;
+  right: -0.08em;
+  top: 0.04em;
+  bottom: 0.06em;
+  z-index: 0;
+  overflow: hidden;
+}
+.auto-sweep__block::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--auto-paper);
+  transform: translateX(-101%);
+  animation: auto-sweep-block 3200ms var(--auto-ease) 450ms 1 both;
+}
+@keyframes auto-sweep-block {
+  0%          { transform: translateX(-101%); }
+  26%, 56%    { transform: translateX(0); }
+  82%, 100%   { transform: translateX(101%); }
+}
+@keyframes auto-sweep-word {
+  0%, 14%     { color: var(--auto-paper); }
+  30%, 52%    { color: var(--auto-accent); }
+  72%, 100%   { color: var(--auto-paper); }
+}
+
+/* ── 5 · BREAKPOINTS ──────────────────────────────────────── */
+
+/* Tablet: Feld nach oben, Text darunter. Behebt M3 (Kacheln hinter der Copy). */
+@media (max-width: 991px) {
+  :root { --auto-pad-x: 32px; }
+
+  .auto-hero { min-height: 0; }
+  .auto-hero__scrim { display: block; }
+  .auto-hero__inner {
+    padding: 500px var(--auto-pad-x) 72px;
+    text-align: center;
+  }
+  .auto-hero__col { max-width: var(--auto-col); margin: 0 auto; }
+  .auto-hero__h1 { max-width: none; }
+  .auto-hero__sub { max-width: 46ch; margin-left: auto; margin-right: auto; }
+  .auto-hero__cta { justify-content: center; }
+  .auto-hero__mark img { height: 48px; }
+}
+
+@media (max-width: 767px) {
+  :root { --auto-pad-x: 20px; }
+
+  .auto-hero__inner { padding: 470px var(--auto-pad-x) 48px; }
+  .auto-hero__scrim { height: 58%; }
+  .auto-hero__sub { font-size: 18px; margin-top: 18px; }
+  .auto-hero__cta { margin-top: 28px; }
+  .auto-hero__cta .auto-btn { width: 100%; }
+  .auto-hero__trust { align-items: flex-start; text-align: left; }
+  .auto-hero__mark img { height: 42px; }
+}
+
+/* ── 6 · REDUCED MOTION ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .auto-sweep__word { animation: none; color: var(--auto-paper); }
+  .auto-sweep__block::before { animation: none; transform: translateX(-101%); }
+  .auto-btn,
+  .auto-btn__wipe,
+  .auto-btn > i,
+  .auto-hero__mark img { transition: none !important; }
+}
