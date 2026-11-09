@@ -152,8 +152,8 @@
     ]},
     { sec: 'Beratung', meta: 'pro Jahr', rows: [
       { title: 'Beratungsguthaben inklusive',
-        desc:  'Anrufe, E-Mails, Termine — alles drin bis zum Guthaben',
-        v: ['100 €', '200 €', '300 €'] },
+        desc:  'Anrufe, E-Mails und Termine bis zur Höhe des Guthabens',
+        v: ['100 €', '200 €', '200 €'] },
     ]},
     { sec: 'Zusätzliche Leistungen', meta: 'optional', rows: [
       { title: 'Jährliche Services für Vor- und Altjahre',
